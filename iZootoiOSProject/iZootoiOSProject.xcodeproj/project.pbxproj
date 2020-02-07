@@ -54,6 +54,8 @@
 		28AEAE9323ED895E00A1BFD2 /* iZootoNotificationExtendsServices.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iZootoNotificationExtendsServices.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AEAE9523ED895E00A1BFD2 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		28AEAE9723ED895E00A1BFD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		28AEAE9F23ED8C6100A1BFD2 /* iZootoNotificationExtendsServices.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iZootoNotificationExtendsServices.entitlements; sourceTree = "<group>"; };
+		28AEAEA023ED8C6E00A1BFD2 /* iZootoiOSProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iZootoiOSProject.entitlements; sourceTree = "<group>"; };
 		30CEAD1618D21DD00E73D0DB /* Pods-iZootoiOSProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSProject.debug.xcconfig"; path = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject.debug.xcconfig"; sourceTree = "<group>"; };
 		3B23AA7C9618DAF3F71DF810 /* Pods_iZootoiOSProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iZootoiOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA02D8F814801C8208D17580 /* Pods-iZootoiOSProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSProject.release.xcconfig"; path = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		28AEAE5A23ED7B8100A1BFD2 /* iZootoiOSProject */ = {
 			isa = PBXGroup;
 			children = (
+				28AEAEA023ED8C6E00A1BFD2 /* iZootoiOSProject.entitlements */,
 				28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */,
 				28AEAE5D23ED7B8100A1BFD2 /* SceneDelegate.swift */,
 				28AEAE5F23ED7B8100A1BFD2 /* ViewController.swift */,
@@ -123,6 +126,7 @@
 		28AEAE9423ED895E00A1BFD2 /* iZootoNotificationExtendsServices */ = {
 			isa = PBXGroup;
 			children = (
+				28AEAE9F23ED8C6100A1BFD2 /* iZootoNotificationExtendsServices.entitlements */,
 				28AEAE9523ED895E00A1BFD2 /* NotificationService.swift */,
 				28AEAE9723ED895E00A1BFD2 /* Info.plist */,
 			);
@@ -447,6 +451,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iZootoiOSProject/iZootoiOSProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
@@ -468,6 +473,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iZootoiOSProject/iZootoiOSProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
@@ -486,6 +492,7 @@
 		28AEAE9C23ED895E00A1BFD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iZootoNotificationExtendsServices/iZootoNotificationExtendsServices.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoNotificationExtendsServices/Info.plist;
@@ -505,6 +512,7 @@
 		28AEAE9D23ED895E00A1BFD2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iZootoNotificationExtendsServices/iZootoNotificationExtendsServices.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoNotificationExtendsServices/Info.plist;
