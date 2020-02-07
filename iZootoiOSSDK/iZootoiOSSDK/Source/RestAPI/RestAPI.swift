@@ -37,7 +37,7 @@ public class RestAPI
     public static func callImpression(notificationData : Aps,userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: "https://impr.izooto.com/imp?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
-            request.httpMethod = "GET"
+            request.httpMethod = "POST"
             URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                 do {
                  print("StatusCode","Track\(token)")
@@ -49,7 +49,7 @@ public class RestAPI
     public static func clickTrack(notificationData : Aps,type : String, userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: "https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=7e7ec936e7cde9b3b0e2381ef018392891f8c8e35919f1fe6dd76d20ff54c8b&op=click&btn=\(type)&ver=\(UIDevice.current.systemVersion)")!)
-                   request.httpMethod = "GET"
+                   request.httpMethod = "POST"
                    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                        do {
                         print("StatusCode","Clicks")

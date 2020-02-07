@@ -13,7 +13,7 @@ import iZootoiOSSDK
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        iZooto.initialisation(izooto_id: 40493, application: application)
+        iZooto.initialisation(izooto_id: 42540, application: application)
         UNUserNotificationCenter.current().delegate = self
         
         return true
@@ -21,8 +21,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         iZooto.getToken(deviceToken: deviceToken)
     }
-
-   
-
 }
 
