@@ -5,7 +5,7 @@ target 'iZootoiOSProject' do
   use_frameworks!
   pod 'iZootoiOSSDK', :path=> "../iZootoiOSSDK/"
 
-end
 target 'iZootoNotificationExtendsServices' do
   pod 'iZootoiOSSDK', :path=> "../iZootoiOSSDK/"
+end
 end

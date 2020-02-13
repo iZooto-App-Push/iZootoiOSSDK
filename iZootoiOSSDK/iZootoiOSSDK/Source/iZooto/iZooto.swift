@@ -15,7 +15,7 @@ public class iZooto
 {
     static var  appDelegate = UIApplication.shared.delegate!
     public  static var mizooto_id = Int()
-    public static var userId = 42540
+   // public static var userId = 42540
     public static var rid : String!
     public static var cid : String!
     public static var tokenData : String!

@@ -12,7 +12,6 @@ protocol ResponseHandler  : AnyObject{
     func onSuccess()
     func onFailure()
 }
-
 public class RestAPI
 {
     public static var BASEURL = "https://aevents.izooto.com/"
@@ -21,7 +20,7 @@ public class RestAPI
     public static var LOG = "iZooto :"
    public static func registerToken(token : String, izootoid : Int)
     {
-        var request = URLRequest(url: URL(string: "https://aevents.izooto.com/app.php?s=2&pid=\(izootoid)&btype=8&dtype=3&tz=1575457865071&bver=12&os=5&allowed=1&bKey=\(token)&check=1")!)
+        var request = URLRequest(url: URL(string: "https://aevents.izooto.com/app.php?s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=1")!)
                 request.httpMethod = "GET"
 
                 URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
@@ -34,6 +33,22 @@ public class RestAPI
 
                  
              }
+    static func currentTimeInMilliSeconds()-> Int
+      {
+          let currentDate = Date()
+          let since1970 = currentDate.timeIntervalSince1970
+          return Int(since1970 * 1000)
+      }
+
+     
+      
+       static func  getVersion() -> String {
+          return UIDevice.current.systemVersion
+
+      }
+
+    
+    
     public static func callImpression(notificationData : Aps,userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: "https://impr.izooto.com/imp?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)

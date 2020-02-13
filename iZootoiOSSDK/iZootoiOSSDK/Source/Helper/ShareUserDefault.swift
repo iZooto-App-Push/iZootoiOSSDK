@@ -8,7 +8,7 @@
 
 import Foundation
 struct SharedUserDefault {
-    static let suitName = "group.com.iZootoiOSSDK"
+    static let suitName = "group.com.iZootoiOSProject"
     struct Key {
       static let token = "saveToken"
       static let registerID = "izootoid"
