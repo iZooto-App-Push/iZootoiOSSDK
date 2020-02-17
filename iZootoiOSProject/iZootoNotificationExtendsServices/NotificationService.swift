@@ -19,8 +19,6 @@ class NotificationService: UNNotificationServiceExtension {
        }
        override func serviceExtensionTimeWillExpire() {
            if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
-              // iZooto.serviceExtensionTimeWillExpireRequest(receiveRequest: self.receivedRequest, //bestAttemptContent: self.bestAttemptContent!)
-               
                contentHandler(bestAttemptContent)
            }
        }

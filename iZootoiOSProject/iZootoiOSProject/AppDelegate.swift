@@ -15,13 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         iZooto.initialisation(izooto_id: 42540, application: application)
         UNUserNotificationCenter.current().delegate = self
-        let bundleID = Bundle.main.bundleIdentifier
-        print("BundleIdentifire",bundleID!)
-
-        if launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] != nil {
-           print("from push")
-        }
-        
         return true
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

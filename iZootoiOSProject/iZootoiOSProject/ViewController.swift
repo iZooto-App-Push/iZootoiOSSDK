@@ -7,10 +7,21 @@
 //
 
 import UIKit
+import iZootoiOSSDK
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,iZootoNotificationActionDelegate {
+    func onNotificationReceived(payload: Aps) {
+        print("Recevied","Notifcation")
+    }
+    
+    func onNotificationView(isView: Bool) {
+        print("Clicks")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        iZooto.delegate = self
+
     }
 
 }

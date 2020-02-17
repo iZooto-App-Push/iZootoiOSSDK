@@ -20,7 +20,7 @@ public class RestAPI
     public static var LOG = "iZooto :"
    public static func registerToken(token : String, izootoid : Int)
     {
-        var request = URLRequest(url: URL(string: "https://aevents.izooto.com/app.php?s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=1")!)
+        var request = URLRequest(url: URL(string: "https://aevents.izooto.com/app.php?s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())")!)
                 request.httpMethod = "GET"
 
                 URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
@@ -46,6 +46,11 @@ public class RestAPI
           return UIDevice.current.systemVersion
 
       }
+    static func getAppVersion() -> String {
+           let dictionary = Bundle.main.infoDictionary!
+           let version = dictionary["CFBundleShortVersionString"] as! String
+           return "\(version)"
+       }
 
     
     
@@ -55,7 +60,7 @@ public class RestAPI
             request.httpMethod = "POST"
             URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                 do {
-                 print("StatusCode","Track\(token)")
+                 print("Recevied","Notification Recevied")
                 }
             }).resume()
 
@@ -63,7 +68,7 @@ public class RestAPI
     }
     public static func clickTrack(notificationData : Aps,type : String, userid : Int,token : String)
     {
-        var request = URLRequest(url: URL(string: "https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=7e7ec936e7cde9b3b0e2381ef018392891f8c8e35919f1fe6dd76d20ff54c8b&op=click&btn=\(type)&ver=\(UIDevice.current.systemVersion)")!)
+        var request = URLRequest(url: URL(string: "https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
                    request.httpMethod = "POST"
                    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                        do {

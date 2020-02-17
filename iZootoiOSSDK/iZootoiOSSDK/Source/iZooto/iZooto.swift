@@ -24,6 +24,8 @@ public class iZooto
     public static var secondAction : UNNotificationAction!
     public static var category : UNNotificationCategory!
     public static var type : String!
+    public static var delegate : iZootoNotificationActionDelegate?
+
     
     public init(application : UIApplication)
     {
@@ -99,8 +101,8 @@ public class iZooto
             let userInfo = request.content.userInfo
             print("UserInfo\(userInfo)")
             let notifcationData = Aps(dictionary: (userInfo["aps"] as? NSDictionary)!)
-            RestAPI.callImpression(notificationData: notifcationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-
+          //  RestAPI.callImpression(notificationData: notifcationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+            delegate?.onNotificationReceived(payload: notifcationData!)
 
                 
                                         
@@ -166,6 +168,7 @@ public class iZooto
              {
                 let userInfo = response.notification.request.content.userInfo
                  let notifcationData = Aps(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                delegate?.onNotificationView(isView: true)
 
                 if notifcationData?.category != nil
                 
@@ -231,7 +234,6 @@ public class iZooto
 
             let decodedData = Data(base64Encoded: base64Encoded)!
             let decodedString = String(data: decodedData, encoding: .utf8)!
-            print("Data\(decodedString)",test1 as Any)
             if ((decodedString.range(of: "tel:")) != nil)
             {
                                if let url = URL(string: decodedString) {
@@ -275,5 +277,11 @@ public class iZooto
             return nil
         }
     }
+
+public protocol iZootoNotificationActionDelegate
+{
+    func onNotificationReceived(payload :Aps )
+    func onNotificationView(isView : Bool)
+}
     
 
