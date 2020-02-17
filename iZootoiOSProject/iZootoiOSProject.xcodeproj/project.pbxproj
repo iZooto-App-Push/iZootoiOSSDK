@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		285BA60823F12D8100520F59 /* Pods_iZootoiOSProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B23AA7C9618DAF3F71DF810 /* Pods_iZootoiOSProject.framework */; };
+		285BA60823F12D8100520F59 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		28AEAE5C23ED7B8100A1BFD2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */; };
 		28AEAE5E23ED7B8100A1BFD2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5D23ED7B8100A1BFD2 /* SceneDelegate.swift */; };
 		28AEAE6023ED7B8100A1BFD2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5F23ED7B8100A1BFD2 /* ViewController.swift */; };
@@ -70,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				285BA60823F12D8100520F59 /* Pods_iZootoiOSProject.framework in Frameworks */,
+				285BA60823F12D8100520F59 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
