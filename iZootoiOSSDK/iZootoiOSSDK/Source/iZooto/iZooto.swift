@@ -15,13 +15,15 @@ public class iZooto
 {
     static var  appDelegate = UIApplication.shared.delegate!
     public  static var mizooto_id = Int()
-   // public static var userId = 42540
     public static var rid : String!
     public static var cid : String!
     public static var tokenData : String!
     public let application : UIApplication
+    @available(iOS 10.0, *)
     public static var firstAction : UNNotificationAction!
+    @available(iOS 10.0, *)
     public static var secondAction : UNNotificationAction!
+    @available(iOS 10.0, *)
     public static var category : UNNotificationCategory!
     public static var type : String!
     public static var delegate : iZootoNotificationActionDelegate?
@@ -36,16 +38,28 @@ public class iZooto
          {
                mizooto_id = izooto_id
                registerForPushNotifications()
-               UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+            
+            if #available(iOS 10.0, *) {
+                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+            } else {
+                
+            }
         }
               public  static  func registerForPushNotifications() {
-              UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+                
+                if #available(iOS 10.0, *) {
+                    UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+                } else {
+                    // Fallback on earlier versions
+                }
+            if #available(iOS 10.0, *) {
               UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                   (granted, error) in
                   print("Permission granted: \(granted)")
                 guard granted else { return }
                 getNotificationSettings()
           }
+                }
         }
         @available(iOS 10.0, *)
            func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -54,13 +68,17 @@ public class iZooto
                  }
 
        public static func getNotificationSettings() {
-          UNUserNotificationCenter.current().getNotificationSettings { settings in
-            guard settings.authorizationStatus == .authorized else { return }
-            DispatchQueue.main.async {
-              UIApplication.shared.registerForRemoteNotifications()
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                guard settings.authorizationStatus == .authorized else { return }
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+                
             }
-
-          }
+        } else {
+            // Fallback on earlier versions
+        }
         }
     public  static  func  getToken(deviceToken : Data)
         {
@@ -94,8 +112,10 @@ public class iZooto
 
             }
         }
-
-        public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
+     
+    @available(iOS 10.0, *)
+    @available(iOS 10.0, *)
+    public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
         {
             
             let userInfo = request.content.userInfo
@@ -118,13 +138,15 @@ public class iZooto
 
                     let url: URL? = URL(string: string!)
                     let urlExtension: String? = url?.pathExtension
-                      guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                          print("error in UNNotificationAttachment.saveImageToDisk()")
-                        contentHandler!(bestAttemptContent)
-                          return
-                      }
+                    if #available(iOS 10.0, *) {
+                        guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                            print("error in UNNotificationAttachment.saveImageToDisk()")
+                            contentHandler!(bestAttemptContent)
+                            return
+                        }
+                        bestAttemptContent.attachments = [ attachment ]
 
-                       bestAttemptContent.attachments = [ attachment ]
+                    }
                     }
                 if notifcationData!.category != ""
                 {
@@ -132,7 +154,11 @@ public class iZooto
                     {
                         let name = notifcationData?.act1name!
 
-                        firstAction = UNNotificationAction( identifier: "FirstButton", title:  name!, options: [.foreground])
+                        if #available(iOS 10.0, *) {
+                            firstAction = UNNotificationAction( identifier: "FirstButton", title:  name!, options: [.foreground])
+                        } else {
+                            // Fallback on earlier versions
+                        }
                         
                       
                     }
@@ -144,8 +170,16 @@ public class iZooto
                     if notifcationData?.act1name != ""
                     {
                         if secondAction != nil {
-                       category = UNNotificationCategory( identifier: (notifcationData?.category!)!, actions: [firstAction,secondAction], intentIdentifiers: [], options: [])
-                        UNUserNotificationCenter.current().setNotificationCategories([category])
+                            if #available(iOS 10.0, *) {
+                                category = UNNotificationCategory( identifier: (notifcationData?.category!)!, actions: [firstAction,secondAction], intentIdentifiers: [], options: [])
+                            } else {
+                                // Fallback on earlier versions
+                            }
+                            if #available(iOS 10.0, *) {
+                                UNUserNotificationCenter.current().setNotificationCategories([category])
+                            } else {
+                                // Fallback on earlier versions
+                            }
                         }
                         else{
                             category = UNNotificationCategory( identifier: (notifcationData?.category!)!, actions: [firstAction], intentIdentifiers: [], options: [])
@@ -164,7 +198,8 @@ public class iZooto
                 print(RestAPI.LOG, "Error Notifcation")
             }
         }
-           public static func HandleNotifcation(response : UNNotificationResponse)
+    @available(iOS 10.0, *)
+    public static func HandleNotifcation(response : UNNotificationResponse)
              {
                 let userInfo = response.notification.request.content.userInfo
                  let notifcationData = Aps(dictionary: (userInfo["aps"] as? NSDictionary)!)
@@ -237,7 +272,11 @@ public class iZooto
             if ((decodedString.range(of: "tel:")) != nil)
             {
                                if let url = URL(string: decodedString) {
-                               UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                if #available(iOS 10.0, *) {
+                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                } else {
+                                    // Fallback on earlier versions
+                                }
                                                 }
 
             }
@@ -257,7 +296,8 @@ public class iZooto
 
 
     }
-    @available(iOSApplicationExtension 10.0, *)
+@available(iOS 10.0, *)
+@available(iOSApplicationExtension 10.0, *)
     extension UNNotificationAttachment {
         
         static func saveImageToDisk(fileIdentifier: String, data: NSData, options: [NSObject : AnyObject]?) -> UNNotificationAttachment? {
@@ -268,8 +308,11 @@ public class iZooto
                 try fileManager.createDirectory(at: folderURL!, withIntermediateDirectories: true, attributes: nil)
                 let fileURL = folderURL?.appendingPathComponent(fileIdentifier)
                 try data.write(to: fileURL!, options: [])
-                let attachment = try UNNotificationAttachment(identifier: fileIdentifier, url: fileURL!, options: options)
+                if #available(iOS 10.0, *) {
+                    let attachment = try UNNotificationAttachment(identifier: fileIdentifier, url: fileURL!, options: options)
                 return attachment
+
+                }
             } catch let error {
                 print("error \(error)")
             }
