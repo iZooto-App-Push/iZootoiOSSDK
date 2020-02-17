@@ -16,23 +16,7 @@
 		28AEAE4A23ED6F2000A1BFD2 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE4923ED6F2000A1BFD2 /* UserDefaults.swift */; };
 		28AEAE4D23ED6F6B00A1BFD2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE4B23ED6F6B00A1BFD2 /* ViewController.swift */; };
 		28AEAE4E23ED6F6B00A1BFD2 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AEAE4C23ED6F6B00A1BFD2 /* ViewController.xib */; };
-		28E21A4D23FA72F9002417E7 /* Pods_iZootoiOSSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8C0CE757DD65BBC29C11E77 /* Pods_iZootoiOSSDK.framework */; };
-		28E21A4E23FA72F9002417E7 /* Pods_iZootoiOSSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F8C0CE757DD65BBC29C11E77 /* Pods_iZootoiOSSDK.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		28E21A4F23FA72F9002417E7 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				28E21A4E23FA72F9002417E7 /* Pods_iZootoiOSSDK.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		28AEAE2F23ED675800A1BFD2 /* iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,7 +40,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28E21A4D23FA72F9002417E7 /* Pods_iZootoiOSSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,7 +161,6 @@
 				28AEAE2B23ED675800A1BFD2 /* Sources */,
 				28AEAE2C23ED675800A1BFD2 /* Frameworks */,
 				28AEAE2D23ED675800A1BFD2 /* Resources */,
-				28E21A4F23FA72F9002417E7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -422,7 +404,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -452,7 +434,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iZootoiOSSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

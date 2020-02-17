@@ -53,21 +53,6 @@ public class Utils
         preference.set(isInitialise, forKey: "INSTALL")
         didSave(preferences: preference)
     }
-  public static func getInstalled()->Bool
-    {
-        let preference = UserDefaults.standard
-        if preference.bool(forKey: "INSTALL") != nil
-
-        {
-            let isIntalled = preference.bool(forKey: "INSTALL")
-            return isIntalled
-
-        }
-        else{
-        return false
-        }
-    }
-
     // Checking the UserDefaults is saved or not
    public static func didSave(preferences: UserDefaults){
         let didSave = preferences.synchronize()

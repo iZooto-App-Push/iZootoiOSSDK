@@ -138,7 +138,6 @@ public class iZooto
 
                     let url: URL? = URL(string: string!)
                     let urlExtension: String? = url?.pathExtension
-                    if #available(iOS 10.0, *) {
                         guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
                             print("error in UNNotificationAttachment.saveImageToDisk()")
                             contentHandler!(bestAttemptContent)
@@ -146,7 +145,7 @@ public class iZooto
                         }
                         bestAttemptContent.attachments = [ attachment ]
 
-                    }
+                    
                     }
                 if notifcationData!.category != ""
                 {
@@ -154,11 +153,8 @@ public class iZooto
                     {
                         let name = notifcationData?.act1name!
 
-                        if #available(iOS 10.0, *) {
                             firstAction = UNNotificationAction( identifier: "FirstButton", title:  name!, options: [.foreground])
-                        } else {
-                            // Fallback on earlier versions
-                        }
+                        
                         
                       
                     }
@@ -170,16 +166,10 @@ public class iZooto
                     if notifcationData?.act1name != ""
                     {
                         if secondAction != nil {
-                            if #available(iOS 10.0, *) {
                                 category = UNNotificationCategory( identifier: (notifcationData?.category!)!, actions: [firstAction,secondAction], intentIdentifiers: [], options: [])
-                            } else {
-                                // Fallback on earlier versions
-                            }
-                            if #available(iOS 10.0, *) {
+                            
                                 UNUserNotificationCenter.current().setNotificationCategories([category])
-                            } else {
-                                // Fallback on earlier versions
-                            }
+                            
                         }
                         else{
                             category = UNNotificationCategory( identifier: (notifcationData?.category!)!, actions: [firstAction], intentIdentifiers: [], options: [])
@@ -308,11 +298,10 @@ public class iZooto
                 try fileManager.createDirectory(at: folderURL!, withIntermediateDirectories: true, attributes: nil)
                 let fileURL = folderURL?.appendingPathComponent(fileIdentifier)
                 try data.write(to: fileURL!, options: [])
-                if #available(iOS 10.0, *) {
                     let attachment = try UNNotificationAttachment(identifier: fileIdentifier, url: fileURL!, options: options)
                 return attachment
 
-                }
+                
             } catch let error {
                 print("error \(error)")
             }
