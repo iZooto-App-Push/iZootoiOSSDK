@@ -6,12 +6,12 @@ Pod::Spec.new do |spec|
   spec.homepage     = "https://github.com/izooto-mobile-sdk/iZootoiOSSDK"
   spec.license      = "MIT"
    spec.author      = { "AmitKumarGupta" => "amit@datability.co" }
-  spec.platform     = :ios
-  spec.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
-  spec.ios.deployment_target = '10.0'
+  spec.platform     = :ios,"10"
+  spec.swift_version = '4.0'
   spec.source       = { :git =>"https://github.com/izooto-mobile-sdk/iZootoiOSSDK.git", :tag => "1.0.2" }
-  spec.source_files  = 'iZootoiOSSDK/*'
-  spec.exclude_files = 'iZootoiOSSDK/.plist'
+  spec.source_files  = 'iZootoiOSSDK/**/*'
+  spec.exclude_files = 'iZootoiOSSDK/*.xcuserstate'
+  spec.exclude_files = 'iZootoiOSSDK/**/*.plist'
+
   spec.requires_arc  = true
-    spec.framework      = 'SystemConfiguration', 'UIKit', 'UserNotifications', 'WebKit'
 end

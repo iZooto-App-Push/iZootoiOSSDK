@@ -41,16 +41,11 @@ public class iZooto
             
             if #available(iOS 10.0, *) {
                 UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-            } else {
-                
             }
         }
               public  static  func registerForPushNotifications() {
-                
                 if #available(iOS 10.0, *) {
                     UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                } else {
-                    // Fallback on earlier versions
                 }
             if #available(iOS 10.0, *) {
               UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
@@ -76,8 +71,6 @@ public class iZooto
                 }
                 
             }
-        } else {
-            // Fallback on earlier versions
         }
         }
     public  static  func  getToken(deviceToken : Data)
@@ -113,7 +106,6 @@ public class iZooto
             }
         }
      
-    @available(iOS 10.0, *)
     @available(iOS 10.0, *)
     public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
         {
@@ -264,9 +256,7 @@ public class iZooto
                                if let url = URL(string: decodedString) {
                                 if #available(iOS 10.0, *) {
                                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                } else {
-                                    // Fallback on earlier versions
-                                }
+                                } 
                                                 }
 
             }

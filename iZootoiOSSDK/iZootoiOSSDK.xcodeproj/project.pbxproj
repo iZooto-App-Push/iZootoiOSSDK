@@ -30,9 +30,6 @@
 		28AEAE4923ED6F2000A1BFD2 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		28AEAE4B23ED6F6B00A1BFD2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		28AEAE4C23ED6F6B00A1BFD2 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
-		53D6DB679F8B77A34D107733 /* Pods-iZootoiOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSSDK.debug.xcconfig"; path = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK.debug.xcconfig"; sourceTree = "<group>"; };
-		706DB5ECBEF36F3A8270C61A /* Pods-iZootoiOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSSDK.release.xcconfig"; path = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK.release.xcconfig"; sourceTree = "<group>"; };
-		F8C0CE757DD65BBC29C11E77 /* Pods_iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +49,6 @@
 				28AEAE3123ED675800A1BFD2 /* iZootoiOSSDK */,
 				28AEAE3023ED675800A1BFD2 /* Products */,
 				A0710C03A30F6DD967C55910 /* Pods */,
-				7733C4B5755A045EBED5B3E0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,19 +117,9 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
-		7733C4B5755A045EBED5B3E0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F8C0CE757DD65BBC29C11E77 /* Pods_iZootoiOSSDK.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		A0710C03A30F6DD967C55910 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				53D6DB679F8B77A34D107733 /* Pods-iZootoiOSSDK.debug.xcconfig */,
-				706DB5ECBEF36F3A8270C61A /* Pods-iZootoiOSSDK.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -156,7 +142,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 28AEAE3723ED675800A1BFD2 /* Build configuration list for PBXNativeTarget "iZootoiOSSDK" */;
 			buildPhases = (
-				84ECCFE2FB30BD731C44638C /* [CP] Check Pods Manifest.lock */,
 				28AEAE2A23ED675800A1BFD2 /* Headers */,
 				28AEAE2B23ED675800A1BFD2 /* Sources */,
 				28AEAE2C23ED675800A1BFD2 /* Frameworks */,
@@ -214,31 +199,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		84ECCFE2FB30BD731C44638C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-iZootoiOSSDK-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		28AEAE2B23ED675800A1BFD2 /* Sources */ = {
@@ -380,7 +340,6 @@
 		};
 		28AEAE3823ED675800A1BFD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53D6DB679F8B77A34D107733 /* Pods-iZootoiOSSDK.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -393,7 +352,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = iZootoiOSSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -411,7 +370,6 @@
 		};
 		28AEAE3923ED675800A1BFD2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 706DB5ECBEF36F3A8270C61A /* Pods-iZootoiOSSDK.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -424,7 +382,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = iZootoiOSSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
