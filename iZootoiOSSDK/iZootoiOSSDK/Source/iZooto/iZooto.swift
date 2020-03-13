@@ -274,6 +274,50 @@ public class iZooto
          return url.queryItems?.first(where: { $0.name == param })?.value
        }
 
+    public static func addEvent(eventName : String , data : Dictionary<String,Any>)
+    {
+       
+        
+          if let theJSONData = try?  JSONSerialization.data(
+            withJSONObject: data,
+            options: .fragmentsAllowed
+            ),
+            let theJSONText = NSString(data: theJSONData,
+                                       encoding: String.Encoding.ascii.rawValue) {
+            let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
+            RestAPI.callEvents(eventName: eventName, data: theJSONText as NSString, userid: mizooto_id, token: token!)
+
+          }
+    }
+        
+        public static func addUserProperties( data : Dictionary<String,Any>)
+           {
+              
+               
+                 if let theJSONData = try?  JSONSerialization.data(
+                   withJSONObject: data,
+                   options: .fragmentsAllowed
+                   ),
+                   let theJSONText = NSString(data: theJSONData,
+                                              encoding: String.Encoding.ascii.rawValue) {
+                   let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
+
+                    RestAPI.callUserProperties(data: theJSONText as NSString, userid: mizooto_id, token: token!)
+
+                 }
+               
+          
+        
+        }
+
+        
+        
+        // print(n)
+      //  String api_url = "?pid=" + mIzooToAppId + "&act=" + eventName +
+            //    "&et=evt" + "&bKey=" + preferenceUtil.getStringData(AppConstant.FCM_DEVICE_TOKEN) + "&val=" + //encodeData;//URLEncoder.encode(database, "UTF-8");
+
+    
+
 
     }
 @available(iOS 10.0, *)
@@ -299,7 +343,6 @@ public class iZooto
             return nil
         }
     }
-
 public protocol iZootoNotificationActionDelegate
 {
     func onNotificationReceived(payload :Aps )
