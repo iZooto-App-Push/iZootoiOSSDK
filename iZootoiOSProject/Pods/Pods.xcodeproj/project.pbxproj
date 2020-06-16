@@ -562,7 +562,6 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK.modulemap";
-				NEW_SETTING = "";
 				PRODUCT_MODULE_NAME = iZootoiOSSDK;
 				PRODUCT_NAME = iZootoiOSSDK;
 				SDKROOT = iphoneos;
@@ -814,7 +813,6 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK.modulemap";
-				NEW_SETTING = "";
 				PRODUCT_MODULE_NAME = iZootoiOSSDK;
 				PRODUCT_NAME = iZootoiOSSDK;
 				SDKROOT = iphoneos;

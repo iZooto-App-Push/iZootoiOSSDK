@@ -9,22 +9,16 @@
 import UIKit
 import iZootoiOSSDK
 
-class ViewController: UIViewController,iZootoNotificationActionDelegate {
-    func onNotificationReceived(payload: Aps) {
-         print("Payload")
-    }
+class ViewController: UIViewController {
     
-    func onNotificationView(isView: Bool) {
-        print("istap")
-    }
     
        
     override func viewDidLoad() {
         super.viewDidLoad()
-        iZooto.delegate = self
-        let data = ["Number": "3456566", "NAme": "Metro","Amount":"160"]
-        iZooto.addEvent(eventName: "Metrocard", data: data)
-        iZooto.addUserProperties(data: data)
+     //   iZooto.delegate = self
+       // let data = ["Number": "3456566", "NAme": "Metro","Amount":"160"]
+       // iZooto.addEvent(eventName: "CREDITCARD", data: data)
+       // iZooto.addUserProperties(data: data)
         
 
     }

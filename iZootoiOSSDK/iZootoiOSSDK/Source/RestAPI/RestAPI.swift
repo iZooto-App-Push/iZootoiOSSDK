@@ -24,12 +24,16 @@ public class RestAPI
 
    public static func registerToken(token : String, izootoid : Int)
     {
-        var request = URLRequest(url: URL(string: "https://aevents.izooto.com/app.php?s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())")!)
+       
+        var request = URLRequest(url: URL(string: "https://aevents.izooto.com/app.php?s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())")!)
+        
                 request.httpMethod = "GET"
 
                 URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                     do {
                        print("Token",token)
+                     UserDefaults.isRegistered(isRegister: true)
+
                       print(RestAPI.LOG,"Registration Successfull")
 
                     }
@@ -44,7 +48,15 @@ public class RestAPI
           return Int(since1970 * 1000)
       }
 
-     
+     static func getDeviceName()->String
+     {
+        let name = UIDevice.current.model
+        if name != nil{
+            return name}
+        else{
+         return "iOS"
+        }
+    }
       
        static func  getVersion() -> String {
           return UIDevice.current.systemVersion
@@ -96,9 +108,12 @@ public class RestAPI
                print("User Properties : Some error occured")
                 }
          }
-    public static func callImpression(notificationData : Aps,userid : Int,token : String)
+    public static func callImpression(notificationData : Payload,userid : Int,token : String)
     {
+       
+        
         var request = URLRequest(url: URL(string: "https://impr.izooto.com/imp?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
+
             request.httpMethod = "POST"
             URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                 do {
@@ -108,13 +123,15 @@ public class RestAPI
 
         
     }
-    public static func clickTrack(notificationData : Aps,type : String, userid : Int,token : String)
+    public static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: "https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
+         print("Data","https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getAppVersion())")
                    request.httpMethod = "POST"
                    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                        do {
                         print("StatusCode","Clicks")
+                        
                        }
                    }).resume()
 

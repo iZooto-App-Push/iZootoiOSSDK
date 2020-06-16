@@ -9,24 +9,35 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController,WKUIDelegate {
+class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
     var window : UIWindow?
      var webView: WKWebView!
     static var seriveURL : String?
     static var title : String?
 
-    
+    var activityIndicator: UIActivityIndicatorView!
+
     override func loadView() {
         super.loadView()
               let webConfiguration = WKWebViewConfiguration()
               webView = WKWebView(frame: .zero, configuration: webConfiguration)
               webView.uiDelegate = self
+             webView.navigationDelegate = self
               webView.frame=self.view.bounds
               view.addSubview(webView)
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setToolBar()
+        activityIndicator = UIActivityIndicatorView()
+               activityIndicator.center = self.view.center
+               activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+
+               view.addSubview(activityIndicator)
+        
+        
         webView.scrollView.contentInset = UIEdgeInsets(top: 43,left: 0,bottom: 0,right: 0);
             if let url = URL(string: ViewController.seriveURL!) {
               let request = URLRequest(url: url)
@@ -50,6 +61,24 @@ class ViewController: UIViewController,WKUIDelegate {
     }
 
 
+    func showActivityIndicator(show: Bool) {
+        if show {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
 
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        showActivityIndicator(show: false)
+    }
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        showActivityIndicator(show: true)
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        showActivityIndicator(show: false)
+    }
   
 }
