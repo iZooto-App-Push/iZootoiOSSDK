@@ -503,7 +503,7 @@ public class iZooto
                 
                  if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
                                           {
-                                             RestAPI.clickTrack(notificationData: notifcationData!, type: "btn0",userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                                             RestAPI.clickTrack(notificationData: notifcationData!, type: "0",userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
                                             
                                             
                                             
@@ -601,7 +601,7 @@ public class iZooto
                                      {
                                           case "FirstButton" :
                                               
-                                              type = "btn1"
+                                              type = "1"
                                               RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
                                               if notifcationData?.ap != "" && notifcationData?.ap != nil
                                                              {
@@ -671,7 +671,7 @@ public class iZooto
                                           break
                                          case "SecondButton" :
                                           
-                                          type = "btn2"
+                                          type = "2"
                                           RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
 
                                           if notifcationData?.ap != "" && notifcationData?.ap != nil
@@ -723,7 +723,7 @@ public class iZooto
                                           }
                                            break
                                      default:
-                                      type = "btn0"
+                                      type = "0"
                                        RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
                                       if notifcationData?.ap != "" && notifcationData?.ap != nil
                                                             {
@@ -762,7 +762,7 @@ public class iZooto
                         
                         
                         
-                                      type = "btn0"
+                                      type = "0"
                         
                                     RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
                         
