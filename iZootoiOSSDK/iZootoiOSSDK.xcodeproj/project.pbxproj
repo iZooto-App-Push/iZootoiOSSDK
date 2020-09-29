@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28A306AC2523397400950BED /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A306AB2523397400950BED /* AppConstants.swift */; };
 		28AEAE3423ED675800A1BFD2 /* iZootoiOSSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AEAE3223ED675800A1BFD2 /* iZootoiOSSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28AEAE3E23ED6BB900A1BFD2 /* iZooto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE3D23ED6BB900A1BFD2 /* iZooto.swift */; };
 		28AEAE4123ED6DF700A1BFD2 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE4023ED6DF700A1BFD2 /* Payload.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		28A306AB2523397400950BED /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		28AEAE2F23ED675800A1BFD2 /* iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AEAE3223ED675800A1BFD2 /* iZootoiOSSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iZootoiOSSDK.h; sourceTree = "<group>"; };
 		28AEAE3323ED675800A1BFD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				28AEAE4023ED6DF700A1BFD2 /* Payload.swift */,
+				28A306AB2523397400950BED /* AppConstants.swift */,
 			);
 			path = Payload;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				28AEAE4823ED6EED00A1BFD2 /* Utils.swift in Sources */,
 				28AEAE4623ED6EB800A1BFD2 /* ShareUserDefault.swift in Sources */,
 				28AEAE4A23ED6F2000A1BFD2 /* UserDefaults.swift in Sources */,
+				28A306AC2523397400950BED /* AppConstants.swift in Sources */,
 				28AEAE4423ED6E4D00A1BFD2 /* RestAPI.swift in Sources */,
 				28AEAE4D23ED6F6B00A1BFD2 /* ViewController.swift in Sources */,
 				28AEAE4123ED6DF700A1BFD2 /* Payload.swift in Sources */,

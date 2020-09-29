@@ -61,6 +61,51 @@ public class Utils
             print("Preferences could not be saved!")
         }
     }
+    public static func eventValidate(eventName : String)->String
+       {
+           let replaced = eventName.replacingOccurrences(of: " ", with: "_")
+           let validataEventname = SimpleSubstring(string: replaced, length: 32)
+           return validataEventname
+       }
+    public static func dataValidate( data : Dictionary<String,Any>)->Dictionary<String,Any>
+    {
+        
+        var updatedData = Dictionary<String,Any>()
+         for key in data.keys {
+
+            print("KEY: \(key)")
+
+            let value = data[key]
+            let keyName = SimpleSubstring(string: key, length: 32)
+
+            if value is Int {
+                updatedData[keyName] = value
+            }
+
+            if value is Bool {
+                 updatedData[keyName] = value
+            }
+           if value is String
+           {
+            let newValue = SimpleSubstring(string: value as! String, length: 64)
+             updatedData[keyName] = newValue
+        }
+        
+
+        }
+        
+        
+        return updatedData
+    }
+          private static func SimpleSubstring(string : String, length : Int) -> String {
+               var returnString = string
+
+               if (string.count > length) {
+                   returnString = String(string[...string.index(string.startIndex, offsetBy: length - 1)])
+               }
+
+               return returnString
+           }
 
 }
  

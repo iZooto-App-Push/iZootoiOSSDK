@@ -41,6 +41,21 @@ public class RestAPI
 
                  
              }
+    public static func callSubscription(isSubscribe : Int,token : String,userid : Int)
+        
+    {
+
+            
+        var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub?pid=\(userid)&btype=8&dtype=3&pte=3&bver=\(getVersion())&os=5&pt=0&bKey=\(token)&ge=1&action=\(isSubscribe)")!)
+                       request.httpMethod = "POST"
+                       URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                           do {
+
+                           }
+                       }).resume()
+    }
+        
+    
     static func currentTimeInMilliSeconds()-> Int
       {
           let currentDate = Date()
@@ -51,11 +66,8 @@ public class RestAPI
      static func getDeviceName()->String
      {
         let name = UIDevice.current.model
-        if name != nil{
-            return name}
-        else{
-         return "iOS"
-        }
+        return name
+       
     }
       
        static func  getVersion() -> String {
@@ -71,7 +83,7 @@ public class RestAPI
     
     public static func callEvents(eventName : String, data : NSString,userid : Int,token : String)
       {
-              if(eventName != nil && data != nil ){
+              if( eventName != "" && data != nil ){
         let escapedString = data.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)
                 var request = URLRequest(url: URL(string: RestAPI.EVENT_URL+"?pid=\(userid)&act=\(eventName)&et=evt&bKey=\(token)&val=\(escapedString!)")!)
                            request.httpMethod = "POST"
@@ -92,7 +104,7 @@ public class RestAPI
       }
     public static func callUserProperties( data : NSString,userid : Int,token : String)
          {
-        if( data != nil ){
+        if( data != "" ){
            
               let userpropertiesData = data.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)
 
@@ -117,7 +129,7 @@ public class RestAPI
             request.httpMethod = "POST"
             URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                 do {
-                 print("Recevied","Notification Recevied")
+                // print("Recevied","Notification Recevied")
                 }
             }).resume()
 
@@ -126,11 +138,11 @@ public class RestAPI
     public static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: "https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
-         print("Data","https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getAppVersion())")
+
                    request.httpMethod = "POST"
                    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                        do {
-                        print("StatusCode","Clicks")
+                       // print("StatusCode","Clicks")
                         
                        }
                    }).resume()
