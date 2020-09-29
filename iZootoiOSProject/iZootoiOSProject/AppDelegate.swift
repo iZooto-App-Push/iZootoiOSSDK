@@ -30,9 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var i = 0
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        iZooto.initialisation(izooto_id: 42540, application: application)
+        iZooto.initialisation(izooto_id: 42540, application: application, provisioanlCheck: false)
         UNUserNotificationCenter.current().delegate = self
         iZooto.delegate = self
+        
 
         return true
     }
