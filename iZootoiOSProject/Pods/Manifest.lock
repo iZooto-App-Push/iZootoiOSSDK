@@ -1,5 +1,5 @@
 PODS:
-  - iZootoiOSSDK (1.0.6)
+  - iZootoiOSSDK (1.0.9)
 
 DEPENDENCIES:
   - iZootoiOSSDK (from `../iZootoiOSSDK/`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../iZootoiOSSDK/"
 
 SPEC CHECKSUMS:
-  iZootoiOSSDK: 3904f03014252bf1729fe1b4acd4652b425b9bbe
+  iZootoiOSSDK: d8a628e72dbb70651de990ad7fcb46c9334eb69a
 
-PODFILE CHECKSUM: 7d950e224c9ef2edd061d4efabaeb1aa48222d33
+PODFILE CHECKSUM: fa755f1709278234a3e278b146687f4ed6feed61
 
 COCOAPODS: 1.8.4

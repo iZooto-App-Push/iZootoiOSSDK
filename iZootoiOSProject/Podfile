@@ -5,6 +5,7 @@
 target 'iZootoiOSProject' do
   pod 'iZootoiOSSDK', :path=> "../iZootoiOSSDK/"
 
+
 target 'iZootoNotificationExtendsServices' do
   pod 'iZootoiOSSDK', :path=> "../iZootoiOSSDK/"
 end

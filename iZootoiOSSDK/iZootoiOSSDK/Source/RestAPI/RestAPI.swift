@@ -16,25 +16,26 @@ public class RestAPI
 {
     public static var BASEURL = "https://aevents.izooto.com/"
     public static var ENCRPTIONURL="https://cdn.izooto.com/app/app_"
-    public static var  IMPRESSION_URL="https://impr.izooto.com/imp?";
+    private static var  IMPRESSION_URL="https://impr.izooto.com/imp?";
     public static var LOG = "iZooto :"
-    public static  var EVENT_URL = "https://et.izooto.com/evt";
-    public static var  PROPERTIES_URL="https://prp.izooto.com/prp";
+    private static  var EVENT_URL = "https://et.izooto.com/evt?";
+    private static var  PROPERTIES_URL="https://prp.izooto.com/prp?";
+    private static var CLICK_URL="https://clk.izooto.com/clk?";
+    private static var REGISTRATION_URL="https://aevents.izooto.com/app.php?";
 
 
    public static func registerToken(token : String, izootoid : Int)
     {
        
-        var request = URLRequest(url: URL(string: "https://aevents.izooto.com/app.php?s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())")!)
-        
-                request.httpMethod = "GET"
-
-                URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(getUUID())")!)
+  
+  
+        request.httpMethod = AppConstant.REQUEST_GET
+        URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                     do {
-                       print("Token",token)
-                     UserDefaults.isRegistered(isRegister: true)
-
-                      print(RestAPI.LOG,"Registration Successfull")
+                        print(AppConstant.DEVICE_TOKEN,token)
+                        UserDefaults.isRegistered(isRegister: true)
+                         print(AppConstant.SUCESSFULLY)
 
                     }
                 }).resume()
@@ -47,12 +48,30 @@ public class RestAPI
 
             
         var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub?pid=\(userid)&btype=8&dtype=3&pte=3&bver=\(getVersion())&os=5&pt=0&bKey=\(token)&ge=1&action=\(isSubscribe)")!)
-                       request.httpMethod = "POST"
+        request.httpMethod = AppConstant.REQUEST_POST
                        URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                            do {
 
                            }
                        }).resume()
+    }
+
+   static  public func createRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
+    {
+    let requestURL = URL(string: "https://cdn.izooto.com/app/app_\(uuid).dat")
+        let request = URLRequest(url: requestURL!)
+        let requestTask = URLSession.shared.dataTask(with: request) {
+            (data: Data?, response: URLResponse?, error: Error?) in
+
+            if(error != nil) {
+                print("Error:  ")
+            }else
+            {
+                let outputStr  = String(data: data!, encoding: String.Encoding.utf8)!
+                completionBlock(outputStr);
+            }
+        }
+        requestTask.resume()
     }
         
     
@@ -69,11 +88,34 @@ public class RestAPI
         return name
        
     }
+    static func getUUID()->String
+    {
+        let device_id = UIDevice.current.identifierForVendor!.uuidString
+        
+        return device_id
+
+    }
       
        static func  getVersion() -> String {
-          return UIDevice.current.systemVersion
+        return UIDevice.current.systemVersion
 
       }
+    
+   static func getAppInfo()->String {
+        let dictionary = Bundle.main.infoDictionary!
+        let version = dictionary["CFBundleShortVersionString"] as! String
+        let build = dictionary["CFBundleVersion"] as! String
+        return version + "(" + build + ")"
+    }
+    static func getAppName()->String {
+        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+        return appName
+    }
+    static func getOSInfo()->String {
+        let os = ProcessInfo().operatingSystemVersion
+        return String(os.majorVersion) + "." + String(os.minorVersion) + "." + String(os.patchVersion)
+    }
+    
     static func getAppVersion() -> String {
            let dictionary = Bundle.main.infoDictionary!
            let version = dictionary["CFBundleShortVersionString"] as! String
@@ -83,20 +125,20 @@ public class RestAPI
     
     public static func callEvents(eventName : String, data : NSString,userid : Int,token : String)
       {
-              if( eventName != "" && data != nil ){
+        if( eventName != " "  ){
         let escapedString = data.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)
-                var request = URLRequest(url: URL(string: RestAPI.EVENT_URL+"?pid=\(userid)&act=\(eventName)&et=evt&bKey=\(token)&val=\(escapedString!)")!)
-                           request.httpMethod = "POST"
+                var request = URLRequest(url: URL(string: RestAPI.EVENT_URL+"pid=\(userid)&act=\(eventName)&et=evt&bKey=\(token)&val=\(escapedString!)")!)
+                     request.httpMethod = AppConstant.REQUEST_POST
                            URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                                do {
-                                print("Add Event","Sucessfully")
+                                print(AppConstant.ADD_EVENT)
                                }
                             }).resume()
 
         
         }
         else{
-            print("Event : Some error occured")
+            print(AppConstant.ERROR_EVENT)
         }
         
 
@@ -105,31 +147,30 @@ public class RestAPI
     public static func callUserProperties( data : NSString,userid : Int,token : String)
          {
         if( data != "" ){
-           
-              let userpropertiesData = data.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)
 
-            var request = URLRequest(url: URL(string: RestAPI.PROPERTIES_URL+"?pid=\(userid)&act=add&et=userp&bKey=\(token)&val=\(userpropertiesData!)")!)
-                              request.httpMethod = "POST"
+
+              let userpropertiesData = data.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)
+            var request = URLRequest(url: URL(string: RestAPI.PROPERTIES_URL+"pid=\(userid)&act=add&et=userp&bKey=\(token)&val=\(userpropertiesData!)")!)
+               request.httpMethod = AppConstant.REQUEST_POST
                               URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                                   do {
-                                   print("Add User Properties","Sucessfully")
+                                    print(AppConstant.ADD_PROPERTIES)
                                   }
                                }).resume()
                         }
             else{
-               print("User Properties : Some error occured")
+            print( AppConstant.ERROR_PROPERTIES)
                 }
+            
+            
          }
     public static func callImpression(notificationData : Payload,userid : Int,token : String)
     {
-       
-        
-        var request = URLRequest(url: URL(string: "https://impr.izooto.com/imp?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
+        var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
 
-            request.httpMethod = "POST"
+            request.httpMethod = AppConstant.REQUEST_POST
             URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                 do {
-                // print("Recevied","Notification Recevied")
                 }
             }).resume()
 
@@ -137,12 +178,14 @@ public class RestAPI
     }
     public static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
-        var request = URLRequest(url: URL(string: "https://clk.izooto.com/clk?pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
+        var request = URLRequest(url: URL(string: RestAPI.CLICK_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
+        
+        
 
-                   request.httpMethod = "POST"
+                request.httpMethod = AppConstant.REQUEST_POST
+
                    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                        do {
-                       // print("StatusCode","Clicks")
                         
                        }
                    }).resume()
@@ -157,11 +200,11 @@ public class RestAPI
             {(data,response,error)in
                 if error != nil
                 {
-                    print("Error")
+                    print(AppConstant.FAILURE)
                     return
                 }
                 if data != nil{
-                    print("Success")
+                    print(AppConstant.SUCESS)
                 }
                 
             }

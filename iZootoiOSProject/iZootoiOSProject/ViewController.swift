@@ -8,18 +8,49 @@
 
 import UIKit
 import iZootoiOSSDK
+import WebKit
 
 class ViewController: UIViewController {
     
+   
     
-       
+    @IBAction func addProperties(_ sender: Any) {
+        let data = ["Number": "3456566", "lang_ਪੰਜਾਬੀ": "NO","ISICECREAME":true] as [String : Any]
+           // iZooto.addUserProperties(data: data)
+        iZooto.registerForPushNotifications()
+
+    }
+    @IBAction func shareToken(_ sender: Any) {
+        
+        let sharedPref = UserDefaults.standard
+        let token = sharedPref.string(forKey: "Token")
+        let text = "This is a token .\(token!)"
+
+        // set up activity view controller
+        let textToShare = [text]
+        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+
+        // exclude some activity types from the list (optional)
+        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+
+        // present the view controller
+        self.present(activityViewController, animated: true, completion: nil)
+        
+        
+    }
+    @IBAction func clickAction(_ sender: Any) {
+        print("clicks")
+//        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "newsview") as! NewsController//
+//        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+    @IBOutlet var webview: WKWebView!
+    public static var Webview = WKWebView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-     //   iZooto.delegate = self
-       // let data = ["Number": "3456566", "NAme": "Metro","Amount":"160"]
-       // iZooto.addEvent(eventName: "CREDITCARD", data: data)
-       // iZooto.addUserProperties(data: data)
-        
+   
 
     }
 

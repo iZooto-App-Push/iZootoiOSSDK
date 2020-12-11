@@ -17,11 +17,11 @@
 		28AEAE4A23ED6F2000A1BFD2 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE4923ED6F2000A1BFD2 /* UserDefaults.swift */; };
 		28AEAE4D23ED6F6B00A1BFD2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE4B23ED6F6B00A1BFD2 /* ViewController.swift */; };
 		28AEAE4E23ED6F6B00A1BFD2 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AEAE4C23ED6F6B00A1BFD2 /* ViewController.xib */; };
+		A608DF6771B2A33302DF8CA9 /* Pods_iZootoiOSSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D57522CD2FD214022AD1703A /* Pods_iZootoiOSSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2834A3F42523419300DDCB77 /* AppConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
-		28A306AB2523397400950BED /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		28AEAE2F23ED675800A1BFD2 /* iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AEAE3223ED675800A1BFD2 /* iZootoiOSSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iZootoiOSSDK.h; sourceTree = "<group>"; };
 		28AEAE3323ED675800A1BFD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -33,6 +33,9 @@
 		28AEAE4923ED6F2000A1BFD2 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		28AEAE4B23ED6F6B00A1BFD2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		28AEAE4C23ED6F6B00A1BFD2 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		A7374778DA15FCE700009462 /* Pods-iZootoiOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSSDK.release.xcconfig"; path = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK.release.xcconfig"; sourceTree = "<group>"; };
+		BE297B4B897AD34F61895D52 /* Pods-iZootoiOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSSDK.debug.xcconfig"; path = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		D57522CD2FD214022AD1703A /* Pods_iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A608DF6771B2A33302DF8CA9 /* Pods_iZootoiOSSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +56,7 @@
 				28AEAE3123ED675800A1BFD2 /* iZootoiOSSDK */,
 				28AEAE3023ED675800A1BFD2 /* Products */,
 				A0710C03A30F6DD967C55910 /* Pods */,
+				A25CF4350D407C25E8D9DB33 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				28AEAE4023ED6DF700A1BFD2 /* Payload.swift */,
-				28A306AB2523397400950BED /* AppConstants.swift */,
 			);
 			path = Payload;
 			sourceTree = "<group>";
@@ -125,8 +129,18 @@
 		A0710C03A30F6DD967C55910 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				BE297B4B897AD34F61895D52 /* Pods-iZootoiOSSDK.debug.xcconfig */,
+				A7374778DA15FCE700009462 /* Pods-iZootoiOSSDK.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		A25CF4350D407C25E8D9DB33 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D57522CD2FD214022AD1703A /* Pods_iZootoiOSSDK.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +161,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 28AEAE3723ED675800A1BFD2 /* Build configuration list for PBXNativeTarget "iZootoiOSSDK" */;
 			buildPhases = (
+				BCBB582A7A24BBC650B02A7C /* [CP] Check Pods Manifest.lock */,
 				28AEAE2A23ED675800A1BFD2 /* Headers */,
 				28AEAE2B23ED675800A1BFD2 /* Sources */,
 				28AEAE2C23ED675800A1BFD2 /* Frameworks */,
@@ -204,6 +219,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BCBB582A7A24BBC650B02A7C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iZootoiOSSDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		28AEAE2B23ED675800A1BFD2 /* Sources */ = {
@@ -346,6 +386,7 @@
 		};
 		28AEAE3823ED675800A1BFD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE297B4B897AD34F61895D52 /* Pods-iZootoiOSSDK.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -377,6 +418,7 @@
 		};
 		28AEAE3923ED675800A1BFD2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7374778DA15FCE700009462 /* Pods-iZootoiOSSDK.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_MODULES = YES;

@@ -49,7 +49,6 @@ public class Utils
    public static func  initFireBaseInialise(isInitialise : Bool)
     {
         let preference = UserDefaults.standard
-        print("Install",isInitialise)
         preference.set(isInitialise, forKey: "INSTALL")
         didSave(preferences: preference)
     }
@@ -65,30 +64,30 @@ public class Utils
        {
            let replaced = eventName.replacingOccurrences(of: " ", with: "_")
            let validataEventname = SimpleSubstring(string: replaced, length: 32)
-           return validataEventname
+          return validataEventname.lowercased()
        }
     public static func dataValidate( data : Dictionary<String,Any>)->Dictionary<String,Any>
     {
         
+     
         var updatedData = Dictionary<String,Any>()
          for key in data.keys {
 
-            print("KEY: \(key)")
 
             let value = data[key]
             let keyName = SimpleSubstring(string: key, length: 32)
 
             if value is Int {
-                updatedData[keyName] = value
+                updatedData[keyName.lowercased()] = value
             }
 
             if value is Bool {
-                 updatedData[keyName] = value
+                updatedData[keyName.lowercased()] = value
             }
            if value is String
            {
             let newValue = SimpleSubstring(string: value as! String, length: 64)
-             updatedData[keyName] = newValue
+            updatedData[keyName.lowercased()] = newValue
         }
         
 
@@ -107,6 +106,13 @@ public class Utils
                return returnString
            }
 
+}
+public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
+{
+    let pattern = "[a-zA-Z0-9-_.~%]+"
+    
+
+    return true
 }
  
   
