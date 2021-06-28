@@ -19,6 +19,7 @@
 		28AEAE6823ED7B8200A1BFD2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28AEAE6623ED7B8200A1BFD2 /* LaunchScreen.storyboard */; };
 		28AEAE9623ED895E00A1BFD2 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE9523ED895E00A1BFD2 /* NotificationService.swift */; };
 		28AEAE9A23ED895E00A1BFD2 /* iZootoNotificationExtendsServices.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 28AEAE9323ED895E00A1BFD2 /* iZootoNotificationExtendsServices.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		28DE164E268473F6001842E5 /* pikachu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 28DE164D268473F6001842E5 /* pikachu.mp3 */; };
 		672F094C0C9EF1920C919C47 /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF5B8FFE013C2EB5CCD5345C /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */; };
 		F8DD71FB556D805564942262 /* Pods_iZootoiOSProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F27B6B814988AA52A6791498 /* Pods_iZootoiOSProject.framework */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,7 @@
 		28AEAE9723ED895E00A1BFD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28AEAE9F23ED8C6100A1BFD2 /* iZootoNotificationExtendsServices.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iZootoNotificationExtendsServices.entitlements; sourceTree = "<group>"; };
 		28AEAEA023ED8C6E00A1BFD2 /* iZootoiOSProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iZootoiOSProject.entitlements; sourceTree = "<group>"; };
+		28DE164D268473F6001842E5 /* pikachu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikachu.mp3; sourceTree = "<group>"; };
 		30CEAD1618D21DD00E73D0DB /* Pods-iZootoiOSProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSProject.debug.xcconfig"; path = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject.debug.xcconfig"; sourceTree = "<group>"; };
 		5BC19B73448C3198F6F8283D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig"; path = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig"; sourceTree = "<group>"; };
 		B4A561CDEA701DD5B7D29F43 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig"; path = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig"; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 		28AEAE5A23ED7B8100A1BFD2 /* iZootoiOSProject */ = {
 			isa = PBXGroup;
 			children = (
+				28DE164D268473F6001842E5 /* pikachu.mp3 */,
 				28740CA12459672300E51907 /* title.png */,
 				28740C9F2459649500E51907 /* logo.png */,
 				28AEAEA023ED8C6E00A1BFD2 /* iZootoiOSProject.entitlements */,
@@ -215,6 +218,7 @@
 				TargetAttributes = {
 					28AEAE5723ED7B8100A1BFD2 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1230;
 					};
 					28AEAE9223ED895E00A1BFD2 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -247,6 +251,7 @@
 			files = (
 				28740CA02459649500E51907 /* logo.png in Resources */,
 				28AEAE6823ED7B8200A1BFD2 /* LaunchScreen.storyboard in Resources */,
+				28DE164E268473F6001842E5 /* pikachu.mp3 in Resources */,
 				28AEAE6523ED7B8200A1BFD2 /* Assets.xcassets in Resources */,
 				28AEAE6323ED7B8100A1BFD2 /* Main.storyboard in Resources */,
 				28740CA22459672300E51907 /* title.png in Resources */,
@@ -497,11 +502,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = iZootoiOSProject/iZootoiOSProject.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = N2T2473XHF;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -513,6 +520,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iZootoiOSProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -524,11 +532,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = iZootoiOSProject/iZootoiOSProject.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = N2T2473XHF;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (

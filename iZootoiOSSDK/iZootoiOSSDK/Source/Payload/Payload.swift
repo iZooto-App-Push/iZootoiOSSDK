@@ -7,7 +7,8 @@
 //
 
 import Foundation
-public class Payload {
+@objc
+public class Payload  : NSObject{
     public var alert : Alert?
     public var key : Int?
     public var id : String? // int

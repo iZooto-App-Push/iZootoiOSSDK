@@ -7,8 +7,8 @@
 //
 
 import Foundation
-
-class AppConstant
+@objc
+class AppConstant : NSObject
 {
     public static let TAG = "iZooto"
     public static let PERMISSION_GRANTED = "Permission granted:"

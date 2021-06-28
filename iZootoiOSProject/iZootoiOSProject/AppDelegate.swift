@@ -8,14 +8,16 @@
 
 import UIKit
 import iZootoiOSSDK
+import AppTrackingTransparency
+import AdSupport
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,iZootoNotificationOpenDelegate ,iZootoNotificationReceiveDelegate
     ,iZootoLandingURLDelegate{
-  
-    
     // handle deeplink
     func onNotificationOpen(action: Dictionary<String, Any>) {
-        print(action)
+        print("DeepLink",action)
     }
     
     // Handle url
@@ -36,33 +38,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        
         // for setting
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
-       
-        // initialisation
-        iZooto.initialisation(izooto_id: "89fd02e5e91f0cbd4e456d3cbef98ce60c517dbe", application: application,  iZootoInitSettings:iZootoInitSettings)//iZootoKeySetting=iZootoInitSettings
-        UNUserNotificationCenter.current().delegate = self//initialize()
-
-        iZooto.setFirebaseAnalytics(isCheck: false)
-       // iZooto.notificationOpenDelegate = self
+        iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
+        UNUserNotificationCenter.current().delegate = self
         iZooto.notificationReceivedDelegate = self
-     //   iZooto.landingURLDelegate = self
-        
-      
-        
+        iZooto.landingURLDelegate = self
+        if launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] != nil {
+            iZooto.notificationOpenDelegate = self
+        }
+        else
+        {
+            iZooto.notificationOpenDelegate = self
 
-            return true
+        }
+        
+        requestPermission()
+
+      
+        return true
+    }
+    func requestPermission() {
+        if #available(iOS 14, *) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                switch status {
+                case .authorized:
+                    // Tracking authorization dialog was shown
+                    // and we are authorized
+                    print("Authorized")
+                    print(ASIdentifierManager.shared().advertisingIdentifier)
+                case .denied:
+                    // Tracking authorization dialog was
+                    // shown and permission is denied
+                    print("Denied")
+                case .notDetermined:
+                    // Tracking authorization dialog has not been shown
+                    print("Not Determined")
+                case .restricted:
+                    print("Restricted")
+                @unknown default:
+                    print("Unknown")
+                }
+            }
+        }
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         iZooto.getToken(deviceToken: deviceToken)
-        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-
-        let sharedPref = UserDefaults.standard
-        sharedPref.setValue(token, forKey: "Token")
-        
-        
     
-
-
-       
     }
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {

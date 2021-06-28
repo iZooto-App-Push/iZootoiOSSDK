@@ -15,9 +15,9 @@ class ViewController: UIViewController {
    
     
     @IBAction func addProperties(_ sender: Any) {
-        let data = ["Number": "3456566", "lang_ਪੰਜਾਬੀ": "NO","ISICECREAME":true] as [String : Any]
-           // iZooto.addUserProperties(data: data)
-        iZooto.registerForPushNotifications()
+        let data = ["language": "bangla"] as [String : Any]
+            iZooto.addUserProperties(data: data)
+      //  iZooto.registerForPushNotifications()
 
     }
     @IBAction func shareToken(_ sender: Any) {
@@ -50,6 +50,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+       
+
+
+      
    
 
     }

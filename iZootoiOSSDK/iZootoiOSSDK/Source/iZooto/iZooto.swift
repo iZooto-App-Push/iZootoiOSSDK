@@ -16,8 +16,8 @@ import CommonCrypto
 import WebKit
 
 let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
-
-public class iZooto
+@objc
+public class iZooto : NSObject
 {
     static var  appDelegate = UIApplication.shared.delegate!
     private  static var mizooto_id = Int()
@@ -45,25 +45,18 @@ public class iZooto
     private static var storyBoardData = UIStoryboard.self
     private static var identifireNameData = String.self
     private static var controllerData = UIViewController.self
-    public static var landingURLDelegate : iZootoLandingURLDelegate?
+   @objc  public static var landingURLDelegate : iZootoLandingURLDelegate?
     private static var keySettingDetails = Dictionary<String,Any>()
-    public static var notificationReceivedDelegate : iZootoNotificationReceiveDelegate?
-    public static var notificationOpenDelegate : iZootoNotificationOpenDelegate?
-
-
-
-    
-    public init(application : UIApplication)
+  @objc  public static var notificationReceivedDelegate : iZootoNotificationReceiveDelegate?
+  @objc   public static var notificationOpenDelegate : iZootoNotificationOpenDelegate?
+   @objc public init(application : UIApplication)
     {
         self.application = application
-
-        
     }
     
 // initialise the device and register the token
-    public static func initialisation(izooto_id : String, application : UIApplication,iZootoInitSettings : Dictionary<String,Any>)
+   @objc public static func initialisation(izooto_id : String, application : UIApplication,iZootoInitSettings : Dictionary<String,Any>)
          {
-              
             izooto_uuid = izooto_id
             keySettingDetails = iZootoInitSettings
             RestAPI.createRequest(uuid: izooto_uuid) { (output) in
@@ -71,6 +64,7 @@ public class iZooto
             let data = jsonString!.data(using: .utf8)!
                    let json = try? JSONSerialization.jsonObject(with: data)
                   if let dictionary = json as? [String: Any] {
+
                     sharedUserDefault?.set(dictionary["pid"]!, forKey: SharedUserDefault.Key.registerID)
                     mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
                   }
@@ -79,7 +73,6 @@ public class iZooto
                   }
                   }
         
-       
            
         if(keySettingDetails != nil)
         {
@@ -138,11 +131,12 @@ public class iZooto
                }
             
         }
+            
     }
     
     
     // register for pushNotification Setting
-public  static  func registerForPushNotifications() {
+@objc public  static  func registerForPushNotifications() {
                 if #available(iOS 10.0, *) {
                     UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
                 }
@@ -163,7 +157,7 @@ public  static  func registerForPushNotifications() {
    
     
     // provision setting
-    private static func   registerForPushNotificationsProvisional()
+   @objc private static func   registerForPushNotificationsProvisional()
     {
         
         if #available(iOS 12.0, *) {
@@ -177,7 +171,7 @@ public  static  func registerForPushNotifications() {
     }
 
    //  Handle notification prompt setting
-    private static func getNotificationSettings() {
+  @objc  private static func getNotificationSettings() {
             if #available(iOS 10.0, *) {
                 UNUserNotificationCenter.current().getNotificationSettings { settings in
    
@@ -191,7 +185,7 @@ public  static  func registerForPushNotifications() {
             }
             }
     // Handle provisional setting
-       private static func getNotificationSettingsProvisional() {
+     @objc  private static func getNotificationSettingsProvisional() {
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 if #available(iOS 12.0, *) {
@@ -206,25 +200,31 @@ public  static  func registerForPushNotifications() {
         }
     
     // Capture the token from APNS
-    public  static  func  getToken(deviceToken : Data)
+   @objc public  static  func  getToken(deviceToken : Data)
         {
           
             let tokenParts = deviceToken.map { data -> String in
                          return String(format: "%02.2hhx", data)
                      }
             let token = tokenParts.joined()
-        // print(AppConstant.DEVICE_TOKEN," \(token)")
+        
+        let date = Date()
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd"
+        let formattedDate = format.string(from: date)
 
 
             if UserDefaults.getRegistered()
             {
-
                 guard let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
                 else
                 {return}
                 print(AppConstant.DEVICE_TOKEN," \(token)")
-                
-
+                if(formattedDate != (sharedUserDefault?.string(forKey: "LastVisit")))
+                {
+                    RestAPI.lastVisit(userid: mizooto_id, token:token)
+                    sharedUserDefault?.set(formattedDate, forKey: "LastVisit")
+                }
             }
             else
             {
@@ -232,24 +232,12 @@ public  static  func registerForPushNotifications() {
                 sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
             }
         }
-  // Check for Firabase Analytics
-    public static func setFirebaseAnalytics(isCheck : Bool)
-    {
-        isAnalytics = isCheck
-        sharedUserDefault?.set(isCheck, forKey: "ISAnalytics")
-    }
+
      // Handle the payload and show the notification
     @available(iOS 10.0, *)
-    public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
+   @objc public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
         {
-                    
             let userInfo = request.content.userInfo
-            let checkdata = sharedUserDefault?.bool(forKey: "ISAnalytics")
-            if checkdata! {
-                               iZooto.trackReceivedEvent(response: request)
-                               //iZootoAnalytics.trackNotificationinfluence(payload: notifcationData!)
-                           }
-          
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
             notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
             bestAttemptContent.sound = UNNotificationSound.default()
@@ -430,18 +418,14 @@ public  static  func registerForPushNotifications() {
 
            }
             }
-            let state = UIApplication.shared.applicationState
-            if state == .active {
-              
-                
-            }
+          
             
            
         }
     // for json aaray
     
     
-    private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
+  @objc  private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
        {
           
            if(sourceString.contains("~"))
@@ -472,7 +456,7 @@ public  static  func registerForPushNotifications() {
        }
     
     // Check the notification enable or not from device setting
-    public static func checkNotificationEnable()
+  @objc  public static func checkNotificationEnable()
     {
         let isNotificationEnabled = UIApplication.shared.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
                 if isNotificationEnabled!{
@@ -513,7 +497,7 @@ public  static  func registerForPushNotifications() {
     }
    
 // for jsonObject
-private static func getParseValue(jsonData :[String : Any], sourceString : String) -> String
+@objc private static func getParseValue(jsonData :[String : Any], sourceString : String) -> String
 {
 if(sourceString.contains("~"))
     {
@@ -605,7 +589,7 @@ return sourceString
  
 
 // Parsing the jsonObject
-   private static func convertToDictionary(text: String) -> [String: Any]? {
+  @objc  private static func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
@@ -617,32 +601,52 @@ return sourceString
     }
     
     // Handle the Notification behaviour
-public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String)
-{
-  let appstate = UIApplication.shared.applicationState
-  if (appstate == .active && displayNotification == "InAppAlert")
-    {
-        let userInfo = notification.request.content.userInfo
-        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-        let alert = UIAlertController(title: notificationData?.alert?.title, message:notificationData?.alert?.body, preferredStyle: UIAlertController.Style.alert)
-        if (notificationData?.act1name != nil && notificationData?.act1name != ""){
-                    alert.addAction(UIAlertAction(title: notificationData?.act1name, style: .default, handler: { (action: UIAlertAction!) in
-                       // UIApplication.shared.openURL(NSURL(string: notificationData!.act1link!)! as URL)
-        
-            }))
-            }
-        if (notificationData?.act2name != nil && notificationData?.act2name != "")
-         {
-          alert.addAction(UIAlertAction(title: notificationData?.act2name, style: .default, handler: { (action: UIAlertAction!) in
-            UIApplication.shared.openURL(NSURL(string: notificationData!.act2link!)! as URL)
-            }))
+    @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String)
+      {
+        let appstate = UIApplication.shared.applicationState
+        if (appstate == .active && displayNotification == "InAppAlert")
+          {
+          let userInfo = notification.request.content.userInfo
+              let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+              let alert = UIAlertController(title: notificationData?.alert?.title, message:notificationData?.alert?.body, preferredStyle: UIAlertController.Style.alert)
+              if (notificationData?.act1name != nil && notificationData?.act1name != ""){
+                          alert.addAction(UIAlertAction(title: notificationData?.act1name, style: .default, handler: { (action: UIAlertAction!) in
+                             // UIApplication.shared.openURL(NSURL(string: notificationData!.act1link!)! as URL)
+              
+                  }))
+                  }
+              if (notificationData?.act2name != nil && notificationData?.act2name != "")
+               {
+                alert.addAction(UIAlertAction(title: notificationData?.act2name, style: .default, handler: { (action: UIAlertAction!) in
+                  UIApplication.shared.openURL(NSURL(string: notificationData!.act2link!)! as URL)
+                  }))
+              }
+              alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+              UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+              }
+      else
+        {
+          let userInfo = notification.request.content.userInfo
+          let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+          notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+          if (notificationData?.cfg != nil)
+          {
+              let str = String((notificationData?.cfg)!)
+              let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+              let lastChar = binaryString?.last!
+              let str1 = String((lastChar)!)
+              let impr = Int(str1)
+              if(impr == 1)
+              {
+                  RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+              }
+              }
+         
         }
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-        }
-    }
+    
+          }
 // Handle the clicks the notification from Banner,Button
-public static func notificationHandler(response : UNNotificationResponse)
+@objc public static func notificationHandler(response : UNNotificationResponse)
 {
     
     let userInfo = response.notification.request.content.userInfo
@@ -653,34 +657,13 @@ public static func notificationHandler(response : UNNotificationResponse)
      {
         userDefaults.set(0, forKey: AppConstant.BADGE)
     }
-    UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count number
-//               let num = notifcationData?.cfg! as! Int
-//                let str = String(num, radix: 2)
-//                print(str) // prints "10110"
-//                let last = str.suffix(1)
-//                print(last) // prints "10110"
-//               let myInt1 = Int(last)
-//
-//
-//
-//                if checkData == myInt1
-//               {
-                     RestAPI.callImpression(notificationData: notifcationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-//                }
-//               else{
-//                    print("No call")
-//                }
-                
-////////
-                if isAnalytics{
-                   // iZooto.trackReceivedEvent(response: response)
-                    //iZootoAnalytics.trackNotificationinfluence(payload: notifcationData!)
-                }
-
+    UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+              
                 
 if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
   {
-    RestAPI.clickTrack(notificationData: notifcationData!, type: "0",userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+    clickTrack(notificationData: notifcationData!, actionType: "0")
+
     if let url = URL(string: notifcationData!.fetchurl!)
          {
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -738,7 +721,8 @@ else
          {
               case "FirstButton" :
                type = "1"
-               RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                clickTrack(notificationData: notifcationData!, actionType: "1")
+
             if notifcationData?.ap != "" && notifcationData?.ap != nil
                 {
                     handleClicks(response: response, actionType: "1")
@@ -796,7 +780,7 @@ else
 break
 case "SecondButton" :
                 type = "2"
-                RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+    clickTrack(notificationData: notifcationData!, actionType: "2")
 
             if notifcationData?.ap != "" && notifcationData?.ap != nil
              {
@@ -844,7 +828,8 @@ case "SecondButton" :
 break
 default:
             type = "0"
-            RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+           clickTrack(notificationData: notifcationData!, actionType: "0")
+
             if notifcationData?.ap != "" && notifcationData?.ap != nil
                 {
                  handleClicks(response: response, actionType: "0")
@@ -877,7 +862,8 @@ else{
 }// close if
 else{
      type = "0"
-     RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+    clickTrack(notificationData: notifcationData!, actionType: "0")
+
           if notifcationData?.ap != "" && notifcationData?.ap != nil
             {
                 handleClicks(response: response, actionType: "0")
@@ -910,18 +896,28 @@ else{
     } //close else
             }
 }
-   // Fetching the Advertisement ID
-  public static  func identifierForAdvertising() -> String? {
-        // check if advertising tracking is enabled in user’s setting
-        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
-            return ASIdentifierManager.shared().advertisingIdentifier.uuidString
-        } else {
-            return "Not Found"
+    
+    @objc private static func clickTrack(notificationData : Payload,actionType : String)
+    {
+        if(notificationData.cfg != nil)
+        {
+            let str = String((notificationData.cfg)!)
+            let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+        let data = binaryString!.suffix(2)
+            let clickCFG = data.prefix(1)
+            let click = Int(clickCFG)
+
+            if(click == 1)
+            {
+                RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+            }
         }
+        
     }
+
     
     // Handle the InApp/Webview
-    private static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
+  @objc  private static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
     {
         let userInfo = response.notification.request.content.userInfo
                let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
@@ -942,11 +938,11 @@ else{
             onHandleLandingURL(response: response, actionType: actionType, launchURL: launchURL)
         }
         
-       RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+      
         
     }
     // handle the borwser
-    private static func onHandleLandingURL(response : UNNotificationResponse , actionType : String,launchURL : String)
+   @objc private static func onHandleLandingURL(response : UNNotificationResponse , actionType : String,launchURL : String)
        {
            let userInfo = response.notification.request.content.userInfo
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
@@ -964,7 +960,7 @@ else{
            
        }
     // Check the notification subscribe or not 0-> Subscribe 2- UNSubscribe
-    public static func setSubscription(isSubscribe : Bool)
+   @objc public static func setSubscription(isSubscribe : Bool)
     {
         var value = 0
         if isSubscribe
@@ -984,34 +980,30 @@ else{
     }
     
     // handle the addtional data
-    private static func handleClicks(response : UNNotificationResponse , actionType : String)
+   @objc private static func handleClicks(response : UNNotificationResponse , actionType : String)
         {
-                       
-            
             let userInfo = response.notification.request.content.userInfo
-                         let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                             var data = Dictionary<String,Any>()
-                                    data["button1ID"] = notifcationData?.act1id
-                                      data["button1Title"] = notifcationData?.act1name
-                                     data["button1URL"] = notifcationData?.act1link
-                                     data["additionalData"] = notifcationData?.ap
-                                     data["landingURL"] = notifcationData?.url
-                                     data["button2ID"] = notifcationData?.act2id
-                                     data["button2Title"] = notifcationData?.act2name
-                                     data["button2URL"] = notifcationData?.act2link
-                                     data["actionType"] = actionType
-                        notificationOpenDelegate?.onNotificationOpen(action: data)
-
-
+            let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+            var data = Dictionary<String,Any>()
+                data["button1ID"] = notifcationData?.act1id
+                data["button1Title"] = notifcationData?.act1name
+                data["button1URL"] = notifcationData?.act1link
+                data["additionalData"] = notifcationData?.ap
+                data["landingURL"] = notifcationData?.url
+                data["button2ID"] = notifcationData?.act2id
+                data["button2Title"] = notifcationData?.act2name
+                data["button2URL"] = notifcationData?.act2link
+                data["actionType"] = actionType
+                notificationOpenDelegate?.onNotificationOpen(action: data)
         }
     
 
-      public static func getQueryStringParameter(url: String, param: String) -> String? {
+     @objc public static func getQueryStringParameter(url: String, param: String) -> String? {
          guard let url = URLComponents(string: url) else { return nil }
          return url.queryItems?.first(where: { $0.name == param })?.value
        }
 // Add Event Functionality
-    public static func addEvent(eventName : String , data : Dictionary<String,Any>)
+  @objc  public static func addEvent(eventName : String , data : Dictionary<String,Any>)
     {
 
         if  eventName != ""{
@@ -1035,7 +1027,7 @@ else{
    
    
     // Add User Properties
-public static func addUserProperties( data : Dictionary<String,Any>)
+@objc public static func addUserProperties( data : Dictionary<String,Any>)
 {
   let returnData =  Utils.dataValidate(data: data)
   if returnData != nil {
@@ -1052,34 +1044,7 @@ public static func addUserProperties( data : Dictionary<String,Any>)
         
         }
    
-    private  static func trackReceivedEvent(response : UNNotificationRequest)
-    {
-                    let userInfo = response.content.userInfo
-                       let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                                      let link = notifcationData?.url
-                       let splitData = link!.components(separatedBy: "?")
-               
-                           let arr = splitData[1].components(separatedBy:"&")
-                           var data = [String:Any]()
-                           for row in arr {
-                               let pairs = row.components(separatedBy:"=")
-                               data[pairs[0]] = pairs[1]
-                           }
-//                           let source = data["utm_source"]
-//                           let medium = data["utm_medium"]
-//                           let campaign = data["utm_campaign"]
-//                           let content = data["utm_content"]
-//                           let term = data["utm_term"]
-                          // let sendData = ["source":source,"medium":medium,"campaign":campaign,"content":content,"term":term]
-       // print("ShowNotification")
-                          // Analytics.logEvent("push_notification_received", parameters: sendData)
-
-    }
-    
-    
-    }
-
-
+}
 
 // Handle banner imange uploading and deleting
 @available(iOS 10.0, *)
@@ -1109,15 +1074,15 @@ public static func addUserProperties( data : Dictionary<String,Any>)
     }
 
 
-public protocol iZootoLandingURLDelegate
+@objc public protocol iZootoLandingURLDelegate : NSObjectProtocol
 {
     func onHandleLandingURL(url : String)
 }
-public protocol iZootoNotificationReceiveDelegate
+@objc public protocol iZootoNotificationReceiveDelegate : NSObjectProtocol
 {
     func onNotificationReceived(payload : Payload)
 }
-public protocol iZootoNotificationOpenDelegate
+@objc public protocol iZootoNotificationOpenDelegate : NSObjectProtocol
 {
     func onNotificationOpen(action : Dictionary<String,Any>)
 }

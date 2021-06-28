@@ -8,7 +8,8 @@
 
 import Foundation
 import UIKit
-public class Utils
+@objc
+public class Utils : NSObject
 {
    public static  let TOKEN = "save_token"
 

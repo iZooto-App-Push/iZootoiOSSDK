@@ -8,11 +8,16 @@
 import Foundation
 import Foundation
 import UIKit
+import AdSupport
+import AppTrackingTransparency
+
+
 protocol ResponseHandler  : AnyObject{
     func onSuccess()
     func onFailure()
 }
-public class RestAPI
+@objc
+public class RestAPI : NSObject
 {
     public static var BASEURL = "https://aevents.izooto.com/"
     public static var ENCRPTIONURL="https://cdn.izooto.com/app/app_"
@@ -22,20 +27,34 @@ public class RestAPI
     private static var  PROPERTIES_URL="https://prp.izooto.com/prp?";
     private static var CLICK_URL="https://clk.izooto.com/clk?";
     private static var REGISTRATION_URL="https://aevents.izooto.com/app.php?";
+    private static  var LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci?";
+    private static  var LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim?";
+    private static  var LASTVISITURL="https://lvi.izooto.com/lvi?";
 
 
    public static func registerToken(token : String, izootoid : Int)
     {
-       
-    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(getUUID())")!)
+    print(identifierForAdvertising()!)
+    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.0&adid=\(identifierForAdvertising()!)")!)
+    print(URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.0&adid=\(identifierForAdvertising()!)")!))
+   
   
-  
-        request.httpMethod = AppConstant.REQUEST_GET
+        request.httpMethod = AppConstant.REQUEST_POST
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                     do {
                         print(AppConstant.DEVICE_TOKEN,token)
                         UserDefaults.isRegistered(isRegister: true)
                          print(AppConstant.SUCESSFULLY)
+                        let date = Date()
+                        let format = DateFormatter()
+                        format.dateFormat = "yyyy-MM-dd"
+                        let formattedDate = format.string(from: date)
+                        if(formattedDate != (sharedUserDefault?.string(forKey: "LastVisit")))
+                        {
+                            RestAPI.lastVisit(userid: izootoid, token:token)
+                            sharedUserDefault?.set(formattedDate, forKey: "LastVisit")
+
+                        }
 
                     }
                 }).resume()
@@ -45,8 +64,6 @@ public class RestAPI
     public static func callSubscription(isSubscribe : Int,token : String,userid : Int)
         
     {
-
-            
         var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub?pid=\(userid)&btype=8&dtype=3&pte=3&bver=\(getVersion())&os=5&pt=0&bKey=\(token)&ge=1&action=\(isSubscribe)")!)
         request.httpMethod = AppConstant.REQUEST_POST
                        URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
@@ -55,6 +72,8 @@ public class RestAPI
                            }
                        }).resume()
     }
+    
+    
 
    static  public func createRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
     {
@@ -179,9 +198,6 @@ public class RestAPI
     public static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: RestAPI.CLICK_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
-        
-        
-
                 request.httpMethod = AppConstant.REQUEST_POST
 
                    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
@@ -212,7 +228,66 @@ public class RestAPI
         }
     }
     
-         
+    @objc public static func identifierForAdvertising() -> String? {
+        if #available(iOS 14, *) {
+            
+            guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
+                return "0000-0000-0000-0000"
+            }
+            return ASIdentifierManager.shared().advertisingIdentifier.uuidString
+
+            
+        }
+        else {
+        guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
+            return "0000-0000-0000-0000"
+        }
+        return ASIdentifierManager.shared().advertisingIdentifier.uuidString
+    }
+    }
+    public static func lastVisit(userid : Int,token : String)
+    {
+            let data = ["last_website_visit":"true","lang":"en"] as [String:String]
+        if let theJSONData = try?  JSONSerialization.data(withJSONObject: data,options: .fragmentsAllowed),
+           let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue) {
+            
+            let lastVisitData = validationData.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
+            var request = URLRequest(url: URL(string: RestAPI.LASTVISITURL+"pid=\(userid)&act=add&isid=1&et=userp&bKey=\(token)&val=\(lastVisitData ??  "")")!)
+
+                request.httpMethod = AppConstant.REQUEST_POST
+                URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                    do {
+                        print("l","v")
+                    }
+                }).resume()
+        
+          }
+        
+    }
+    public static func lastImpression(notificationData : Payload,userid : Int,token : String)
+    {
+        var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
+
+            request.httpMethod = AppConstant.REQUEST_POST
+            URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                do {
+                }
+            }).resume()
+
+        
+    }
+    public static func lastClick(notificationData : Payload,userid : Int,token : String)
+    {
+        var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
+
+            request.httpMethod = AppConstant.REQUEST_POST
+            URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                do {
+                }
+            }).resume()
+
+        
+    }
 }
 
 
