@@ -35,7 +35,7 @@ public class RestAPI : NSObject
    public static func registerToken(token : String, izootoid : Int)
     {
     print(identifierForAdvertising()!)
-    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.1&adid=\(identifierForAdvertising()!)")!)
+    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.2&adid=\(identifierForAdvertising()!)")!)
    
    
   
@@ -197,11 +197,12 @@ public class RestAPI : NSObject
     }
     public static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
+       
         var request = URLRequest(url: URL(string: RestAPI.CLICK_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
                 request.httpMethod = AppConstant.REQUEST_POST
-
                    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                        do {
+                        print("C-N")
                         
                        }
                    }).resume()

@@ -672,17 +672,18 @@ return sourceString
     let userInfo = response.notification.request.content.userInfo
     let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
    // iZootoActionDelegate?.onNotificationReceived(payload: notifcationData!)
-    notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
+   // notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
     if let userDefaults = UserDefaults(suiteName: "group.com.iZooto-iOS-SDK")
      {
         userDefaults.set(0, forKey: AppConstant.BADGE)
     }
     UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-              
+    clickTrack(notificationData: notifcationData!, actionType: "0")
+
                 
 if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
   {
-    clickTrack(notificationData: notifcationData!, actionType: "0")
+   // clickTrack(notificationData: notifcationData!, actionType: "0")
 
     if let url = URL(string: notifcationData!.fetchurl!)
          {
@@ -737,11 +738,12 @@ else
     {
     if notifcationData?.category != nil
      {
+
         switch response.actionIdentifier
          {
               case "FirstButton" :
                type = "1"
-                clickTrack(notificationData: notifcationData!, actionType: "1")
+               // clickTrack(notificationData: notifcationData!, actionType: "1")
 
             if notifcationData?.ap != "" && notifcationData?.ap != nil
                 {
@@ -800,7 +802,7 @@ else
 break
 case "SecondButton" :
                 type = "2"
-    clickTrack(notificationData: notifcationData!, actionType: "2")
+   // clickTrack(notificationData: notifcationData!, actionType: "2")
 
             if notifcationData?.ap != "" && notifcationData?.ap != nil
              {
@@ -848,7 +850,7 @@ case "SecondButton" :
 break
 default:
             type = "0"
-           clickTrack(notificationData: notifcationData!, actionType: "0")
+          // clickTrack(notificationData: notifcationData!, actionType: "0")
 
             if notifcationData?.ap != "" && notifcationData?.ap != nil
                 {
@@ -870,6 +872,8 @@ else{
         }
      }
      else{
+       // clickTrack(notificationData: notifcationData!, actionType: "0")
+
         if let url = URL(string: notifcationData!.url!) {
             UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
              }
@@ -877,12 +881,12 @@ else{
                                   
           }
     }
- }//close switch
+ }
 
-}// close if
+}
 else{
      type = "0"
-    clickTrack(notificationData: notifcationData!, actionType: "0")
+   // clickTrack(notificationData: notifcationData!, actionType: "0")
 
           if notifcationData?.ap != "" && notifcationData?.ap != nil
             {
@@ -931,6 +935,11 @@ else{
             {
                 RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
             }
+        }
+        else
+        {
+
+            RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
         }
         
     }
