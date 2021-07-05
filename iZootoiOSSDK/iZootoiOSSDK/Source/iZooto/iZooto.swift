@@ -42,6 +42,7 @@ public class iZooto : NSObject
     private static var izooto_uuid : String!
     private static var isWebView = false as Bool
     private static var landingURL : String!
+    private static var badgeNumber = 0 as NSInteger
     private static var storyBoardData = UIStoryboard.self
     private static var identifireNameData = String.self
     private static var controllerData = UIViewController.self
@@ -232,6 +233,19 @@ public class iZooto : NSObject
                 sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
             }
         }
+    @objc public static func setBadgeCount(badgeNumber : NSInteger)
+    {
+       if(badgeNumber>0)
+       {
+        sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
+
+       }
+        else
+       {
+        sharedUserDefault?.setValue(0, forKey: "BADGECOUNT")
+
+       }
+    }
 
      // Handle the payload and show the notification
     @available(iOS 10.0, *)
@@ -241,15 +255,21 @@ public class iZooto : NSObject
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
             notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
             bestAttemptContent.sound = UNNotificationSound.default()
-
-            if let userDefaults = UserDefaults(suiteName: "group.com.iZooto-iOS-SDK") {
-
+            badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+          if let userDefaults = UserDefaults(suiteName: "group.com.iZooto-iOS-SDK") {
                 let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
                 if badgeCount > 0 {
+                    if(badgeNumber > 0)
+                    {
+                        bestAttemptContent.badge = 1 as NSNumber
+
+                    }
+                    else
+                    {
                     userDefaults.set(badgeCount + 1, forKey: AppConstant.BADGE)
                     bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                    }
                 } else {
-
                     userDefaults.set(1, forKey: AppConstant.BADGE)
                     bestAttemptContent.badge = 1
 
