@@ -35,11 +35,8 @@ public class RestAPI : NSObject
    public static func registerToken(token : String, izootoid : Int)
     {
     print(identifierForAdvertising()!)
-    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.2&adid=\(identifierForAdvertising()!)")!)
-   
-   
-  
-        request.httpMethod = AppConstant.REQUEST_POST
+    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.3&adid=\(identifierForAdvertising()!)")!)
+           request.httpMethod = AppConstant.REQUEST_POST
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                     do {
                         print(AppConstant.DEVICE_TOKEN,token)
@@ -265,7 +262,7 @@ public class RestAPI : NSObject
           }
         
     }
-    public static func lastImpression(notificationData : Payload,userid : Int,token : String)
+  @objc  public static func lastImpression(notificationData : Payload,userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
 
@@ -277,7 +274,7 @@ public class RestAPI : NSObject
 
         
     }
-    public static func lastClick(notificationData : Payload,userid : Int,token : String)
+   @objc  public static func lastClick(notificationData : Payload,userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
 
@@ -289,6 +286,7 @@ public class RestAPI : NSObject
 
         
     }
+   
 }
 
 

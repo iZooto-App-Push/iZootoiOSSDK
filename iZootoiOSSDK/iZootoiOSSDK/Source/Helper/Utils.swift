@@ -106,7 +106,13 @@ public class Utils : NSObject
 
                return returnString
            }
-
+    
+    public static func getBundleName()->String
+    {
+        let bundleID = Bundle.main.bundleIdentifier
+        return "group."+bundleID! + ".iZooto"
+        
+    }
 }
 public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
 {
@@ -117,4 +123,5 @@ public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> B
 }
  
   
+
 

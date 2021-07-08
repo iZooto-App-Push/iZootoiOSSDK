@@ -256,7 +256,7 @@ public class iZooto : NSObject
             notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
             bestAttemptContent.sound = UNNotificationSound.default()
             badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-          if let userDefaults = UserDefaults(suiteName: "group.com.iZooto-iOS-SDK") {
+    if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
                 let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
                 if badgeCount > 0 {
                     if(badgeNumber > 0)
@@ -673,7 +673,7 @@ return sourceString
     let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
    // iZootoActionDelegate?.onNotificationReceived(payload: notifcationData!)
    // notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
-    if let userDefaults = UserDefaults(suiteName: "group.com.iZooto-iOS-SDK")
+    if let userDefaults = UserDefaults(suiteName: Utils.getBundleName())
      {
         userDefaults.set(0, forKey: AppConstant.BADGE)
     }

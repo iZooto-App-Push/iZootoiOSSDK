@@ -34,11 +34,4 @@ class AppConstant : NSObject
     public static let PID = "pid="
     public static let ISWEBVIEW = "isWebView"
     
-
-    
-    
-
-
-
-    
 }

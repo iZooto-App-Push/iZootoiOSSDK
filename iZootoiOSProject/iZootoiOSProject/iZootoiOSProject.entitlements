@@ -6,8 +6,9 @@
 	<string>development</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.iZootoiOSProject</string>
 		<string>group.com.iZooto-iOS-SDK</string>
+		<string>group.com.iZootoiOSProject</string>
+		<string>group.com.iZootoiOSProject.iZooto</string>
 	</array>
 </dict>
 </plist>

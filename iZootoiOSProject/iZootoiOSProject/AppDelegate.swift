@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         }
         
-        requestPermission()
+        //requestPermission()
         iZooto.setBadgeCount(badgeNumber: 1)
 
       
