@@ -243,6 +243,7 @@ public class iZooto : NSObject
         else
        {
         sharedUserDefault?.setValue(0, forKey: "BADGECOUNT")
+        sharedUserDefault?.setValue(0, forKey: AppConstant.BADGE)
 
        }
     }
@@ -256,9 +257,11 @@ public class iZooto : NSObject
             notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
             bestAttemptContent.sound = UNNotificationSound.default()
             badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-    if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-                let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
-                if badgeCount > 0 {
+            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+               // let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
+                let badgeCount = sharedUserDefault?.integer(forKey: AppConstant.BADGE)
+
+                if badgeCount! > 0 {
                     if(badgeNumber > 0)
                     {
                         bestAttemptContent.badge = 1 as NSNumber
@@ -266,11 +269,17 @@ public class iZooto : NSObject
                     }
                     else
                     {
-                    userDefaults.set(badgeCount + 1, forKey: AppConstant.BADGE)
-                    bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                        sharedUserDefault?.setValue(badgeCount!+1, forKey: AppConstant.BADGE)
+                        bestAttemptContent.badge = badgeCount! + 1 as NSNumber
+
+                        
+
+                   // userDefaults.set(badgeCount + 1, forKey: AppConstant.BADGE)
+                   // bestAttemptContent.badge = badgeCount + 1 as NSNumber
                     }
                 } else {
-                    userDefaults.set(1, forKey: AppConstant.BADGE)
+                    sharedUserDefault?.setValue(badgeCount!+1, forKey: AppConstant.BADGE)
+                   // userDefaults.set(1, forKey: AppConstant.BADGE)
                     bestAttemptContent.badge = 1
 
                 }
@@ -675,9 +684,33 @@ return sourceString
    // notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
     if let userDefaults = UserDefaults(suiteName: Utils.getBundleName())
      {
-        userDefaults.set(0, forKey: AppConstant.BADGE)
+        let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
+        if(badgeCount>0)
+        {
+            if(badgeNumber > 0)
+            {
+                UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+            }
+            else
+            {
+           // userDefaults.set(0, forKey: AppConstant.BADGE)
+                sharedUserDefault?.setValue(0, forKey: AppConstant.BADGE)
+
+            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+
+            }
+        }
+        else
+        {
+            //userDefaults.set(0, forKey: AppConstant.BADGE)
+            sharedUserDefault?.setValue(0, forKey: AppConstant.BADGE)
+
+            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+
+        }
+
     }
-    UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+    
     clickTrack(notificationData: notifcationData!, actionType: "0")
 
                 
@@ -850,12 +883,10 @@ case "SecondButton" :
 break
 default:
             type = "0"
-          // clickTrack(notificationData: notifcationData!, actionType: "0")
-
-            if notifcationData?.ap != "" && notifcationData?.ap != nil
-                {
-                 handleClicks(response: response, actionType: "0")
-                }
+    if notifcationData?.ap != "" && notifcationData?.ap != nil
+    {
+     handleClicks(response: response, actionType: "0")
+    }
 else{
     if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
      {

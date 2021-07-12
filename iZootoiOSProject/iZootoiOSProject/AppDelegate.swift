@@ -42,20 +42,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
-        if launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] != nil {
-            iZooto.notificationOpenDelegate = self
-        }
-        else
-        {
-            iZooto.notificationOpenDelegate = self
+        iZooto.notificationOpenDelegate = self
 
-        }
+       
         
         //requestPermission()
-        iZooto.setBadgeCount(badgeNumber: 1)
 
       
         return true
+    }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        application.applicationIconBadgeNumber = 0
+        iZooto.setBadgeCount(badgeNumber: 0)
+
+        
     }
     func requestPermission() {
         if #available(iOS 14, *) {

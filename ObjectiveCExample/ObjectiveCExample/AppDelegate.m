@@ -22,6 +22,7 @@
     [iZooto initialisationWithIzooto_id:@"de1bdb0a32007eed602064192bb129b7e5e3cc32"  application:application iZootoInitSettings:iZootooInitSetting];
         
     });
+    [iZooto setBadgeCountWithBadgeNumber:1];
   
     iZooto.notificationReceivedDelegate = self;
     iZooto.landingURLDelegate = self;
@@ -29,7 +30,10 @@
     return YES;
 }
  
- 
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    application.applicationIconBadgeNumber = 0;
+}
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     //Get Token from When enbale prompt allow
     [iZooto getTokenWithDeviceToken:deviceToken];

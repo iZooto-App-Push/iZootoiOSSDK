@@ -35,7 +35,7 @@ public class RestAPI : NSObject
    public static func registerToken(token : String, izootoid : Int)
     {
     print(identifierForAdvertising()!)
-    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.3&adid=\(identifierForAdvertising()!)")!)
+    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.4&adid=\(identifierForAdvertising()!)")!)
            request.httpMethod = AppConstant.REQUEST_POST
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                     do {

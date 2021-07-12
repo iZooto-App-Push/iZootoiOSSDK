@@ -16,6 +16,8 @@
     self.bestAttemptContent = [request.content mutableCopy];
     if (self.bestAttemptContent != nil)
     {
+        [iZooto setBadgeCountWithBadgeNumber:1];
+
         [iZooto didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bestAttemptContent:  self.bestAttemptContent  contentHandler: self.contentHandler ];
     }
    // self.contentHandler(self.bestAttemptContent);
