@@ -36,13 +36,14 @@ public class iZooto : NSObject
     private static var actionType : String!
     private static var updateURL : String!
     private static let checkData = 1 as Int
-    private static var badgeCount = 0
+   // private static var badgeCount = 0
     private static var isAnalytics = false as Bool
     private static var isNativeWebview = false as Bool
     private static var izooto_uuid : String!
     private static var isWebView = false as Bool
     private static var landingURL : String!
     private static var badgeNumber = 0 as NSInteger
+    private static var badgeCount = 0 as NSInteger
     private static var storyBoardData = UIStoryboard.self
     private static var identifireNameData = String.self
     private static var controllerData = UIViewController.self
@@ -73,6 +74,7 @@ public class iZooto : NSObject
                     print("Some error occured")
                   }
                   }
+   // UserDefaults.setBageNumber(number: badgeCount)
         
            
         if(keySettingDetails != nil)
@@ -235,33 +237,38 @@ public class iZooto : NSObject
         }
     @objc public static func setBadgeCount(badgeNumber : NSInteger)
     {
-       if(badgeNumber>0)
+
+        if(badgeNumber>0)
        {
         sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
 
        }
         else
        {
-        sharedUserDefault?.setValue(0, forKey: "BADGECOUNT")
-        sharedUserDefault?.setValue(0, forKey: AppConstant.BADGE)
-
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+            userDefaults.set(0, forKey: "Badge")
+            userDefaults.synchronize()
        }
+    }
     }
 
      // Handle the payload and show the notification
     @available(iOS 10.0, *)
-   @objc public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
+   @objc public static func didReceiveNotificationExtensionRequest(bundleName : String,
+                                                                    request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
         {
             let userInfo = request.content.userInfo
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
             notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
             bestAttemptContent.sound = UNNotificationSound.default()
             badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-               // let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
-                let badgeCount = sharedUserDefault?.integer(forKey: AppConstant.BADGE)
-
-                if badgeCount! > 0 {
+    
+            if(bundleName != nil)
+            {
+                let groupName = "group."+bundleName+".iZooto"
+            if let userDefaults = UserDefaults(suiteName: groupName) {
+                badgeCount = userDefaults.integer(forKey:"Badge")
+                if badgeCount > 0 {
                     if(badgeNumber > 0)
                     {
                         bestAttemptContent.badge = 1 as NSNumber
@@ -269,22 +276,24 @@ public class iZooto : NSObject
                     }
                     else
                     {
-                        sharedUserDefault?.setValue(badgeCount!+1, forKey: AppConstant.BADGE)
-                        bestAttemptContent.badge = badgeCount! + 1 as NSNumber
-
-                        
-
-                   // userDefaults.set(badgeCount + 1, forKey: AppConstant.BADGE)
-                   // bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                        userDefaults.set(badgeCount + 1, forKey: "Badge")
+                        bestAttemptContent.badge = badgeCount + 1 as NSNumber
                     }
                 } else {
-                    sharedUserDefault?.setValue(badgeCount!+1, forKey: AppConstant.BADGE)
-                   // userDefaults.set(1, forKey: AppConstant.BADGE)
+                    userDefaults.set(1, forKey: "Badge")
                     bestAttemptContent.badge = 1
 
                 }
-                
+                userDefaults.synchronize()
+
+
             }
+            }
+        else
+            {
+                print("No GroupName added here")
+            }
+        
           
             if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
                           {
@@ -680,36 +689,38 @@ return sourceString
     
     let userInfo = response.notification.request.content.userInfo
     let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+    UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+    if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+        userDefaults.set(0, forKey: "Badge")
+        userDefaults.synchronize()
+   }
+
    // iZootoActionDelegate?.onNotificationReceived(payload: notifcationData!)
    // notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
-    if let userDefaults = UserDefaults(suiteName: Utils.getBundleName())
-     {
-        let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
-        if(badgeCount>0)
-        {
-            if(badgeNumber > 0)
-            {
-                UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-            }
-            else
-            {
-           // userDefaults.set(0, forKey: AppConstant.BADGE)
-                sharedUserDefault?.setValue(0, forKey: AppConstant.BADGE)
-
-            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-
-            }
-        }
-        else
-        {
-            //userDefaults.set(0, forKey: AppConstant.BADGE)
-            sharedUserDefault?.setValue(0, forKey: AppConstant.BADGE)
-
-            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-
-        }
-
-    }
+//    if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+//
+//        badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
+//        if(badgeCount>0)
+//        {
+//            if(badgeNumber > 0)
+//            {
+//                UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+//            }
+//            else
+//            {
+//                userDefaults.set(0, forKey: AppConstant.BADGE)
+//            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+//
+//            }
+//        }
+//        else
+//        {
+//            userDefaults.set(0, forKey: AppConstant.BADGE)
+//            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+//
+//        }
+//        userDefaults.synchronize()
+//    }
     
     clickTrack(notificationData: notifcationData!, actionType: "0")
 

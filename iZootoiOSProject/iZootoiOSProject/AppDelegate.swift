@@ -43,7 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-
+       // iZooto.setBadgeCount(badgeNumber: 0)
+        
+ 
        
         
         //requestPermission()
@@ -51,11 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
       
         return true
     }
-    func applicationDidBecomeActive(_ application: UIApplication) {
+        func applicationDidBecomeActive(_ application: UIApplication) {
         application.applicationIconBadgeNumber = 0
         iZooto.setBadgeCount(badgeNumber: 0)
-
-        
     }
     func requestPermission() {
         if #available(iOS 14, *) {

@@ -14,7 +14,7 @@ class AppConstant : NSObject
     public static let PERMISSION_GRANTED = "Permission granted:"
     public static let DEVICE_TOKEN="Device Token"
     public static let SUCESSFULLY="Device Register Sucessfully"
-    public static let BADGE="badge"
+    public static let BADGE="BADGECOUNTUPDATE"
     public static let IMAGE_ERROR = "Image Error"
     public static let FIREST_BUTTON = "FirstButton"
     public static var SECOND_BUTTON = "SecondButton"
