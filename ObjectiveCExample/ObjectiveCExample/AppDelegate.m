@@ -16,14 +16,13 @@
 //define settings
         NSMutableDictionary *iZootooInitSetting = [[NSMutableDictionary alloc]init];
         [iZootooInitSetting setObject:@YES forKey:@"auto_prompt"];
-        [iZootooInitSetting setObject:@NO forKey:@"nativeWebview"];
+        [iZootooInitSetting setObject:@YES forKey:@"nativeWebview"];
         [iZootooInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
     // initalise the MoMagic SDK
     [iZooto initialisationWithIzooto_id:@"de1bdb0a32007eed602064192bb129b7e5e3cc32"  application:application iZootoInitSettings:iZootooInitSetting];
         
     });
-    [iZooto setBadgeCountWithBadgeNumber:1];
-  
+    
     iZooto.notificationReceivedDelegate = self;
     iZooto.landingURLDelegate = self;
     iZooto.notificationOpenDelegate = self;
@@ -41,8 +40,7 @@
  
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
     NSLog(@"Received");
-    [iZooto handleForeGroundNotificationWithNotification:notification displayNotification:@"NONE"];
-    completionHandler(UNNotificationPresentationOptionAlert);
+    [iZooto handleForeGroundNotificationWithNotification:notification displayNotification:@"NONE" completionHandler:completionHandler];
 }
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     
@@ -58,6 +56,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
  
  
 - (void)onHandleLandingURLWithUrl:(NSString * _Nonnull)url {
+    NSLog(url);
     
 }
  

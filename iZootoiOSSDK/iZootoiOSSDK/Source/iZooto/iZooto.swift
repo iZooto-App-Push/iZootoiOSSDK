@@ -259,6 +259,8 @@ public class iZooto : NSObject
         {
             let userInfo = request.content.userInfo
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+    if(notifcationData?.created_on != nil && notifcationData?.rid != nil)
+    {
             notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
             bestAttemptContent.sound = UNNotificationSound.default()
             badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
@@ -456,7 +458,11 @@ public class iZooto : NSObject
 
            }
             }
-          
+    }
+    else
+    {
+        print("Other Notification providers")
+    }
             
            
         }
@@ -639,7 +645,7 @@ return sourceString
     }
     
     // Handle the Notification behaviour
-    @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String)
+    @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String,completionHandler : @escaping (UNNotificationPresentationOptions) -> Void)
       {
         let appstate = UIApplication.shared.applicationState
         if (appstate == .active && displayNotification == "InAppAlert")
@@ -664,8 +670,11 @@ return sourceString
               }
       else
         {
-          let userInfo = notification.request.content.userInfo
+            let userInfo = notification.request.content.userInfo
           let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+            if(notificationData?.created_on != nil && notificationData?.rid != nil)
+            {
+            
           notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
           if (notificationData?.cfg != nil)
           {
@@ -679,8 +688,16 @@ return sourceString
                   RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
               }
               }
-         
+                completionHandler([.badge, .alert, .sound])
+
         }
+            else
+            {
+                print("other notification")
+            
+            }
+        }
+        
     
           }
 // Handle the clicks the notification from Banner,Button
@@ -689,6 +706,8 @@ return sourceString
     
     let userInfo = response.notification.request.content.userInfo
     let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+    if(notifcationData?.created_on != nil)
+    {
     UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
     if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
         userDefaults.set(0, forKey: "Badge")
@@ -696,31 +715,8 @@ return sourceString
    }
 
    // iZootoActionDelegate?.onNotificationReceived(payload: notifcationData!)
-   // notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
-//    if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-//
-//        badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
-//        if(badgeCount>0)
-//        {
-//            if(badgeNumber > 0)
-//            {
-//                UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-//            }
-//            else
-//            {
-//                userDefaults.set(0, forKey: AppConstant.BADGE)
-//            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-//
-//            }
-//        }
-//        else
-//        {
-//            userDefaults.set(0, forKey: AppConstant.BADGE)
-//            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-//
-//        }
-//        userDefaults.synchronize()
-//    }
+    notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
+
     
     clickTrack(notificationData: notifcationData!, actionType: "0")
 
@@ -961,6 +957,10 @@ else{
         }
     } //close else
             }
+    }
+    else{
+        print("other Providers")
+    }
 }
     
     @objc private static func clickTrack(notificationData : Payload,actionType : String)
@@ -983,8 +983,10 @@ else{
 
             RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
         }
-        
     }
+    
+        
+    
 
     
     // Handle the InApp/Webview

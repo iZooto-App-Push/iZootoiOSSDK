@@ -530,6 +530,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5BFBC176872D999F2F19FB73 /* Pods-ObjectiveCExample-NotificationExtesnionServices.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_ENTITLEMENTS = NotificationExtesnionServices/NotificationExtesnionServices.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
@@ -551,6 +552,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 971CFB8363055EE17D22861F /* Pods-ObjectiveCExample-NotificationExtesnionServices.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_ENTITLEMENTS = NotificationExtesnionServices/NotificationExtesnionServices.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
