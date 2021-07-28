@@ -37,9 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
        
         // for setting
-        let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
+        let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
         UNUserNotificationCenter.current().delegate = self
+        
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
@@ -87,17 +88,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        print("Notification received")
         iZooto.handleForeGroundNotification(notification: notification, displayNotification: "None", completionHandler: completionHandler)
         
-       
-       
-
     }
 
 
    // @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
         iZooto.notificationHandler(response: response)//iZooto.notificationHandler
         completionHandler()
 

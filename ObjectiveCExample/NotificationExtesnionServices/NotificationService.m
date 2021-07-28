@@ -16,12 +16,8 @@
     self.bestAttemptContent = [request.content mutableCopy];
     if (self.bestAttemptContent != nil)
     {
-        [iZooto setBadgeCountWithBadgeNumber:1];
         [iZooto didReceiveNotificationExtensionRequestWithBundleName:@"com.iZooto.ObjectiveCExample" request:self.receivedRequest bestAttemptContent:self.bestAttemptContent contentHandler: self.contentHandler];
-
-       // [iZooto didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bestAttemptContent:  self.bestAttemptContent  contentHandler: self.contentHandler ];
     }
-   // self.contentHandler(self.bestAttemptContent);
 }
  
 - (void)serviceExtensionTimeWillExpire {

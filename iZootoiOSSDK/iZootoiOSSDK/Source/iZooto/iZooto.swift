@@ -259,7 +259,7 @@ public class iZooto : NSObject
         {
             let userInfo = request.content.userInfo
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-    if(notifcationData?.created_on != nil && notifcationData?.rid != nil)
+    if(notifcationData?.inApp != nil)
     {
             notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
             bestAttemptContent.sound = UNNotificationSound.default()
@@ -672,7 +672,7 @@ return sourceString
         {
             let userInfo = notification.request.content.userInfo
           let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-            if(notificationData?.created_on != nil && notificationData?.rid != nil)
+            if(notificationData?.inApp != nil)
             {
             
           notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
@@ -693,7 +693,7 @@ return sourceString
         }
             else
             {
-                print("other notification")
+                print("other notification provider")
             
             }
         }
@@ -706,8 +706,7 @@ return sourceString
     
     let userInfo = response.notification.request.content.userInfo
     let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-    if(notifcationData?.created_on != nil)
-    {
+   
     UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
     if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
         userDefaults.set(0, forKey: "Badge")
@@ -957,10 +956,7 @@ else{
         }
     } //close else
             }
-    }
-    else{
-        print("other Providers")
-    }
+   
 }
     
     @objc private static func clickTrack(notificationData : Payload,actionType : String)
