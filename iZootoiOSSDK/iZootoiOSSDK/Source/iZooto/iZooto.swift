@@ -62,11 +62,12 @@ public class iZooto : NSObject
             izooto_uuid = izooto_id
             keySettingDetails = iZootoInitSettings
             RestAPI.createRequest(uuid: izooto_uuid) { (output) in
+                
                 let jsonString = output.fromBase64()
             let data = jsonString!.data(using: .utf8)!
                    let json = try? JSONSerialization.jsonObject(with: data)
                   if let dictionary = json as? [String: Any] {
-
+                    
                     sharedUserDefault?.set(dictionary["pid"]!, forKey: SharedUserDefault.Key.registerID)
                     mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
                   }
@@ -74,7 +75,6 @@ public class iZooto : NSObject
                     print("Some error occured")
                   }
                   }
-   // UserDefaults.setBageNumber(number: badgeCount)
         
            
         if(keySettingDetails != nil)
@@ -134,6 +134,15 @@ public class iZooto : NSObject
                }
             
         }
+    let dicData = sharedUserDefault?.dictionary(forKey:"UserPropertiesData")
+    if(dicData != nil)
+    {
+        addUserProperties(data: dicData!)
+    }
+    else
+    {
+       // print("No User Properties Data")
+    }
             
     }
     
@@ -205,7 +214,8 @@ public class iZooto : NSObject
     // Capture the token from APNS
    @objc public  static  func  getToken(deviceToken : Data)
         {
-          
+    
+  
             let tokenParts = deviceToken.map { data -> String in
                          return String(format: "%02.2hhx", data)
                      }
@@ -228,6 +238,7 @@ public class iZooto : NSObject
                     RestAPI.lastVisit(userid: mizooto_id, token:token)
                     sharedUserDefault?.set(formattedDate, forKey: "LastVisit")
                 }
+               
             }
             else
             {
@@ -643,6 +654,7 @@ return sourceString
         }
         return nil
     }
+    
     
     // Handle the Notification behaviour
     @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String,completionHandler : @escaping (UNNotificationPresentationOptions) -> Void)
@@ -1098,6 +1110,7 @@ else{
     // Add User Properties
 @objc public static func addUserProperties( data : Dictionary<String,Any>)
 {
+    
   let returnData =  Utils.dataValidate(data: data)
   if returnData != nil {
   if let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed),
@@ -1107,6 +1120,12 @@ else{
     {
      RestAPI.callUserProperties(data: validationData as NSString, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: token!)
                 
+    }
+    else
+    {
+        sharedUserDefault?.set(data, forKey:"UserPropertiesData")
+       
+
     }
   }
     }

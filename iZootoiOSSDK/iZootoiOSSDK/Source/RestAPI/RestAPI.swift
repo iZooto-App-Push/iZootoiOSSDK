@@ -34,7 +34,7 @@ public class RestAPI : NSObject
 
    public static func registerToken(token : String, izootoid : Int)
     {
-    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.7&adid=\(identifierForAdvertising()!)")!)
+    var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(izootoid)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(token)&av=1.1.8&adid=\(identifierForAdvertising()!)")!)
            request.httpMethod = AppConstant.REQUEST_POST
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                     do {
@@ -49,6 +49,15 @@ public class RestAPI : NSObject
                         {
                             RestAPI.lastVisit(userid: izootoid, token:token)
                             sharedUserDefault?.set(formattedDate, forKey: "LastVisit")
+                            let dicData = sharedUserDefault?.dictionary(forKey:"UserPropertiesData")
+                            if(dicData != nil)
+                            {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                                    iZooto.addUserProperties(data: dicData!)
+
+                                }
+                            }
+                           
                         }
 
                     }
@@ -59,7 +68,7 @@ public class RestAPI : NSObject
     public static func callSubscription(isSubscribe : Int,token : String,userid : Int)
         
     {
-        var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub?pid=\(userid)&btype=8&dtype=3&pte=3&bver=\(getVersion())&os=5&pt=0&bKey=\(token)&ge=1&action=\(isSubscribe)")!)
+        var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub?pid=\(userid)&btype=8&dtype=3&pte=3&bver=1.1.8&os=5&pt=0&bKey=\(token)&ge=1&action=\(isSubscribe)")!)
         request.httpMethod = AppConstant.REQUEST_POST
                        URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                            do {
@@ -76,7 +85,7 @@ public class RestAPI : NSObject
         let request = URLRequest(url: requestURL!)
         let requestTask = URLSession.shared.dataTask(with: request) {
             (data: Data?, response: URLResponse?, error: Error?) in
-
+           
             if(error != nil) {
                 print("Error:  ")
             }else
@@ -168,6 +177,8 @@ public class RestAPI : NSObject
                request.httpMethod = AppConstant.REQUEST_POST
                               URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
                                   do {
+                                    sharedUserDefault?.set("", forKey:"UserPropertiesData")
+
                                     print(AppConstant.ADD_PROPERTIES)
                                   }
                                }).resume()

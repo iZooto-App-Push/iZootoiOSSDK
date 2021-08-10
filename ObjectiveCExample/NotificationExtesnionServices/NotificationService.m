@@ -17,6 +17,11 @@
     if (self.bestAttemptContent != nil)
     {
         [iZooto didReceiveNotificationExtensionRequestWithBundleName:@"com.iZooto.ObjectiveCExample" request:self.receivedRequest bestAttemptContent:self.bestAttemptContent contentHandler: self.contentHandler];
+      //  self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"pikachu.mp3"];
+       
+
+     //   self.bestAttemptContent.sound = [NSString stringWithFormat:@"pikachu.mp3", self.bestAttemptContent.sound];
+
     }
 }
  

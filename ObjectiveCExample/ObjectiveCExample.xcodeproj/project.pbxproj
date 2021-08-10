@@ -16,6 +16,7 @@
 		2807906E2689F30E00395F82 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2807906D2689F30E00395F82 /* main.m */; };
 		28079084268A087C00395F82 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 28079083268A087C00395F82 /* NotificationService.m */; };
 		28079088268A087C00395F82 /* NotificationExtesnionServices.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 28079080268A087C00395F82 /* NotificationExtesnionServices.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		28D05FFD26B2C5F7005B352A /* pikachu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 28D05FFC26B2C5F6005B352A /* pikachu.mp3 */; };
 		30CCFBFA57997196FA36503F /* Pods_ObjectiveCExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F53348437F7276319A71 /* Pods_ObjectiveCExample.framework */; };
 		F212C849DF969D0A3699CFA2 /* Pods_ObjectiveCExample_NotificationExtesnionServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCBD444D747C16CD79FA4AB1 /* Pods_ObjectiveCExample_NotificationExtesnionServices.framework */; };
 /* End PBXBuildFile section */
@@ -63,6 +64,7 @@
 		28079083268A087C00395F82 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		28079085268A087C00395F82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2807908F268A088100395F82 /* NotificationExtesnionServices.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationExtesnionServices.entitlements; sourceTree = "<group>"; };
+		28D05FFC26B2C5F6005B352A /* pikachu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = pikachu.mp3; path = ../../../../../Desktop/pikachu.mp3; sourceTree = "<group>"; };
 		5653F53348437F7276319A71 /* Pods_ObjectiveCExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BFBC176872D999F2F19FB73 /* Pods-ObjectiveCExample-NotificationExtesnionServices.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCExample-NotificationExtesnionServices.debug.xcconfig"; path = "Target Support Files/Pods-ObjectiveCExample-NotificationExtesnionServices/Pods-ObjectiveCExample-NotificationExtesnionServices.debug.xcconfig"; sourceTree = "<group>"; };
 		73F1D2C9CB04F07A2969E0F8 /* Pods-ObjectiveCExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCExample.release.xcconfig"; path = "Target Support Files/Pods-ObjectiveCExample/Pods-ObjectiveCExample.release.xcconfig"; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 		2807905A2689F30A00395F82 /* ObjectiveCExample */ = {
 			isa = PBXGroup;
 			children = (
+				28D05FFC26B2C5F6005B352A /* pikachu.mp3 */,
 				28079079268A030500395F82 /* ObjectiveCExample.entitlements */,
 				2807905B2689F30A00395F82 /* AppDelegate.h */,
 				2807905C2689F30A00395F82 /* AppDelegate.m */,
@@ -245,6 +248,7 @@
 			files = (
 				2807906B2689F30E00395F82 /* LaunchScreen.storyboard in Resources */,
 				280790682689F30E00395F82 /* Assets.xcassets in Resources */,
+				28D05FFD26B2C5F7005B352A /* pikachu.mp3 in Resources */,
 				280790662689F30A00395F82 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

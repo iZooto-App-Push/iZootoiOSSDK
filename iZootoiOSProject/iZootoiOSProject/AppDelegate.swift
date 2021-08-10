@@ -35,28 +35,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var i = 0
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-       
-        // for setting
+        
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
         UNUserNotificationCenter.current().delegate = self
+       // let data = ["language" :"tamil","match":"cricket"]
+       // iZooto.addUserProperties(data: data)
         
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-       // iZooto.setBadgeCount(badgeNumber: 0)
-        
- 
-       
-        
-        //requestPermission()
-
       
         return true
     }
         func applicationDidBecomeActive(_ application: UIApplication) {
         application.applicationIconBadgeNumber = 0
         iZooto.setBadgeCount(badgeNumber: 0)
+    }
+    func showAlert()
+    {
+        
+        let alert = UIAlertController(title: "Hello!", message: "Greetings from AppDelegate.", preferredStyle: .alert)
+        self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+
+
     }
     func requestPermission() {
         if #available(iOS 14, *) {
@@ -95,7 +97,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
    // @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        let userInfo = response.notification.request.content.userInfo
         iZooto.notificationHandler(response: response)//iZooto.notificationHandler
         completionHandler()
 
