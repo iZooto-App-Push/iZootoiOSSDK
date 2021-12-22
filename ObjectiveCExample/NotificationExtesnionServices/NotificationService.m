@@ -20,7 +20,7 @@
       //  self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"pikachu.mp3"];
        
 
-     //   self.bestAttemptContent.sound = [NSString stringWithFormat:@"pikachu.mp3", self.bestAttemptContent.sound];
+        self.bestAttemptContent.sound = [NSString stringWithFormat:@"pikachu.mp3", self.bestAttemptContent.sound];
 
     }
 }

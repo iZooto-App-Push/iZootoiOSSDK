@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "iZootoiOSSDK"
-  spec.version      = "1.1.8"
+  spec.version      = "1.1.9"
   spec.summary      = "iZooto Notification push services"
   spec.description  = " iZooto Push Notifications To Drive Audience Engagement"
   spec.homepage     = "https://github.com/izooto-mobile-sdk/iZootoiOSSDK"

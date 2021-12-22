@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28248A9E26C5528300F5560A /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28248A9D26C5528300F5560A /* SecondViewController.swift */; };
 		285BA60823F12D8100520F59 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		28621614254950AD00B178F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */; };
 		28740CA02459649500E51907 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 28740C9F2459649500E51907 /* logo.png */; };
@@ -49,6 +50,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		28248A9D26C5528300F5560A /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		285BA60B23F1537800520F59 /* iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28740C9F2459649500E51907 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		28740CA12459672300E51907 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */,
 				28AEAE5D23ED7B8100A1BFD2 /* SceneDelegate.swift */,
 				28AEAE5F23ED7B8100A1BFD2 /* ViewController.swift */,
+				28248A9D26C5528300F5560A /* SecondViewController.swift */,
 				28AEAE6123ED7B8100A1BFD2 /* Main.storyboard */,
 				28AEAE6423ED7B8200A1BFD2 /* Assets.xcassets */,
 				28AEAE6623ED7B8200A1BFD2 /* LaunchScreen.storyboard */,
@@ -336,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28248A9E26C5528300F5560A /* SecondViewController.swift in Sources */,
 				28AEAE6023ED7B8100A1BFD2 /* ViewController.swift in Sources */,
 				28AEAE5C23ED7B8100A1BFD2 /* AppDelegate.swift in Sources */,
 				28AEAE5E23ED7B8100A1BFD2 /* SceneDelegate.swift in Sources */,
@@ -431,7 +435,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -485,7 +489,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -559,7 +563,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B4A561CDEA701DD5B7D29F43 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig */;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = iZootoNotificationExtendsServices/iZootoNotificationExtendsServices.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -587,7 +591,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5BC19B73448C3198F6F8283D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig */;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = iZootoNotificationExtendsServices/iZootoNotificationExtendsServices.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

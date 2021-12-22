@@ -8,6 +8,8 @@
 #import "AppDelegate.h"
 @import iZootoiOSSDK;
 @import UserNotifications;
+#import <UserNotifications/UserNotifications.h>
+
 @interface AppDelegate ()
 @end
 @implementation AppDelegate
@@ -16,27 +18,31 @@
     [iZootooInitSetting setObject:@YES forKey:@"auto_prompt"];
     [iZootooInitSetting setObject:@YES forKey:@"nativeWebview"];
     [iZootooInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
-
+//    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound |UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+    [application registerForRemoteNotifications];  
     if (launchOptions != nil)
        {
            // opened from a push notification when the app is closed
+
            NSDictionary* userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
            if (userInfo != nil)
            {
                 NSLog(@"userInfo->%@", [userInfo objectForKey:@"aps"]);
-               [iZooto initialisationWithIzooto_id:@"9ea93ba1e02e25e33cd708fb11359bd47e67d9db"  application:application iZootoInitSettings:iZootooInitSetting];
-                    iZooto.landingURLDelegate = self ;
-               
+               [iZooto initialisationWithIzooto_id:@"dc68677625ff2183bd225ee5aadb23d1639cefac"  application:application iZootoInitSettings:iZootooInitSetting];
+               iZooto.notificationOpenDelegate = self;
+
            }
        }
+    else{
     dispatch_async(dispatch_get_main_queue(), ^{
    // initalise the iZooto SDK
-   [iZooto initialisationWithIzooto_id:@"9ea93ba1e02e25e33cd708fb11359bd47e67d9db"  application:application iZootoInitSettings:iZootooInitSetting];
+   [iZooto initialisationWithIzooto_id:@"dc68677625ff2183bd225ee5aadb23d1639cefac"  application:application iZootoInitSettings:iZootooInitSetting];
         iZooto.landingURLDelegate = self ;
        iZooto.notificationReceivedDelegate = self;
        iZooto.notificationOpenDelegate = self;
        
    });
+    }
    
     return YES;
 }
@@ -83,6 +89,7 @@
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)(void))completionHandler
 {
+
     [iZooto notificationHandlerWithResponse:response];
     completionHandler();
 }
@@ -91,7 +98,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
  
 - (void)onHandleLandingURLWithUrl:(NSString * _Nonnull)url {
     NSLog(@"%@", url);
-    [self ShowAlert:url];
+    //[self ShowAlert:url];
 
 
     
@@ -99,7 +106,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
  
 - (void)onNotificationOpenWithAction:(NSDictionary<NSString *,id> * _Nonnull)action {
     NSLog(@"NSString = %@", action);
-    [self ShowAlert:action];
+   // [self ShowAlert:action];
 
  
 }

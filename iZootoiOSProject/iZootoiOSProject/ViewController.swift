@@ -22,22 +22,32 @@ class ViewController: UIViewController {
     }
     @IBAction func shareToken(_ sender: Any) {
         
-        let sharedPref = UserDefaults.standard
-        let token = sharedPref.string(forKey: "Token")
-        let text = "This is a token .\(token!)"
+        if #available(iOS 13.0, *) {
+            let svc = (storyboard?.instantiateViewController(identifier: "green_vc")) as! SecondViewController
+            present(svc, animated: true)
 
-        // set up activity view controller
-        let textToShare = [text]
-        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view
-
-        // exclude some activity types from the list (optional)
-        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
-
-        // present the view controller
-        self.present(activityViewController, animated: true, completion: nil)
+        } else {
+            // Fallback on earlier versions
+        }
         
+//        let secondVC = storyboard?.instantiateViewController(withIdentifier: "AgainViewController") as! AgainViewController
+//               self.present(secondVC, animated: true, completion: nil)
         
+//        let sharedPref = UserDefaults.standard
+//        let token = sharedPref.string(forKey: "Token")
+//      //  let text = "This is a token .\(token!)"
+//
+//        // set up activity view controller
+//        let textToShare = [text]
+//        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+//        activityViewController.popoverPresentationController?.sourceView = self.view
+//
+//        // exclude some activity types from the list (optional)
+//        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+//
+//        // present the view controller
+//        self.present(activityViewController, animated: true, completion: nil)
+       // self.present(AgainViewController(), animated: true, completion: nil)
     }
     @IBAction func clickAction(_ sender: Any) {
         print("clicks")
@@ -50,13 +60,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-       
-
-
+        view.backgroundColor = .red
       
-   
-
     }
 
 }

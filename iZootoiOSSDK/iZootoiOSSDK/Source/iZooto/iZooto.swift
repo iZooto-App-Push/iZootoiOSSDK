@@ -14,6 +14,9 @@ import AdSupport
 import AVFoundation
 import CommonCrypto
 import WebKit
+import AppTrackingTransparency
+import AdSupport
+
 
 let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 @objc
@@ -59,15 +62,22 @@ public class iZooto : NSObject
 // initialise the device and register the token
    @objc public static func initialisation(izooto_id : String, application : UIApplication,iZootoInitSettings : Dictionary<String,Any>)
          {
-            izooto_uuid = izooto_id
+            
+
+             
+             izooto_uuid = izooto_id
             keySettingDetails = iZootoInitSettings
-            RestAPI.createRequest(uuid: izooto_uuid) { (output) in
-                
+
+//          
+             
+             izooto_uuid = izooto_id
+            keySettingDetails = iZootoInitSettings
+            RestAPI.getRequest(uuid: izooto_uuid) { (output) in
+
                 let jsonString = output.fromBase64()
             let data = jsonString!.data(using: .utf8)!
                    let json = try? JSONSerialization.jsonObject(with: data)
                   if let dictionary = json as? [String: Any] {
-                    
                     sharedUserDefault?.set(dictionary["pid"]!, forKey: SharedUserDefault.Key.registerID)
                     mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
                   }
@@ -75,7 +85,9 @@ public class iZooto : NSObject
                     print("Some error occured")
                   }
                   }
-        
+
+            // sharedUserDefault?.set("1001718", forKey: SharedUserDefault.Key.registerID)
+          //  mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
            
         if(keySettingDetails != nil)
         {
@@ -118,6 +130,7 @@ public class iZooto : NSObject
             }
           else {
                 print("The auto_prompt  key is not present in the dictionary")
+              RestAPI.sendExceptionToServer(exceptionName: "The auto_prompt  key is not present in the dictionary", className: "iZooto", methodName: "initialisation", accoundID: 0, token: "", rid: "0", cid: "0")
             }
            
         if #available(iOS 10.0, *) {
@@ -134,19 +147,18 @@ public class iZooto : NSObject
                }
             
         }
-    let dicData = sharedUserDefault?.dictionary(forKey:"UserPropertiesData")
-    if(dicData != nil)
+    let userPropertiesData = sharedUserDefault?.dictionary(forKey:"UserPropertiesData")
+    if(userPropertiesData != nil)
     {
-        addUserProperties(data: dicData!)
+        addUserProperties(data: userPropertiesData!)
     }
-    else
+    let eventData = sharedUserDefault?.dictionary(forKey:"AddEvents")
+    let eventName = sharedUserDefault?.string(forKey: "EventName")
+    if(eventData != nil && eventName != nil)
     {
-       // print("No User Properties Data")
+        addEvent(eventName: eventName!, data: eventData!)
     }
-            
     }
-    
-    
     // register for pushNotification Setting
 @objc public  static  func registerForPushNotifications() {
                 if #available(iOS 10.0, *) {
@@ -156,9 +168,11 @@ public class iZooto : NSObject
 
                     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                                            (granted, error) in
+                        UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
                         print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
                                            guard granted else { return }
                                            getNotificationSettings()
+                        
                         
                 }
                 
@@ -175,6 +189,7 @@ public class iZooto : NSObject
         if #available(iOS 12.0, *) {
                            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge,.provisional]) {
                                (granted, error) in
+                              // UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
                                 print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
                                 guard granted else { return }
                                 getNotificationSettingsProvisional()
@@ -225,9 +240,7 @@ public class iZooto : NSObject
         let format = DateFormatter()
         format.dateFormat = "yyyy-MM-dd"
         let formattedDate = format.string(from: date)
-
-
-            if UserDefaults.getRegistered()
+        if UserDefaults.getRegistered()
             {
                 guard let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
                 else
@@ -238,20 +251,43 @@ public class iZooto : NSObject
                     RestAPI.lastVisit(userid: mizooto_id, token:token)
                     sharedUserDefault?.set(formattedDate, forKey: "LastVisit")
                 }
+              if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+                userDefaults.set(token, forKey: "DEVICETOKEN")
+                userDefaults.set(mizooto_id, forKey: "PID")
+                userDefaults.synchronize()
+               }
                
             }
             else
             {
-                RestAPI.registerToken(token: token, izootoid: mizooto_id)
-                sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
-            }
+                           if(mizooto_id != 0 && token != nil)
+                            {
+                            RestAPI.registerToken(token: token, izootoid: mizooto_id)
+                            sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
+                               if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+                                   userDefaults.set(token, forKey: "DEVICETOKEN")
+                                   userDefaults.set(mizooto_id, forKey: "PID")
+                                   userDefaults.synchronize()
+                              }
+                               
+                           }
+                            else
+                            {
+                                RestAPI.sendExceptionToServer(exceptionName: "Token & Account ID issue occured", className: "iZooto", methodName: "GetToken", accoundID: mizooto_id, token: token, rid: "", cid: "")
+                            }
+                        }
+            
+          
         }
     @objc public static func setBadgeCount(badgeNumber : NSInteger)
     {
-
-        if(badgeNumber>0)
+       if(badgeNumber == -1)
+        {
+           sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
+       }
+        if(badgeNumber == 1)
        {
-        sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
+            sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
 
        }
         else
@@ -259,8 +295,28 @@ public class iZooto : NSObject
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
             userDefaults.set(0, forKey: "Badge")
             userDefaults.synchronize()
+
        }
     }
+    }
+    @objc public static func  getAdvertisementID(adid : NSString)
+    {
+        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))
+        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token))
+        if (adid != nil && token != nil && userID != 0 )
+        {
+            let dicData = sharedUserDefault?.bool(forKey:"AdvertisementID")
+            if(dicData == false)
+            {
+                RestAPI.registerToken(token: token!, izootoid: userID!, adid: adid)
+            }
+           
+            
+        }
+        else{
+            sharedUserDefault?.set(adid, forKey: "ADID")
+        }
+      
     }
 
      // Handle the payload and show the notification
@@ -269,212 +325,233 @@ public class iZooto : NSObject
                                                                     request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
         {
             let userInfo = request.content.userInfo
-            let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-    if(notifcationData?.inApp != nil)
-    {
-            notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
-            bestAttemptContent.sound = UNNotificationSound.default()
-            badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-    
-            if(bundleName != nil)
+            let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+          if(notificationData?.inApp != nil)
             {
-                let groupName = "group."+bundleName+".iZooto"
-            if let userDefaults = UserDefaults(suiteName: groupName) {
-                badgeCount = userDefaults.integer(forKey:"Badge")
-                if badgeCount > 0 {
-                    if(badgeNumber > 0)
-                    {
-                        bestAttemptContent.badge = 1 as NSNumber
-
-                    }
-                    else
-                    {
-                        userDefaults.set(badgeCount + 1, forKey: "Badge")
-                        bestAttemptContent.badge = badgeCount + 1 as NSNumber
-                    }
-                } else {
-                    userDefaults.set(1, forKey: "Badge")
-                    bestAttemptContent.badge = 1
-
-                }
-                userDefaults.synchronize()
-
-
-            }
-            }
-        else
-            {
-                print("No GroupName added here")
-            }
+                    
         
-          
-            if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
-                          {
-                              if let url = URL(string: notifcationData!.fetchurl!) {
-                                 URLSession.shared.dataTask(with: url) { data, response, error in
-                                    if let data = data {
-                                do {
-                                    
-                                    
-                                    
-                                     let json = try JSONSerialization.jsonObject(with: data)
-                                        if let jsonArray = json as? [[String:Any]] {
-                                            bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.alert!.title)!))"
-                                            bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.alert!.body)!))"
-                                        if notifcationData?.url != "" {
-                                            notifcationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.url)!))"
-                                          
-                                            }
-                                        if notifcationData?.alert?.attachment_url != "" {
-                                          notifcationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.alert!.attachment_url)!))"
-                                            if (notifcationData?.alert?.attachment_url!.contains(".webp"))!
-                                            {
-                                                notifcationData?.alert?.attachment_url = notifcationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
-                                            }
-                                            
-                                    }
-                                                
-                                        } else if let jsonDictionary = json as? [String:Any] {
-                                            // print("Hello",jsonDictionary)
-
-                                            bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.alert!.title)!))"
-                                            bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.alert!.body)!))"
-                                            if notifcationData?.url != "" {
-                                             notifcationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.url)!))"
-                                            }
-                                            if notifcationData?.alert?.attachment_url != "" {
-                                                
-                                                
-                                            notifcationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.alert!.attachment_url)!))"
-                                                if (notifcationData?.alert?.attachment_url!.contains(".webp"))!
-                                              {
-                                                  notifcationData?.alert?.attachment_url = notifcationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
-                                               
-                                              }
-                                              if (notifcationData?.alert?.attachment_url!.contains("http:"))!
-                                                                                          {
-                                                                                              notifcationData?.alert?.attachment_url = notifcationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
-                                                                                           
-                                                                                          }
-                                                                                          
-                                               
-                                               
-                                                
-                                            }
-                                        }
-                                       
-                                      autoreleasepool {
-                                        if let urlString = (notifcationData?.alert?.attachment_url),
-                                                       let fileUrl = URL(string: urlString ) {
-
-                                                              guard let imageData = NSData(contentsOf: fileUrl) else {
-                                                                contentHandler!(bestAttemptContent)
-                                                                 return
-                                                               }
-                                                              let string = notifcationData?.alert?.attachment_url
-                                                              let url: URL? = URL(string: string!)
-                                                              let urlExtension: String? = url?.pathExtension
-                                                                guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                                                    print(AppConstant.IMAGE_ERROR)
-                                                                  contentHandler!(bestAttemptContent)
-                                                                  return
-                                                                }
-                                                                bestAttemptContent.attachments = [ attachment ]
-                                                              }
-
-
-                                                 }
-                                                     
-                                        contentHandler!(bestAttemptContent)
-
-
-                                    
-
-
-                                } catch let error {
-                                    print("Error",error)
+                        notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                        bestAttemptContent.sound = UNNotificationSound.default()
+                        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+                
+                        if(bundleName != nil)
+                        {
+                            let groupName = "group."+bundleName+".iZooto"
+                        
+                        if let userDefaults = UserDefaults(suiteName: groupName) {
+                            badgeCount = userDefaults.integer(forKey:"Badge")
+                            if badgeCount > 0 {
+                                if(badgeNumber > 0)
+                                {
+                                    bestAttemptContent.badge = 1 as NSNumber
 
                                 }
-                                                                      }
-                                    
-                                 }.resume()
-                              }
-                             
-                            let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
-                                                  let  category = UNNotificationCategory( identifier: "izooto_category", actions: [firstAction], intentIdentifiers: [], options: [])
-                                                   UNUserNotificationCenter.current().setNotificationCategories([category])
-                             
+                                else
+                                {
+                                    userDefaults.set(badgeCount + 1, forKey: "Badge")
+                                    bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                                }
+                            } else {
+                                
+                               
+                                    userDefaults.set(1, forKey: "Badge")
+                                    bestAttemptContent.badge = 1
+                                
+                            }
+                            
+                            let deviceToken = userDefaults.string(forKey: "DEVICETOKEN")
+                            let pid = userDefaults.integer(forKey: "PID")
+                            
+                            if (notificationData?.cfg != nil)
+                            {
+                                let str = String((notificationData?.cfg)!)
+                                let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                                let lastChar = binaryString?.last!
+                                let str1 = String((lastChar)!)
+                                let impr = Int(str1)
+                                if(impr == 1)
+                                {
+                                    RestAPI.callImpression(notificationData: notificationData!,userid: pid,token:"\(deviceToken)")
 
-                          }
+                                }
+                               }
+                            userDefaults.synchronize()
 
-                
-            else{
-            if notifcationData != nil
-            {
-                
 
-            autoreleasepool {
-                if let urlString = (notifcationData?.alert?.attachment_url),
-                let fileUrl = URL(string: urlString ) {
-                       guard let imageData = NSData(contentsOf: fileUrl) else {
-                            contentHandler!(bestAttemptContent)
-                          return
                         }
-                       let string = notifcationData?.alert?.attachment_url
-                       let url: URL? = URL(string: string!)
-                       let urlExtension: String? = url?.pathExtension
-
-                         guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                           print(AppConstant.IMAGE_ERROR)
-                           contentHandler!(bestAttemptContent)
-                           return
-                         }
-                         bestAttemptContent.attachments = [ attachment ]
-                       }
-            }
-                
-                
-                  
-
-                if notifcationData!.category != "" && notifcationData!.category != nil
-                {
-                     if notifcationData?.act1name != "" && notifcationData?.act1name != nil && notifcationData?.act2name != nil && notifcationData?.act2name != ""
-                    {
-                        let name = notifcationData?.act1name!
-                        let secondName = notifcationData?.act2name!
-                      
-
-                        let   firstAction = UNNotificationAction( identifier: AppConstant.FIREST_BUTTON, title: " \(name!)", options:.foreground)
-                        let   secondAction = UNNotificationAction( identifier: AppConstant.SECOND_BUTTON, title: "\(secondName!)",options: .foreground)
                         
-                        let  category = UNNotificationCategory( identifier:AppConstant.CATEGORY_NAME, actions: [firstAction,secondAction], intentIdentifiers: [], options: [])
-                     
-                        UNUserNotificationCenter.current().setNotificationCategories([category])
-
-
-                    }
                     else
-                    {
-                       
-                        let name = notifcationData?.act1name!
-                        let firstAction = UNNotificationAction( identifier: AppConstant.FIREST_BUTTON, title: " \(name!)", options: .foreground)
-                        let  category = UNNotificationCategory( identifier: AppConstant.CATEGORY_NAME, actions: [firstAction], intentIdentifiers: [], options: [])
-                        UNUserNotificationCenter.current().setNotificationCategories([category])
-                    }
-               
-                    contentHandler!(bestAttemptContent)
+                        {
+                            print("No GroupName added here")
+                        }
+                        }
+          
+                    
+                      
+                        if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
+                                      {
+                                          if let url = URL(string: notificationData!.fetchurl!) {
+                                             URLSession.shared.dataTask(with: url) { data, response, error in
+                                                if let data = data {
+                                            do {
+                                                
+                                                
+                                                
+                                                 let json = try JSONSerialization.jsonObject(with: data)
+                                                    if let jsonArray = json as? [[String:Any]] {
+                                                        bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
+                                                        bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
+                                                    if notificationData?.url != "" {
+                                                        notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                                      
+                                                        }
+                                                    if notificationData?.alert?.attachment_url != "" {
+                                                        notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                                        if (notificationData?.alert?.attachment_url!.contains(".webp"))!
+                                                        {
+                                                            notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
+                                                        }
+                                                        
+                                                }
+                                                            
+                                                    } else if let jsonDictionary = json as? [String:Any] {
+                                                        // print("Hello",jsonDictionary)
 
-                
+                                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
+                                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
+                                                        if notificationData?.url != "" {
+                                                            notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                                        }
+                                                        if notificationData?.alert?.attachment_url != "" {
+                                                            
+                                                            
+                                                            notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                                            if (notificationData?.alert?.attachment_url!.contains(".webp"))!
+                                                          {
+                                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
+                                                           
+                                                          }
+                                                          if (notificationData?.alert?.attachment_url!.contains("http:"))!
+                                                                                                      {
+                                                              notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
+                                                                                                       
+                                                                                                      }
+                                                                                                      
+                                                           
+                                                           
+                                                            
+                                                        }
+                                                    }
+                                                   
+                                                  autoreleasepool {
+                                                    if let urlString = (notificationData?.alert?.attachment_url),
+                                                                   let fileUrl = URL(string: urlString ) {
+
+                                                                          guard let imageData = NSData(contentsOf: fileUrl) else {
+                                                                            contentHandler!(bestAttemptContent)
+                                                                             return
+                                                                           }
+                                                                          let string = notificationData?.alert?.attachment_url
+                                                                          let url: URL? = URL(string: string!)
+                                                                          let urlExtension: String? = url?.pathExtension
+                                                                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                                                                print(AppConstant.IMAGE_ERROR)
+                                                                              contentHandler!(bestAttemptContent)
+                                                                              return
+                                                                            }
+                                                                            bestAttemptContent.attachments = [ attachment ]
+                                                                          }
+                                                             }
+                                                                 
+                                                    contentHandler!(bestAttemptContent)
+                                            } catch let error {
+                                                print("Error",error)
+
+                                            }
+                                        }
+                                                
+                                             }.resume()
+                                          }
+                                         
+                                        let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
+                                                              let  category = UNNotificationCategory( identifier: "izooto_category", actions: [firstAction], intentIdentifiers: [], options: [])
+                                                               UNUserNotificationCenter.current().setNotificationCategories([category])
+                                         
+
+                                      }
+
+                            
+                        else{
+                        if notificationData != nil
+                        {
+                            
+
+                        autoreleasepool {
+                            if let urlString = (notificationData?.alert?.attachment_url),
+                            let fileUrl = URL(string: urlString ) {
+                                   guard let imageData = NSData(contentsOf: fileUrl) else {
+                                        contentHandler!(bestAttemptContent)
+                                      return
+                                    }
+                                   let string = notificationData?.alert?.attachment_url
+                                   let url: URL? = URL(string: string!)
+                                   let urlExtension: String? = url?.pathExtension
+
+                                     guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                       print(AppConstant.IMAGE_ERROR)
+                                       contentHandler!(bestAttemptContent)
+                                       return
+                                     }
+                                     bestAttemptContent.attachments = [ attachment ]
+                                   }
+                        }
+                            
+                            
+                              
+
+                            if notificationData!.category != "" && notificationData!.category != nil
+                            {
+                                 if notificationData?.act1name != "" && notificationData?.act1name != nil && notificationData?.act2name != nil && notificationData?.act2name != ""
+                                {
+                                    let name = notificationData?.act1name!
+                                    let secondName = notificationData?.act2name!
+                                  
+
+                                    let   firstAction = UNNotificationAction( identifier: AppConstant.FIREST_BUTTON, title: " \(name!)", options:.foreground)
+                                    let   secondAction = UNNotificationAction( identifier: AppConstant.SECOND_BUTTON, title: "\(secondName!)",options: .foreground)
+                                    
+                                    let  category = UNNotificationCategory( identifier:AppConstant.CATEGORY_NAME, actions: [firstAction,secondAction], intentIdentifiers: [], options: [])
+                                 
+                                    UNUserNotificationCenter.current().setNotificationCategories([category])
+
+
+                                }
+                                else
+                                {
+                                   
+                                    if(notificationData? .act1name != nil)
+                                    {
+                                    let name = notificationData?.act1name!
+                                    let firstAction = UNNotificationAction( identifier: AppConstant.FIREST_BUTTON, title: " \(name!)", options: .foreground)
+                                    let  category = UNNotificationCategory( identifier: AppConstant.CATEGORY_NAME, actions: [firstAction], intentIdentifiers: [], options: [])
+                                    UNUserNotificationCenter.current().setNotificationCategories([category])
+                                    }
+                                   
+                                }
+                           
+                                contentHandler!(bestAttemptContent)
+
+                            
+                            }
+                       }
+                        }
+                  
+                    
                 }
-
-           }
+            else
+            {
+                print("Other Notification Payload")
             }
-    }
-    else
-    {
-        print("Other Notification providers")
-    }
-            
            
         }
     // for json aaray
@@ -500,13 +577,8 @@ public class iZooto : NSObject
                 let lastData = array.last
                 let res = String(lastData!)
                 return   data1[res]! as! String
-
-                
             }
         }
-
-
-                                                   
         return sourceString
        }
     
@@ -650,6 +722,9 @@ return sourceString
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
                 print(error.localizedDescription)
+                        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
+                        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+                        RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "convertToDictionary", accoundID: userID, token: token, rid: "0", cid: "0")
             }
         }
         return nil
@@ -658,6 +733,7 @@ return sourceString
     
     // Handle the Notification behaviour
     @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String,completionHandler : @escaping (UNNotificationPresentationOptions) -> Void)
+    
       {
         let appstate = UIApplication.shared.applicationState
         if (appstate == .active && displayNotification == "InAppAlert")
@@ -699,6 +775,7 @@ return sourceString
               {
                   RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
               }
+             
               }
                 completionHandler([.badge, .alert, .sound])
 
@@ -715,58 +792,64 @@ return sourceString
 // Handle the clicks the notification from Banner,Button
 @objc public static func notificationHandler(response : UNNotificationResponse)
 {
-    
+
     let userInfo = response.notification.request.content.userInfo
-    let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+    let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
    
-    UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+    badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+    if(badgeNumber == -1)
+    {
+       print("HandleNotification1",badgeNumber)
+        UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
+
+
+    }
+    else
+    {
+        UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+       
+    }
     if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
         userDefaults.set(0, forKey: "Badge")
         userDefaults.synchronize()
    }
-
-   // iZootoActionDelegate?.onNotificationReceived(payload: notifcationData!)
-    notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
-
-    
-    clickTrack(notificationData: notifcationData!, actionType: "0")
-
-                
-if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
+   
+clickTrack(notificationData: notificationData!, actionType: "0")
+notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
   {
-   // clickTrack(notificationData: notifcationData!, actionType: "0")
 
-    if let url = URL(string: notifcationData!.fetchurl!)
+    if let url = URL(string: notificationData!.fetchurl!)
          {
         URLSession.shared.dataTask(with: url) { data, response, error in
         if let data = data {
         do {
             let json = try JSONSerialization.jsonObject(with: data)
             if let jsonArray = json as? [[String:Any]] {
-            if notifcationData?.url != "" {
-             notifcationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.url)!))"
-              notifcationData?.url = "https:"+notifcationData!.url!
-            if notifcationData?.act1name != nil && notifcationData?.act1name != ""
+            if notificationData?.url != "" {
+                notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                notificationData?.url = "https:"+notificationData!.url!
+            if notificationData?.act1name != nil && notificationData?.act1name != ""
                 {
-            if let url = URL(string:notifcationData!.url!) {
+            if let url = URL(string:notificationData!.url!) {
             UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
 }
     }
 else
     {
-      if let url = URL(string:notifcationData!.url!) {
+      if let url = URL(string:notificationData!.url!) {
         UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
         }
     }
   }
 }
 else if let jsonDictionary = json as? [String:Any] {
-    if notifcationData?.url != "" {
-    notifcationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.url)!))"
-    if let url = URL(string:notifcationData!.url!) {
-    if notifcationData?.act1name != nil && notifcationData?.act1name != ""
+    if notificationData?.url != "" {
+        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+    if let url = URL(string:notificationData!.url!) {
+    if notificationData?.act1name != nil && notificationData?.act1name != ""
      {
-       if let url = URL(string:notifcationData!.url!) {
+       if let url = URL(string:notificationData!.url!) {
            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
             }
     }
@@ -780,6 +863,9 @@ else
 }
 } catch let error {
     print(AppConstant.TAG,error)
+    let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
+    let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+    RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler", accoundID: userID, token: token, rid: "0", cid: "0")
 }
 }
 }.resume()
@@ -787,7 +873,7 @@ else
 }
 else
     {
-    if notifcationData?.category != nil
+    if notificationData?.category != nil
      {
 
         switch response.actionIdentifier
@@ -796,15 +882,15 @@ else
                type = "1"
                // clickTrack(notificationData: notifcationData!, actionType: "1")
 
-            if notifcationData?.ap != "" && notifcationData?.ap != nil
+            if notificationData?.ap != "" && notificationData?.ap != nil
                 {
                     handleClicks(response: response, actionType: "1")
                 }
             else
             {
-             if notifcationData?.act1link != nil && notifcationData?.act1link != ""
+             if notificationData?.act1link != nil && notificationData?.act1link != ""
                 {
-                 let launchURl = notifcationData?.act1link!
+                 let launchURl = notificationData?.act1link!
                  if launchURl!.contains("tel:")
                     {
                      if let url = URL(string: launchURl!)
@@ -815,17 +901,17 @@ else
                     }
                  else
                     {
-                    if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
+                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
                     {
                       
                         let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
                         if checkWebview!
                         {
-                        landingURLDelegate?.onHandleLandingURL(url: (notifcationData?.act1link)!)
+                        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act1link)!)
                         }
                         else
                         {
-                            ViewController.seriveURL = notifcationData?.act1link
+                            ViewController.seriveURL = notificationData?.act1link
                         UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
                         }
                      
@@ -833,15 +919,15 @@ else
                     }
                   else
                    {
-                    if(notifcationData?.fetchurl != "" && notifcationData?.fetchurl != nil)
+                    if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
                         {
-                            if let url = URL(string: notifcationData!.url!) {
+                            if let url = URL(string: notificationData!.url!) {
                              UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
                                 }
                         }
                     else
                         {
-                        if let url = URL(string: notifcationData!.act1link!) {
+                        if let url = URL(string: notificationData!.act1link!) {
                             UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
                                     }
                                 }
@@ -855,15 +941,15 @@ case "SecondButton" :
                 type = "2"
    // clickTrack(notificationData: notifcationData!, actionType: "2")
 
-            if notifcationData?.ap != "" && notifcationData?.ap != nil
+            if notificationData?.ap != "" && notificationData?.ap != nil
              {
                     handleClicks(response: response, actionType: "2")
              }
             else
             {
-                if notifcationData?.act2link != nil && notifcationData?.act2link != ""
+                if notificationData?.act2link != nil && notificationData?.act2link != ""
                  {
-                    let launchURl = notifcationData?.act2link!
+                    let launchURl = notificationData?.act2link!
                 if launchURl!.contains("tel:")
                  {
                   if let url = URL(string: launchURl!)
@@ -873,24 +959,24 @@ case "SecondButton" :
                    }
                 else
                  {
-                    if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
+                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
                     {
                       
                         let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
                         if checkWebview!
                         {
-                        landingURLDelegate?.onHandleLandingURL(url: (notifcationData?.act2link)!)
+                        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act2link)!)
                         }
                         else
                         {
-                            ViewController.seriveURL = notifcationData?.act2link
+                            ViewController.seriveURL = notificationData?.act2link
                         UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
                         }
                      
                     }
                 else
                  {
-                    if let url = URL(string: notifcationData!.act2link!)
+                    if let url = URL(string: notificationData!.act2link!)
                      {
                             UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
                      }
@@ -901,29 +987,30 @@ case "SecondButton" :
 break
 default:
             type = "0"
-    if notifcationData?.ap != "" && notifcationData?.ap != nil
+    if notificationData?.ap != "" && notificationData?.ap != nil
     {
-     handleClicks(response: response, actionType: "0")
+        handleClicks(response: response, actionType: "0")
+
     }
 else{
-    if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
+    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
      {
        
         let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
         if checkWebview!
         {
-        landingURLDelegate?.onHandleLandingURL(url: (notifcationData?.url)!)
+        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
         }
         else
         {
-        ViewController.seriveURL = notifcationData?.url
+        ViewController.seriveURL = notificationData?.url
         UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
         }
      }
      else{
        // clickTrack(notificationData: notifcationData!, actionType: "0")
 
-        if let url = URL(string: notifcationData!.url!) {
+        if let url = URL(string: notificationData!.url!) {
             UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
              }
 
@@ -935,62 +1022,56 @@ else{
 }
 else{
      type = "0"
-   // clickTrack(notificationData: notifcationData!, actionType: "0")
 
-          if notifcationData?.ap != "" && notifcationData?.ap != nil
+          if notificationData?.ap != "" && notificationData?.ap != nil
             {
-                handleClicks(response: response, actionType: "0")
-                                                                                                         
+               handleClicks(response: response, actionType: "0")
             }
         else
         {
-         if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
+         if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
             {
            
             let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
             if checkWebview!
             {
-            landingURLDelegate?.onHandleLandingURL(url: (notifcationData?.url)!)
+            landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
             }
             else
             {
-            ViewController.seriveURL = notifcationData?.url
+            ViewController.seriveURL = notificationData?.url
             UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
             }
             }
             else
             {
-                if let url = URL(string: notifcationData!.url!) {
+                if let url = URL(string: notificationData!.url!) {
                     UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                    }
             }
-                                    
+            }
         }
     } //close else
-            }
+}
    
 }
     
-    @objc private static func clickTrack(notificationData : Payload,actionType : String)
+
+    
+    @objc  static func clickTrack(notificationData : Payload,actionType : String)
     {
         if(notificationData.cfg != nil)
         {
-            let str = String((notificationData.cfg)!)
-            let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-        let data = binaryString!.suffix(2)
-            let clickCFG = data.prefix(1)
-            let click = Int(clickCFG)
-
-            if(click == 1)
-            {
-                RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-            }
+                    let str = String((notificationData.cfg)!)
+                    let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                let data = binaryString!.suffix(2)
+                    let clickCFG = data.prefix(1)
+                    let click = Int(clickCFG)
+                    if(click == 1)
+                    {
+                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                    }
         }
-        else
-        {
-
-            RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-        }
+      
     }
     
         
@@ -998,7 +1079,7 @@ else{
 
     
     // Handle the InApp/Webview
-  @objc  private static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
+   @objc static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
     {
         let userInfo = response.notification.request.content.userInfo
                let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
@@ -1023,7 +1104,7 @@ else{
         
     }
     // handle the borwser
-   @objc private static func onHandleLandingURL(response : UNNotificationResponse , actionType : String,launchURL : String)
+   @objc  static func onHandleLandingURL(response : UNNotificationResponse , actionType : String,launchURL : String)
        {
            let userInfo = response.notification.request.content.userInfo
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
@@ -1059,9 +1140,24 @@ else{
         }
        
     }
+    @objc public static func tapNotification(userinfo : [AnyHashable: Any])
+    {
+        let notifcationData = Payload(dictionary: (userinfo["aps"] as? NSDictionary)!)
+        var data = Dictionary<String,Any>()
+            data["button1ID"] = notifcationData?.act1id
+            data["button1Title"] = notifcationData?.act1name
+            data["button1URL"] = notifcationData?.act1link
+            data["additionalData"] = notifcationData?.ap
+            data["landingURL"] = notifcationData?.url
+            data["button2ID"] = notifcationData?.act2id
+            data["button2Title"] = notifcationData?.act2name
+            data["button2URL"] = notifcationData?.act2link
+            data["actionType"] = actionType
+            iZooto.notificationOpenDelegate?.onNotificationOpen(action: data)
+    }
     
     // handle the addtional data
-   @objc private static func handleClicks(response : UNNotificationResponse , actionType : String)
+   @objc public static func handleClicks(response : UNNotificationResponse , actionType : String)
         {
             let userInfo = response.notification.request.content.userInfo
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
@@ -1100,6 +1196,11 @@ else{
 
                RestAPI.callEvents(eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: token!)
                 }
+                else{
+                    sharedUserDefault?.set(data, forKey:"AddEvents")
+                    sharedUserDefault?.set(eventName, forKey: "EventName")
+
+                }
                
           }
         }
@@ -1111,28 +1212,34 @@ else{
 @objc public static func addUserProperties( data : Dictionary<String,Any>)
 {
     
-  let returnData =  Utils.dataValidate(data: data)
-  if returnData != nil {
-  if let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed),
+    
+  
+    let returnData =  Utils.dataValidate(data: data)
+    if returnData != nil {
+    if let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed),
      let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue) {
      let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
     if (token != nil && !token!.isEmpty)
     {
      RestAPI.callUserProperties(data: validationData as NSString, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: token!)
-                
     }
     else
     {
         sharedUserDefault?.set(data, forKey:"UserPropertiesData")
-       
-
     }
   }
+    }
+    else
+    {
+        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
+        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+        RestAPI.sendExceptionToServer(exceptionName: "No Data found in Dictionary", className: "iZooto", methodName: "addUserProperties", accoundID: userID, token: token, rid: "0", cid: "0")
     }
         
         }
    
 }
+
 
 // Handle banner imange uploading and deleting
 @available(iOS 10.0, *)
@@ -1154,6 +1261,9 @@ else{
                 
             } catch let error {
                 print("error \(error)")
+                let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
+                let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+                RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "saveImageToDisk", accoundID: userID, token: token, rid: "0", cid: "0")
             }
             
             

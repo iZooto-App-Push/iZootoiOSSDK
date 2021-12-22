@@ -9,16 +9,8 @@ class NotificationService: UNNotificationServiceExtension {
            self.receivedRequest = request;
            self.contentHandler = contentHandler
            bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
-
            if let bestAttemptContent = bestAttemptContent {
-           // iZooto.setBadgeCount(badgeNumber: 0)
             iZooto.didReceiveNotificationExtensionRequest(bundleName :"com.iZootoiOSProject",request: receivedRequest, bestAttemptContent: bestAttemptContent,contentHandler: contentHandler)
-          
-            
-            
-            
-            
-            
             
             // bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "pikachu.mp3"))
 
@@ -27,8 +19,7 @@ class NotificationService: UNNotificationServiceExtension {
        }
        override func serviceExtensionTimeWillExpire() {
            if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
-           // iZooto.didReceiveNotificationExtensionRequest(request: receivedRequest, bestAttemptContent: bestAttemptContent,contentHandler: contentHandler)
-               contentHandler(bestAttemptContent)
+               iZooto.didReceiveNotificationExtensionRequest(bundleName :"com.iZootoiOSProject",request: receivedRequest, bestAttemptContent: bestAttemptContent,contentHandler: contentHandler)
            }
        }
 
