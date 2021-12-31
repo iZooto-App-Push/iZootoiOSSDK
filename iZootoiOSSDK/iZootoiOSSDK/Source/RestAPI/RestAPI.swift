@@ -31,7 +31,7 @@ public class RestAPI : NSObject
     private static  var LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
     private static  var LASTVISITURL="https://lvi.izooto.com/lvi";
     private static var EXCEPTION_URL="https://aerr.izooto.com/aer";
-    private static let  SDKVERSION = "1.1.9"
+    private static let  SDKVERSION = "1.1.10"
 
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {

@@ -86,9 +86,6 @@ public class iZooto : NSObject
                   }
                   }
 
-            // sharedUserDefault?.set("1001718", forKey: SharedUserDefault.Key.registerID)
-          //  mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
-           
         if(keySettingDetails != nil)
         {
             let nativeWebviewKey = keySettingDetails["nativeWebview"] != nil
@@ -386,7 +383,9 @@ public class iZooto : NSObject
                         }
                         }
           
-                    
+              if #available(iOS 15.0, *) {
+                  bestAttemptContent.relevanceScore = notificationData?.relevence_score ?? 0
+              }
                       
                         if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
                                       {
@@ -1125,10 +1124,12 @@ else{
    @objc public static func setSubscription(isSubscribe : Bool)
     {
         var value = 0
-        if isSubscribe
+        if !isSubscribe
         {
             value = 2
         }
+        print(isSubscribe)
+        print(value)
     
          let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
          let miZooto_id = sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)

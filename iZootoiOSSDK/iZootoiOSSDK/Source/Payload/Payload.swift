@@ -33,6 +33,7 @@ public class Payload  : NSObject{
     public var fetchurl : String?
     public var cfg : String?
     public var inApp : String?
+    public var relevence_score : Double?
 
 
     public class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
@@ -69,6 +70,7 @@ public class Payload  : NSObject{
         inApp = dictionary["ia"] as? String          // inApp
         act1id = dictionary["d1"] as? String //action1 id
         act2id = dictionary["d2"] as? String // action2 id
+        relevence_score = dictionary["rs"] as? Double
     }
 public func dictionaryRepresentation() -> NSDictionary {
         let dictionary = NSMutableDictionary()
@@ -96,6 +98,7 @@ public func dictionaryRepresentation() -> NSDictionary {
        dictionary.setValue(self.inApp, forKey: "ia")
        dictionary.setValue(self.act1id, forKey: "d1")
        dictionary.setValue(self.act2id, forKey: "d2")
+       dictionary.setValue(self.relevence_score, forKey:"rs")
 
 
         return dictionary

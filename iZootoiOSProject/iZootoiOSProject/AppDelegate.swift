@@ -55,12 +55,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        // iZooto.addEvent(eventName: "Event", data:data)
        // iZooto.getAdvertisementID(adid: RestAPI.identifierForAdvertising() as! NSString)
         //getAdvertisementIS()
+        //iZooto.setSubscription(isSubscribe: true)
 
         return true
     }
         func applicationDidBecomeActive(_ application: UIApplication) {
-        application.applicationIconBadgeNumber = 0
-        iZooto.setBadgeCount(badgeNumber: 0)
+        application.applicationIconBadgeNumber = -1
+        iZooto.setBadgeCount(badgeNumber: -1)
             
            
           
