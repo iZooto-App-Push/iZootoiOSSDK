@@ -34,6 +34,7 @@ public class Payload  : NSObject{
     public var cfg : String?
     public var inApp : String?
     public var relevence_score : Double?
+    public var interrutipn_level : Int?
 
 
     public class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
@@ -70,7 +71,8 @@ public class Payload  : NSObject{
         inApp = dictionary["ia"] as? String          // inApp
         act1id = dictionary["d1"] as? String //action1 id
         act2id = dictionary["d2"] as? String // action2 id
-        relevence_score = dictionary["rs"] as? Double
+        relevence_score = dictionary["rs"] as? Double // relevance score
+        interrutipn_level = dictionary["il"] as? Int // interruption level
     }
 public func dictionaryRepresentation() -> NSDictionary {
         let dictionary = NSMutableDictionary()
@@ -92,13 +94,14 @@ public func dictionaryRepresentation() -> NSDictionary {
         dictionary.setValue(self.act1link, forKey: "l1")
         dictionary.setValue(self.act2name, forKey: "b2")
         dictionary.setValue(self.act2link, forKey: "l2")
-       dictionary.setValue(self.ap, forKey: "ap")
-       dictionary.setValue(self.cfg, forKey: "cfg")
-       dictionary.setValue(self.fetchurl, forKey: "fu")
-       dictionary.setValue(self.inApp, forKey: "ia")
-       dictionary.setValue(self.act1id, forKey: "d1")
-       dictionary.setValue(self.act2id, forKey: "d2")
-       dictionary.setValue(self.relevence_score, forKey:"rs")
+        dictionary.setValue(self.ap, forKey: "ap")
+        dictionary.setValue(self.cfg, forKey: "cfg")
+        dictionary.setValue(self.fetchurl, forKey: "fu")
+        dictionary.setValue(self.inApp, forKey: "ia")
+        dictionary.setValue(self.act1id, forKey: "d1")
+        dictionary.setValue(self.act2id, forKey: "d2")
+        dictionary.setValue(self.relevence_score, forKey:"rs")
+        dictionary.setValue(self.interrutipn_level, forKey: "il")
 
 
         return dictionary

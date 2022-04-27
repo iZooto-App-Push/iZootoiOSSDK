@@ -11,7 +11,6 @@ import UIKit
 import AdSupport
 import AppTrackingTransparency
 
-
 protocol ResponseHandler  : AnyObject{
     func onSuccess()
     func onFailure()
@@ -19,6 +18,7 @@ protocol ResponseHandler  : AnyObject{
 @objc
 public class RestAPI : NSObject
 {
+   // public static var  STAGING_URL = "https://iz-java-appsrv-stageing.azurewebsites.net/app.php";
     public static var   BASEURL = "https://aevents.izooto.com/app.php"
     public static var   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
     private static var  IMPRESSION_URL="https://impr.izooto.com/imp";
@@ -31,11 +31,11 @@ public class RestAPI : NSObject
     private static  var LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
     private static  var LASTVISITURL="https://lvi.izooto.com/lvi";
     private static var EXCEPTION_URL="https://aerr.izooto.com/aer";
-    private static let  SDKVERSION = "1.1.10"
+    private static let  SDKVERSION = "2.0.1"
 
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
-        if(isSubscribe != -1)
+        if(isSubscribe != -1 && userid != 0)
         {
         let requestHeaders:[String:String] = ["Content-Type":"application/x-www-form-urlencoded"]
          var requestBodyComponents = URLComponents()
@@ -136,7 +136,7 @@ public class RestAPI : NSObject
     
      static func callEvents(eventName : String, data : NSString,userid : Int,token : String)
       {
-        if( eventName != " "  && data != nil){
+        if( eventName != " "  && data != nil && userid != 0){
             let requestHeaders:[String:String] = ["Content-Type":"application/x-www-form-urlencoded"]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(userid)"),
@@ -166,7 +166,7 @@ public class RestAPI : NSObject
       }
      static func callUserProperties( data : NSString,userid : Int,token : String)
          {
-        if( data != "" ){
+        if( data != ""  && userid != 0){
             let requestHeaders:[String:String] = ["Content-Type":"application/x-www-form-urlencoded"]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(userid)"),
@@ -293,6 +293,8 @@ public class RestAPI : NSObject
         return ASIdentifierManager.shared().advertisingIdentifier.uuidString
     }
     }
+    
+    // last visit data send to server
     @objc static func lastVisit(userid : Int,token : String)
     {
         if(token != nil && userid != 0)
@@ -330,6 +332,7 @@ public class RestAPI : NSObject
         }
         
     }
+    // last impression send to server
   @objc   static func lastImpression(notificationData : Payload,userid : Int,token : String)
     {
        if(notificationData != nil && userid != 0 && token != nil)
@@ -364,6 +367,7 @@ public class RestAPI : NSObject
 
         
     }
+    // last click data send to server
    @objc   static func lastClick(notificationData : Payload,userid : Int,token : String)
     {
     if(userid != 0 && token != nil && notificationData != nil)
@@ -394,6 +398,7 @@ public class RestAPI : NSObject
         }
    
     }
+    // subscribe the token
     @objc  static func registerToken(token : String, izootoid : Int)
     {
         if(token != nil && izootoid != 0)
@@ -451,7 +456,6 @@ public class RestAPI : NSObject
            
        }
       
-    
     }
     @objc static func registerToken(token : String, izootoid : Int ,adid : NSString)
     {

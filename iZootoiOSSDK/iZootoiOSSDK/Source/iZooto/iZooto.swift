@@ -257,8 +257,10 @@ public class iZooto : NSObject
             }
             else
             {
-                           if(mizooto_id != 0 && token != nil)
+
+                if(mizooto_id != 0 && token != nil)
                             {
+                               
                             RestAPI.registerToken(token: token, izootoid: mizooto_id)
                             sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
                                if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
@@ -270,6 +272,7 @@ public class iZooto : NSObject
                            }
                             else
                             {
+                               print("ID")
                                 RestAPI.sendExceptionToServer(exceptionName: "Token & Account ID issue occured", className: "iZooto", methodName: "GetToken", accoundID: mizooto_id, token: token, rid: "", cid: "")
                             }
                         }
@@ -385,6 +388,20 @@ public class iZooto : NSObject
           
               if #available(iOS 15.0, *) {
                   bestAttemptContent.relevanceScore = notificationData?.relevence_score ?? 0
+                  if(notificationData?.interrutipn_level == 1 )
+                  {
+                      bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.passive
+                  }
+                  if(notificationData?.interrutipn_level == 2)
+                  {
+                      bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.timeSensitive
+
+                  }
+                  if(notificationData?.interrutipn_level == 3)
+                  {
+                      bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.critical
+
+                  }
               }
                       
                         if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
@@ -414,7 +431,6 @@ public class iZooto : NSObject
                                                 }
                                                             
                                                     } else if let jsonDictionary = json as? [String:Any] {
-                                                        // print("Hello",jsonDictionary)
 
                                                         bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
                                                         bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
@@ -798,7 +814,6 @@ return sourceString
     badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
     if(badgeNumber == -1)
     {
-       print("HandleNotification1",badgeNumber)
         UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
 
 
@@ -1128,8 +1143,6 @@ else{
         {
             value = 2
         }
-        print(isSubscribe)
-        print(value)
     
          let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
          let miZooto_id = sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)
@@ -1261,7 +1274,6 @@ else{
 
                 
             } catch let error {
-                print("error \(error)")
                 let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
                 let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
                 RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "saveImageToDisk", accoundID: userID, token: token, rid: "0", cid: "0")

@@ -10,25 +10,31 @@ import UIKit
 import iZootoiOSSDK
 import AppTrackingTransparency
 import AdSupport
+import WebKit
 
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,iZootoNotificationOpenDelegate ,iZootoNotificationReceiveDelegate
     ,iZootoLandingURLDelegate{
-        
+        var i = 0
+        var window: UIWindow?
+        private static var controllerData = UIViewController.self
+
 
     // handle deeplink
     func onNotificationOpen(action: Dictionary<String, Any>) {
-        NSLog("DeepLink2\(action)")
         let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
           let viewController = mainStoryBoard.instantiateViewController(withIdentifier: "green_vc")
           window?.rootViewController = viewController
           window?.makeKeyAndVisible()
+       
     }
     
     // Handle url
     func onHandleLandingURL(url: String) {// setlandingURL
         print("ClickURL",url)
+//    UIApplication.shared.keyWindow!.rootViewController?.present(new V, animated: true, completion: nil)
+      
     }
     
     // Notification Received
@@ -38,8 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     }
 
-    var i = 0
-    var window: UIWindow?
+   
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
@@ -48,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
         iZooto.notificationReceivedDelegate = self
-        iZooto.landingURLDelegate = self
+       // iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
       //  let data = ["language":"English"]
        // iZooto.addUserProperties(data: data)
@@ -56,23 +61,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        // iZooto.getAdvertisementID(adid: RestAPI.identifierForAdvertising() as! NSString)
         //getAdvertisementIS()
         //iZooto.setSubscription(isSubscribe: true)
-
+        requestPermission();
         return true
     }
         func applicationDidBecomeActive(_ application: UIApplication) {
         application.applicationIconBadgeNumber = -1
         iZooto.setBadgeCount(badgeNumber: -1)
+          //  getAdvertisementId();
+
             
            
           
     }
-        func getAdvertisementIS()
+        func requestPermission() {
+            if #available(iOS 14, *) {
+                ATTrackingManager.requestTrackingAuthorization { status in
+                    switch status {
+                    case .authorized:
+                        // Tracking authorization dialog was shown
+                        // and we are authorized
+                        print("Authorized")
+                        
+                        // Now that we are authorized we can get the IDFA
+                        print(ASIdentifierManager.shared().advertisingIdentifier)
+                    case .denied:
+                        // Tracking authorization dialog was
+                        // shown and permission is denied
+                        print("Denied")
+                    case .notDetermined:
+                        // Tracking authorization dialog has not been shown
+                        print("Not Determined")
+                    case .restricted:
+                        print("Restricted")
+                    @unknown default:
+                        print("Unknown")
+                    }
+                }
+            }
+        }
+        
+        
+        func getAdvertisementId()
         {
             if #available(iOS 14, *) {
                 ATTrackingManager.requestTrackingAuthorization { status in
                     DispatchQueue.main.async {
                         switch status {
                         case .authorized:
+
                             // Authorized
                             let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
                             iZooto.getAdvertisementID(adid: idfa as NSString)
@@ -81,6 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 .restricted:
                             break
                         @unknown default:
+
                             break
                         }
                     }
@@ -94,6 +131,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
   
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenParts = deviceToken.map { data -> String in
+                     return String(format: "%02.2hhx", data)
+                 }
+        let sharedPref = UserDefaults.standard
+        let token = tokenParts.joined()
+        sharedPref.setValue(token, forKey: "TOKEN")
         iZooto.getToken(deviceToken: deviceToken)
     
     }

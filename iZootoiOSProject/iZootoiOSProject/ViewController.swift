@@ -22,6 +22,34 @@ class ViewController: UIViewController {
     }
     @IBAction func shareToken(_ sender: Any) {
         
+        let sharedPref = UserDefaults.standard
+        let token = sharedPref.string(forKey: "TOKEN")
+        if (token != " " && token != nil)
+        {
+        let text = "This is a token .\(token!)"
+        
+        if let urlStr = NSURL(string: "https://apps.apple.com/us/app/idxxxxxxxx?ls=1&mt=8") {
+            let objectsToShare = [text]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                if let popup = activityVC.popoverPresentationController {
+                    popup.sourceView = self.view
+                    popup.sourceRect = CGRect(x: self.view.frame.size.width / 2, y: self.view.frame.size.height / 4, width: 0, height: 0)
+                }
+            }
+
+            self.present(activityVC, animated: true, completion: nil)
+        }
+        }
+        else{
+            print("Token is not found")
+        }
+      
+    }
+    @IBAction func clickAction(_ sender: Any) {
+        print("clicks")
+        
         if #available(iOS 13.0, *) {
             let svc = (storyboard?.instantiateViewController(identifier: "green_vc")) as! SecondViewController
             present(svc, animated: true)
@@ -29,28 +57,6 @@ class ViewController: UIViewController {
         } else {
             // Fallback on earlier versions
         }
-        
-//        let secondVC = storyboard?.instantiateViewController(withIdentifier: "AgainViewController") as! AgainViewController
-//               self.present(secondVC, animated: true, completion: nil)
-        
-//        let sharedPref = UserDefaults.standard
-//        let token = sharedPref.string(forKey: "Token")
-//      //  let text = "This is a token .\(token!)"
-//
-//        // set up activity view controller
-//        let textToShare = [text]
-//        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
-//        activityViewController.popoverPresentationController?.sourceView = self.view
-//
-//        // exclude some activity types from the list (optional)
-//        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
-//
-//        // present the view controller
-//        self.present(activityViewController, animated: true, completion: nil)
-       // self.present(AgainViewController(), animated: true, completion: nil)
-    }
-    @IBAction func clickAction(_ sender: Any) {
-        print("clicks")
 //        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
 //        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "newsview") as! NewsController//
 //        self.navigationController?.pushViewController(nextViewController, animated: true)
