@@ -59,20 +59,59 @@ public class iZooto : NSObject
         self.application = application
     }
     
+    @objc public static func initWithLaunchOptions(launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
+    {
+       
+    }
+    
+    
+    @objc public static func setAppId(izooto_app_id:String)
+    {
+        setInit(izooto_app_id: izooto_app_id)
+    }
+    private static func setInit(izooto_app_id: String)
+    {
+        izooto_uuid = izooto_app_id
+        RestAPI.getRequest(uuid: izooto_uuid) { (output) in
+           let jsonString = output.fromBase64()
+       let data = jsonString!.data(using: .utf8)!
+              let json = try? JSONSerialization.jsonObject(with: data)
+             if let dictionary = json as? [String: Any] {
+               sharedUserDefault?.set(dictionary["pid"]!, forKey: SharedUserDefault.Key.registerID)
+               mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
+             }
+             else{
+               print("Some error occured")
+             }
+             }
+             registerForPushNotifications() // check for prompt
+              if #available(iOS 10.0, *) {
+              UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+          }
+       
+   
+let userPropertiesData = sharedUserDefault?.dictionary(forKey:"UserPropertiesData")
+if(userPropertiesData != nil)
+{
+   addUserProperties(data: userPropertiesData!)
+}
+let eventData = sharedUserDefault?.dictionary(forKey:"AddEvents")
+let eventName = sharedUserDefault?.string(forKey: "EventName")
+if(eventData != nil && eventName != nil)
+{
+   addEvent(eventName: eventName!, data: eventData!)
+}
+    }
+    
 // initialise the device and register the token
    @objc public static func initialisation(izooto_id : String, application : UIApplication,iZootoInitSettings : Dictionary<String,Any>)
          {
-            
-
              
              izooto_uuid = izooto_id
-            keySettingDetails = iZootoInitSettings
-
-//          
-             
+             keySettingDetails = iZootoInitSettings
              izooto_uuid = izooto_id
-            keySettingDetails = iZootoInitSettings
-            RestAPI.getRequest(uuid: izooto_uuid) { (output) in
+             keySettingDetails = iZootoInitSettings
+             RestAPI.getRequest(uuid: izooto_uuid) { (output) in
 
                 let jsonString = output.fromBase64()
             let data = jsonString!.data(using: .utf8)!
@@ -157,7 +196,8 @@ public class iZooto : NSObject
     }
     }
     // register for pushNotification Setting
-@objc public  static  func registerForPushNotifications() {
+
+    @objc public  static  func registerForPushNotifications() {
                 if #available(iOS 10.0, *) {
                     UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
                 }
@@ -195,7 +235,8 @@ public class iZooto : NSObject
     }
 
    //  Handle notification prompt setting
-  @objc  private static func getNotificationSettings() {
+   
+    @objc  private static func getNotificationSettings() {
             if #available(iOS 10.0, *) {
                 UNUserNotificationCenter.current().getNotificationSettings { settings in
    
@@ -209,7 +250,8 @@ public class iZooto : NSObject
             }
             }
     // Handle provisional setting
-     @objc  private static func getNotificationSettingsProvisional() {
+     
+    @objc  private static func getNotificationSettingsProvisional() {
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 if #available(iOS 12.0, *) {
@@ -224,7 +266,8 @@ public class iZooto : NSObject
         }
     
     // Capture the token from APNS
-   @objc public  static  func  getToken(deviceToken : Data)
+   
+    @objc public  static  func  getToken(deviceToken : Data)
         {
     
   
@@ -279,6 +322,8 @@ public class iZooto : NSObject
             
           
         }
+   
+    // handle the badge count
     @objc public static func setBadgeCount(badgeNumber : NSInteger)
     {
        if(badgeNumber == -1)
@@ -299,6 +344,8 @@ public class iZooto : NSObject
        }
     }
     }
+    
+    // getAdvertisement ID
     @objc public static func  getAdvertisementID(adid : NSString)
     {
         let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))
@@ -851,7 +898,10 @@ if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
     }
 else
     {
-      if let url = URL(string:notificationData!.url!) {
+      
+   // let izUrlString = notificationData!.url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+    if let url = URL(string:notificationData!.url!) {
+          
         UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
         }
     }

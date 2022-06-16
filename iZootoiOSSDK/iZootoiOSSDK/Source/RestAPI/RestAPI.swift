@@ -56,7 +56,7 @@ public class RestAPI : NSObject
          URLSession.shared.dataTask(with: request){(data,response,error) in
              
             do {
-                print("Subscribe","sucess")
+               // print("Subscribe","sucess")
             }
          }.resume()
         }
@@ -67,20 +67,31 @@ public class RestAPI : NSObject
         }
         
     }
-    static  public func getRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
+    
+    public static   func getRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
     {
     let requestURL = URL(string: "https://cdn.izooto.com/app/app_\(uuid).dat")
         let request = URLRequest(url: requestURL!)
         let requestTask = URLSession.shared.dataTask(with: request) {
             (data: Data?, response: URLResponse?, error: Error?) in
-           
             if(error != nil) {
                 sendExceptionToServer(exceptionName: error?.localizedDescription ?? "not found", className: "Rest API", methodName: "getRequest", accoundID: 0, token: "" , rid: "",cid : "")
                 
             }else
             {
-                let outputStr  = String(data: data!, encoding: String.Encoding.utf8)!
-                completionBlock(outputStr);
+                if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200{
+                    let outputStr  = String(data: data!, encoding: String.Encoding.utf8)!
+                        completionBlock(outputStr);
+                }
+                    else
+                    {
+                        print("iZooto App id is not correct,please check")
+                      
+                    }
+                    }
+                
+                
             }
         }
         requestTask.resume()
@@ -317,7 +328,7 @@ public class RestAPI : NSObject
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 
                do {
-                print("l","v")
+                //print("l","v")
                 
                }
             }.resume()
@@ -484,7 +495,7 @@ public class RestAPI : NSObject
              do {
                  sharedUserDefault?.set(true,forKey: "AdvertisementID")
                  sharedUserDefault?.set("", forKey: "ADID")
-                 print("Successfully added ",adid as String)
+                 //print("Successfully added ",adid as String)
 
 
 

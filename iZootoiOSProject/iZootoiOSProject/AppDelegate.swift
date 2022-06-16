@@ -23,10 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     // handle deeplink
     func onNotificationOpen(action: Dictionary<String, Any>) {
-        let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
-          let viewController = mainStoryBoard.instantiateViewController(withIdentifier: "green_vc")
-          window?.rootViewController = viewController
-          window?.makeKeyAndVisible()
+
        
     }
     
@@ -47,11 +44,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        getAdvertisementId();
+
         UNUserNotificationCenter.current().delegate = self
         iZooto.registerForPushNotifications()
 //5c6dae82ba66086df247f9766a1094fef62c162e    // 92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
-        iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
+       // iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
+       // iZooto.initWithLaunchOptions(launchOptions: launchOptions)
+        iZooto.setAppId(izooto_app_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf")
         iZooto.notificationReceivedDelegate = self
        // iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
@@ -61,15 +62,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        // iZooto.getAdvertisementID(adid: RestAPI.identifierForAdvertising() as! NSString)
         //getAdvertisementIS()
         //iZooto.setSubscription(isSubscribe: true)
-        requestPermission();
+       
         return true
     }
         func applicationDidBecomeActive(_ application: UIApplication) {
         application.applicationIconBadgeNumber = -1
         iZooto.setBadgeCount(badgeNumber: -1)
-          //  getAdvertisementId();
 
-            
+           // requestPermission()
            
           
     }
@@ -103,6 +103,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         func getAdvertisementId()
         {
+           
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                     
+           
+            
+            
+            
+            
+            
+            
+            
             if #available(iOS 14, *) {
                 ATTrackingManager.requestTrackingAuthorization { status in
                     DispatchQueue.main.async {
@@ -111,6 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
                             // Authorized
                             let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                            print(idfa)
                             iZooto.getAdvertisementID(adid: idfa as NSString)
                         case .denied,
                                 .notDetermined,
@@ -127,6 +139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 iZooto.getAdvertisementID(adid: adID as NSString)
 
             }
+            })
         }
 
   

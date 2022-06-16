@@ -10,7 +10,11 @@ import UIKit
 import iZootoiOSSDK
 
 @available(iOS 13.0, *)
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate ,iZootoNotificationOpenDelegate{
+    func onNotificationOpen(action: Dictionary<String, Any>) {
+        print(action)
+    }
+    
     
 
     var window: UIWindow?
@@ -53,26 +57,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //
         guard (scene as? UIWindowScene) != nil else { return }
         if let userInfo = connectionOptions.notificationResponse?.notification.request.content.userInfo {
-            let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                         if(notifcationData?.ap != nil)
-                         {
-                           var data = Dictionary<String,Any>()
-                             data["button1ID"] = notifcationData?.act1id
-                             data["button1Title"] = notifcationData?.act1name
-                             data["button1URL"] = notifcationData?.act1link
-                             data["additionalData"] = notifcationData?.ap
-                             data["landingURL"] = notifcationData?.url
-                             data["button2ID"] = notifcationData?.act2id
-                             data["button2Title"] = notifcationData?.act2name
-                             data["button2URL"] = notifcationData?.act2link
-                             data["actionType"] = 0
-                             //navigate the class
-                             let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                               let viewController = mainStoryBoard.instantiateViewController(withIdentifier: "green_vc")
-                               window?.rootViewController = viewController
-          
-          
-                     }
+//            let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+//                         if(notifcationData?.ap != nil)
+//                         {
+//                           var data = Dictionary<String,Any>()
+//                             data["button1ID"] = notifcationData?.act1id
+//                             data["button1Title"] = notifcationData?.act1name
+//                             data["button1URL"] = notifcationData?.act1link
+//                             data["additionalData"] = notifcationData?.ap
+//                             data["landingURL"] = notifcationData?.url
+//                             data["button2ID"] = notifcationData?.act2id
+//                             data["button2Title"] = notifcationData?.act2name
+//                             data["button2URL"] = notifcationData?.act2link
+//                             data["actionType"] = 0
+//                             //navigate the class
+//                             let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//                               let viewController = mainStoryBoard.instantiateViewController(withIdentifier: "green_vc")
+//                               window?.rootViewController = viewController
+//
+//
+//                     }
+            iZooto.notificationOpenDelegate = self
         }
 
     }
