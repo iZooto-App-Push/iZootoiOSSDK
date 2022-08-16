@@ -44,14 +44,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        getAdvertisementId();
 
         UNUserNotificationCenter.current().delegate = self
         iZooto.registerForPushNotifications()
 //5c6dae82ba66086df247f9766a1094fef62c162e    // 92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf
-        let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
+       // let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
        // iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
-       // iZooto.initWithLaunchOptions(launchOptions: launchOptions)
+        iZooto.initWithLaunchOptions(launchOptions: launchOptions)
         iZooto.setAppId(izooto_app_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf")
         iZooto.notificationReceivedDelegate = self
        // iZooto.landingURLDelegate = self
@@ -62,6 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        // iZooto.getAdvertisementID(adid: RestAPI.identifierForAdvertising() as! NSString)
         //getAdvertisementIS()
         //iZooto.setSubscription(isSubscribe: true)
+        getAdvertisementId();
+
        
         return true
     }
@@ -81,6 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         // Tracking authorization dialog was shown
                         // and we are authorized
                         print("Authorized")
+                        
                         
                         // Now that we are authorized we can get the IDFA
                         print(ASIdentifierManager.shared().advertisingIdentifier)
@@ -105,15 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         {
            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                     
-           
-            
-            
-            
-            
-            
-            
-            
+             
             if #available(iOS 14, *) {
                 ATTrackingManager.requestTrackingAuthorization { status in
                     DispatchQueue.main.async {
