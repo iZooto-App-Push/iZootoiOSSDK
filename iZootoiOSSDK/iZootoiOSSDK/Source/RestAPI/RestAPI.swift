@@ -21,17 +21,16 @@ public class RestAPI : NSObject
     // public static var  STAGING_URL = "https://iz-java-appsrv-stageing.azurewebsites.net/app.php";
      static let   BASEURL = "https://aevents.izooto.com/app.php"
      static let   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
-     static let  IMPRESSION_URL="https://impr.izooto.com/imp";
+     static let   IMPRESSION_URL="https://impr.izooto.com/imp";
      static let   LOG = "iZooto :"
      static let EVENT_URL = "https://et.izooto.com/evt";
      static let  PROPERTIES_URL="https://prp.izooto.com/prp";
      static let  CLICK_URL="https://clk.izooto.com/clk";
-     static let  REGISTRATION_URL="https://aevents.izooto.com/app.php";
      static let LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci";
      static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
      static let LASTVISITURL="https://lvi.izooto.com/lvi";
-     static let EXCEPTION_URL="https://aerr.izooto.com/aer";
-     static let  SDKVERSION = "2.0.2"
+     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
+     static let  SDKVERSION = "2.0.3"
     
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
@@ -59,7 +58,7 @@ public class RestAPI : NSObject
         }
         else
         {
-            sendExceptionToServer(exceptionName: "isSubscribe\(isSubscribe)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "callSubscription", accoundID: userid, token: token , rid: "",cid : "")
+            sendExceptionToServer(exceptionName: "isSubscribe\(isSubscribe)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "callSubscription", pid: userid, token: token , rid: "",cid : "")
             
         }
         
@@ -72,7 +71,7 @@ public class RestAPI : NSObject
         let requestTask = URLSession.shared.dataTask(with: request) {
             (data: Data?, response: URLResponse?, error: Error?) in
             if(error != nil) {
-                sendExceptionToServer(exceptionName: error?.localizedDescription ?? "not found", className: "Rest API", methodName: "getRequest", accoundID: 0, token: "" , rid: "",cid : "")
+                sendExceptionToServer(exceptionName: error?.localizedDescription ?? "not found", className: "Rest API", methodName: "getRequest", pid: 0, token: "" , rid: "",cid : "")
                 
             }else
             {
@@ -153,7 +152,7 @@ public class RestAPI : NSObject
         }
         else{
             print(AppConstant.ERROR_EVENT)
-            sendExceptionToServer(exceptionName: "User Event name and  data are blank", className: "Rest API", methodName: "callEvents", accoundID: userid, token: token , rid: "",cid : "")
+            sendExceptionToServer(exceptionName: "User Event name and  data are blank", className: "Rest API", methodName: "callEvents", pid: userid, token: token , rid: "",cid : "")
         }
         
     }
@@ -188,7 +187,7 @@ public class RestAPI : NSObject
         }
         else
         {
-            sendExceptionToServer(exceptionName: "User Properties data are blank", className: "Rest API", methodName: "callUserProperties", accoundID: userid, token: token , rid: "",cid : "")
+            sendExceptionToServer(exceptionName: "User Properties data are blank", className: "Rest API", methodName: "callUserProperties", pid: userid, token: token , rid: "",cid : "")
         }
     }
     
@@ -221,7 +220,7 @@ public class RestAPI : NSObject
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
             
         }
         
@@ -256,7 +255,7 @@ public class RestAPI : NSObject
         else
         {
             
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
             
             
         }
@@ -339,7 +338,7 @@ public class RestAPI : NSObject
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Token or  pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", accoundID: userid, token: token , rid: "",cid :"")
+            sendExceptionToServer(exceptionName: "Token or  pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: "",cid :"")
         }
         
     }
@@ -372,7 +371,7 @@ public class RestAPI : NSObject
         else
         {
             
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
             
             
         }
@@ -409,7 +408,7 @@ public class RestAPI : NSObject
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
             
         }
         
@@ -471,7 +470,7 @@ public class RestAPI : NSObject
         else
         {
             print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR)
-            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, accoundID: 0, token: "", rid: "", cid: "")
+            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, pid: 0, token: "", rid: "", cid: "")
             
         }
         
@@ -517,17 +516,17 @@ public class RestAPI : NSObject
         else
         {
             sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, accoundID: 0, token: "", rid: "", cid: "")
+            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, pid: 0, token: "", rid: "", cid: "")
             
         }
     }
     
     // send exception to the server
-    static func sendExceptionToServer(exceptionName : String ,className : String ,methodName: String,accoundID :Int ,token : String,rid : String,cid : String)
+ @objc  public static func sendExceptionToServer(exceptionName : String ,className : String ,methodName: String,pid :Int ,token : String,rid : String,cid : String)
     {
         let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
         var requestBodyComponents = URLComponents()
-        requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(accoundID)"),
+        requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(pid)"),
                                             URLQueryItem(name: "exceptionName", value: "\(exceptionName)"),
                                             URLQueryItem(name: "methodName", value: "\(methodName)"),
                                             URLQueryItem(name: "className", value:"\(className))"),

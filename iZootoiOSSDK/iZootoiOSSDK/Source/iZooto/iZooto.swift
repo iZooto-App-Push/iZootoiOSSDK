@@ -179,7 +179,7 @@ public class iZooto : NSObject
             }
             else {
                 print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND)
-                RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND, className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_KEY_INITIALISE, accoundID: 0, token: "", rid: "0", cid: "0")
+                RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND, className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_KEY_INITIALISE, pid: 0, token: "\(izooto_uuid ?? "")", rid: "0", cid: "0")
             }
             
             if #available(iOS 10.0, *) {
@@ -328,7 +328,7 @@ public class iZooto : NSObject
             }
             else
             {
-                RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.IZ_TAG, methodName: "GetToken", accoundID: mizooto_id, token: token, rid: "", cid: "")
+                RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.IZ_TAG, methodName: "GetToken", pid: mizooto_id, token: token, rid: "", cid: "")
             }
         }
         
@@ -807,7 +807,7 @@ public class iZooto : NSObject
                 print(error.localizedDescription)
                 let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
                 let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-                RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "convertToDictionary", accoundID: userID, token: token, rid: "0", cid: "0")
+                RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "convertToDictionary", pid: userID, token: token, rid: "0", cid: "0")
             }
         }
         return nil
@@ -866,6 +866,9 @@ public class iZooto : NSObject
             else
             {
                 print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                
+                
+                RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
                 
             }
         }
@@ -950,7 +953,7 @@ public class iZooto : NSObject
                             print(AppConstant.TAG,error)
                             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
                             let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-                            RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler", accoundID: userID, token: token, rid: "0", cid: "0")
+                            RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
                         }
                     }
                 }.resume()
@@ -1315,7 +1318,7 @@ public class iZooto : NSObject
         {
             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
             let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-            RestAPI.sendExceptionToServer(exceptionName: "No Data found in Dictionary", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY, accoundID: userID, token: token, rid: "0", cid: "0")
+            RestAPI.sendExceptionToServer(exceptionName: "No Data found in Dictionary", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY, pid: userID, token: token, rid: "0", cid: "0")
         }
         
     }
@@ -1344,7 +1347,7 @@ extension UNNotificationAttachment {
         } catch let error {
             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
             let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-            RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: AppConstant.IZ_TAG, methodName: "saveImageToDisk", accoundID: userID, token: token, rid: "0", cid: "0")
+            RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: AppConstant.IZ_TAG, methodName: "saveImageToDisk", pid: userID, token: token, rid: "0", cid: "0")
         }
         
         
