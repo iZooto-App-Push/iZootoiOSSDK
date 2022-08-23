@@ -71,7 +71,7 @@ public class iZooto : NSObject
     
     @objc public static func setAppId(izooto_app_id:String)
     {
-       
+        
         if(izooto_app_id != ""){
             setInit(izooto_app_id: izooto_app_id)
             
@@ -80,7 +80,7 @@ public class iZooto : NSObject
             print(AppConstant.IZ_TAG,AppConstant.REGISTERED_ERROR_MESSAGE)
             return
         }
-      
+        
     }
     private static func setInit(izooto_app_id: String)
     {
@@ -309,15 +309,23 @@ public class iZooto : NSObject
                 userDefaults.set(mizooto_id, forKey: AppConstant.REGISTERED_ID)
                 userDefaults.synchronize()
             }
+            if(RestAPI.SDKVERSION != sharedUserDefault?.string(forKey: "SDKVERSION"))
+                       {
+                           sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
+                           RestAPI.registerToken(token: token, izootoid: mizooto_id)
+
+                       }
             
         }
         else
         {
             
-            if(mizooto_id != 0 && token != nil)
+            if(mizooto_id != 0 && token != "")
             {
                 
                 RestAPI.registerToken(token: token, izootoid: mizooto_id)
+                sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
+
                 sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
                 if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
                     userDefaults.set(token, forKey: "DEVICETOKEN")
@@ -391,7 +399,7 @@ public class iZooto : NSObject
             notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
             badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
             
-            // custom notification sound 
+            // custom notification sound
             if (soundName != "")
             {
                 bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
@@ -474,12 +482,13 @@ public class iZooto : NSObject
             
             if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
             {
-                if let url = URL(string: notificationData!.fetchurl!) {
+                
+                let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+
+                if let url = URL(string: izUrlString!) {
                     URLSession.shared.dataTask(with: url) { data, response, error in
                         if let data = data {
                             do {
-                                
-                                
                                 
                                 let json = try JSONSerialization.jsonObject(with: data)
                                 if let jsonArray = json as? [[String:Any]] {
@@ -491,10 +500,7 @@ public class iZooto : NSObject
                                     }
                                     if notificationData?.alert?.attachment_url != "" {
                                         notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                        if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                        {
-                                            notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
-                                        }
+                                       
                                         
                                     }
                                     
@@ -507,21 +513,7 @@ public class iZooto : NSObject
                                     }
                                     if notificationData?.alert?.attachment_url != "" {
                                         
-                                        
                                         notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                        if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                        {
-                                            notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
-                                            
-                                        }
-                                        if (notificationData?.alert?.attachment_url!.contains("http:"))!
-                                        {
-                                            notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
-                                            
-                                        }
-                                        
-                                        
-                                        
                                         
                                     }
                                 }
@@ -589,43 +581,10 @@ public class iZooto : NSObject
                         }
                     }
                     
+                    contentHandler!(bestAttemptContent)
                     
                     
                     
-                    if notificationData!.category != "" && notificationData!.category != nil
-                    {
-                        if notificationData?.act1name != "" && notificationData?.act1name != nil && notificationData?.act2name != nil && notificationData?.act2name != ""
-                        {
-                            let name = notificationData?.act1name!
-                            let secondName = notificationData?.act2name!
-                            
-                            
-                            let   firstAction = UNNotificationAction( identifier: AppConstant.FIREST_BUTTON, title: " \(name!)", options:.foreground)
-                            let   secondAction = UNNotificationAction( identifier: AppConstant.SECOND_BUTTON, title: "\(secondName!)",options: .foreground)
-                            
-                            let  category = UNNotificationCategory( identifier:AppConstant.CATEGORY_NAME, actions: [firstAction,secondAction], intentIdentifiers: [], options: [])
-                            
-                            UNUserNotificationCenter.current().setNotificationCategories([category])
-                            
-                            
-                        }
-                        else
-                        {
-                            
-                            if(notificationData? .act1name != nil)
-                            {
-                                let name = notificationData?.act1name!
-                                let firstAction = UNNotificationAction( identifier: AppConstant.FIREST_BUTTON, title: " \(name!)", options: .foreground)
-                                let  category = UNNotificationCategory( identifier: AppConstant.CATEGORY_NAME, actions: [firstAction], intentIdentifiers: [], options: [])
-                                UNUserNotificationCenter.current().setNotificationCategories([category])
-                            }
-                            
-                        }
-                        
-                        contentHandler!(bestAttemptContent)
-                        
-                        
-                    }
                 }
             }
             
@@ -903,9 +862,11 @@ public class iZooto : NSObject
         notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
         if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
         {
+            let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             
-            if let url = URL(string: notificationData!.fetchurl!)
+            if let url = URL(string: izUrlString!)
             {
+                
                 URLSession.shared.dataTask(with: url) { data, response, error in
                     if let data = data {
                         do {
@@ -913,40 +874,15 @@ public class iZooto : NSObject
                             if let jsonArray = json as? [[String:Any]] {
                                 if notificationData?.url != "" {
                                     notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                    notificationData?.url = "https:"+notificationData!.url!
-                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                    {
-                                        if let url = URL(string:notificationData!.url!) {
-                                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                        }
-                                    }
-                                    else
-                                    {
-                                        
-                                        // let izUrlString = notificationData!.url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                        if let url = URL(string:notificationData!.url!) {
-                                            
-                                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                        }
-                                    }
+                                    handleBroserNotification(url: (notificationData?.url)!)
+                                    
                                 }
                             }
                             else if let jsonDictionary = json as? [String:Any] {
                                 if notificationData?.url != "" {
                                     notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                    if let url = URL(string:notificationData!.url!) {
-                                        if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                        {
-                                            if let url = URL(string:notificationData!.url!) {
-                                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                        }
-                                        
-                                    }
+                                    handleBroserNotification(url: (notificationData?.url)!)
+                                    
                                 }
                             }
                         } catch let error {
@@ -1009,9 +945,8 @@ public class iZooto : NSObject
                                 {
                                     if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
                                     {
-                                        if let url = URL(string: notificationData!.url!) {
-                                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                        }
+                                        handleBroserNotification(url: (notificationData?.url)!)
+                                        
                                     }
                                     else
                                     {
@@ -1027,7 +962,6 @@ public class iZooto : NSObject
                     break
                 case "SecondButton" :
                     type = "2"
-                    // clickTrack(notificationData: notifcationData!, actionType: "2")
                     
                     if notificationData?.ap != "" && notificationData?.ap != nil
                     {
@@ -1096,11 +1030,8 @@ public class iZooto : NSObject
                             }
                         }
                         else{
-                            // clickTrack(notificationData: notifcationData!, actionType: "0")
                             
-                            if let url = URL(string: notificationData!.url!) {
-                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                            }
+                            handleBroserNotification(url: (notificationData?.url)!)
                             
                             
                         }
@@ -1133,9 +1064,8 @@ public class iZooto : NSObject
                     }
                     else
                     {
-                        if let url = URL(string: notificationData!.url!) {
-                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                        }
+                        handleBroserNotification(url: (notificationData?.url)!)
+                        
                     }
                 }
             } //close else
@@ -1198,14 +1128,9 @@ public class iZooto : NSObject
         let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
         if ((notifcationData?.inApp?.contains("0"))! && notifcationData?.inApp != "")
         {
-            if let url = URL(string: launchURL) {
-                if #available(iOS 10.0, *) {
-                    
-                    UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                }
-                
-            }
+            handleBroserNotification(url: launchURL)
         }
+        
         
         
     }
@@ -1321,6 +1246,15 @@ public class iZooto : NSObject
             RestAPI.sendExceptionToServer(exceptionName: "No Data found in Dictionary", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY, pid: userID, token: token, rid: "0", cid: "0")
         }
         
+    }
+    @objc private static func handleBroserNotification(url : String)
+    {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let izUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            if let izUrl = URL(string: izUrlString!) {
+                UIApplication.shared.open(izUrl)
+            }
+        }
     }
     
 }
