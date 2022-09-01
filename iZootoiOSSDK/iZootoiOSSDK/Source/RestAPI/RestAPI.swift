@@ -18,7 +18,6 @@ protocol ResponseHandler  : AnyObject{
 @objc
 public class RestAPI : NSObject
 {
-    // public static var  STAGING_URL = "https://iz-java-appsrv-stageing.azurewebsites.net/app.php";
      static let   BASEURL = "https://aevents.izooto.com/app.php"
      static let   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
      static let   IMPRESSION_URL="https://impr.izooto.com/imp";
@@ -418,6 +417,10 @@ public class RestAPI : NSObject
     {
         if(token != nil && izootoid != 0)
         {
+            
+            let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
+
+
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems =
@@ -433,7 +436,9 @@ public class RestAPI : NSObject
                             URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
                             URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
                             URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())")
+                            URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())"),
+                            URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)")
+                            
             ]
             var request = URLRequest(url: URL(string: RestAPI.BASEURL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
@@ -481,6 +486,7 @@ public class RestAPI : NSObject
     {
         if(token != nil && izootoid != 0)
         {
+            let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems =
@@ -496,7 +502,9 @@ public class RestAPI : NSObject
                                 URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
                                 URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
                                 URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())")
+                                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())"),
+                                URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)")
+
             ]
             var request = URLRequest(url: URL(string: RestAPI.BASEURL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST

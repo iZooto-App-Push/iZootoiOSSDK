@@ -47,12 +47,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         UNUserNotificationCenter.current().delegate = self
         iZooto.registerForPushNotifications()
+        //iZooto.setPluginVersion(pluginVersion: "rn_2.0.3")
 //5c6dae82ba66086df247f9766a1094fef62c162e    // 92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf
-       // let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
-       // iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
-        iZooto.initWithLaunchOptions(launchOptions: launchOptions)
-        iZooto.setAppId(izooto_app_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf")
-        iZooto.notificationReceivedDelegate = self
+        let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
+        iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
+       // iZooto.initWithLaunchOptions(launchOptions: launchOptions)
+       // iZooto.setAppId(izooto_app_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf")
+       // iZooto.notificationReceivedDelegate = self
        // iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
       //  let data = ["language":"English"]

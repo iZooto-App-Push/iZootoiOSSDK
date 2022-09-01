@@ -90,6 +90,8 @@ class AppConstant : NSObject
     static let iZ_DEVICE_OS_VERSION = "osVersion"
     static let iZ_DEVICE_NAME = "deviceName"
     static let iZ_KEY_CHECK_VERSION = "check"
+    static let iZ_KEY_PLUGIN_VERSION_VALUE = "pluginVersion"
+    static let iZ_KEY_PLUGIN_VRSION_NAME = "pv"
 
 
 
