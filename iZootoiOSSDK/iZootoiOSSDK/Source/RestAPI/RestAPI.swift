@@ -29,7 +29,7 @@ public class RestAPI : NSObject
      static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
      static let LASTVISITURL="https://lvi.izooto.com/lvi";
      static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
-     static let  SDKVERSION = "2.0.3"
+     static let  SDKVERSION = "2.0.4"
     
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
@@ -532,6 +532,8 @@ public class RestAPI : NSObject
     // send exception to the server
  @objc  public static func sendExceptionToServer(exceptionName : String ,className : String ,methodName: String,pid :Int ,token : String,rid : String,cid : String)
     {
+        let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
+
         let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
         var requestBodyComponents = URLComponents()
         requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(pid)"),
@@ -542,6 +544,8 @@ public class RestAPI : NSObject
                                             URLQueryItem(name: "av", value: SDKVERSION),
                                             URLQueryItem(name: "rid", value: "\(rid)"),
                                             URLQueryItem(name: "cid", value: "\(cid)"),
+                                            URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)"),
+
                                             URLQueryItem(name: "osVersion", value: "\(getVersion())"),
                                             URLQueryItem(name: "deviceName", value: "\(getDeviceName())"),
                                             URLQueryItem(name: "check", value: "\(getAppVersion())")]
