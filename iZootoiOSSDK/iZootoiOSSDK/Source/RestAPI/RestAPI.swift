@@ -124,7 +124,7 @@ public class RestAPI : NSObject
     // send event to server
     static func callEvents(eventName : String, data : NSString,userid : Int,token : String)
     {
-        if( eventName != " "  && data != nil && userid != 0){
+        if( eventName != ""  && data != "" && userid != 0){
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [
@@ -193,7 +193,7 @@ public class RestAPI : NSObject
     // track the notification impression
     static func callImpression(notificationData : Payload,userid : Int,token : String)
     {
-        if(notificationData != nil && userid != 0 && token != nil)
+        if(notificationData.rid != nil && userid != 0 && token != "")
         {
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
@@ -228,7 +228,7 @@ public class RestAPI : NSObject
     // track the notification click
     static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
-        if(notificationData != nil && userid != 0 && token != nil)
+        if(notificationData.rid != nil && userid != 0 && token != "")
         {
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
@@ -304,7 +304,7 @@ public class RestAPI : NSObject
     // last visit data send to server
     @objc static func lastVisit(userid : Int,token : String)
     {
-        if(token != nil && userid != 0)
+        if(token != "" && userid != 0)
         {
             let data = ["last_website_visit":"true","lang":"en"] as [String:String]
             if let theJSONData = try?  JSONSerialization.data(withJSONObject: data,options: .fragmentsAllowed),
@@ -344,7 +344,7 @@ public class RestAPI : NSObject
     // last impression send to server
     @objc   static func lastImpression(notificationData : Payload,userid : Int,token : String)
     {
-        if(notificationData != nil && userid != 0 && token != nil)
+        if(notificationData.rid != nil && userid != 0 && token != "")
         {
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
@@ -381,7 +381,7 @@ public class RestAPI : NSObject
     // last click data send to server
     @objc   static func lastClick(notificationData : Payload,userid : Int,token : String)
     {
-        if(userid != 0 && token != nil && notificationData != nil)
+        if(userid != 0 && token != "" && notificationData.rid != nil)
         {
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
@@ -415,7 +415,7 @@ public class RestAPI : NSObject
     // register the token on our panel
     @objc  static func registerToken(token : String, izootoid : Int)
     {
-        if(token != nil && izootoid != 0)
+        if(token != "" && izootoid != 0)
         {
             
             let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
@@ -484,7 +484,7 @@ public class RestAPI : NSObject
     // send the token with adID
     @objc static func registerToken(token : String, izootoid : Int ,adid : NSString)
     {
-        if(token != nil && izootoid != 0)
+        if(token != "" && izootoid != 0)
         {
             let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]

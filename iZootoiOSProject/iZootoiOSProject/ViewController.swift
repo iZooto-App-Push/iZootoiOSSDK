@@ -15,7 +15,7 @@ class ViewController: UIViewController {
    
     
     @IBAction func addProperties(_ sender: Any) {
-        let data = ["language": "bangla"] as [String : Any]
+       // let data = ["language": "bangla"] as [String : Any]
           // iZooto.addUserProperties(data: data)
       //  iZooto.registerForPushNotifications()
 
@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         {
         let text = "This is a token .\(token!)"
         
-        if let urlStr = NSURL(string: "https://apps.apple.com/us/app/idxxxxxxxx?ls=1&mt=8") {
+            if NSURL(string: "https://apps.apple.com/us/app/idxxxxxxxx?ls=1&mt=8") != nil {
             let objectsToShare = [text]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
 

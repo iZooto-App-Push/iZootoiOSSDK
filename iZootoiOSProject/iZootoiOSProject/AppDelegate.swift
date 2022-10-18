@@ -47,34 +47,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         UNUserNotificationCenter.current().delegate = self
         iZooto.registerForPushNotifications()
-        //iZooto.setPluginVersion(pluginVersion: "rn_2.0.3")
-//5c6dae82ba66086df247f9766a1094fef62c162e    // 92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
-       // iZooto.initWithLaunchOptions(launchOptions: launchOptions)
-       // iZooto.setAppId(izooto_app_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf")
-       // iZooto.notificationReceivedDelegate = self
-       // iZooto.landingURLDelegate = self
+        iZooto.notificationReceivedDelegate = self
+        iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-      //  let data = ["language":"English"]
-       // iZooto.addUserProperties(data: data)
-       // iZooto.addEvent(eventName: "Event", data:data)
-       // iZooto.getAdvertisementID(adid: RestAPI.identifierForAdvertising() as! NSString)
-        //getAdvertisementIS()
-        //iZooto.setSubscription(isSubscribe: true)
+     
         getAdvertisementId();
 
        
         return true
     }
-        func applicationDidBecomeActive(_ application: UIApplication) {
-        application.applicationIconBadgeNumber = -1
-        iZooto.setBadgeCount(badgeNumber: -1)
-
-           // requestPermission()
-           
-          
-    }
+        
         func requestPermission() {
             if #available(iOS 14, *) {
                 ATTrackingManager.requestTrackingAuthorization { status in

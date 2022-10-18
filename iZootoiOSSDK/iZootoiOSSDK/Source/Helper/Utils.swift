@@ -114,13 +114,7 @@ public class Utils : NSObject
         
     }
 }
-public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
-{
-    let pattern = "[a-zA-Z0-9-_.~%]+"
-    
 
-    return true
-}
  
   
 

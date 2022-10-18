@@ -138,7 +138,7 @@ public class iZooto : NSObject
             }
         }
         
-        if(keySettingDetails != nil)
+        if(!keySettingDetails.isEmpty)
         {
             let nativeWebviewKey = keySettingDetails[AppConstant.iZ_KEY_WEBVIEW] != nil
             if nativeWebviewKey{
@@ -370,7 +370,7 @@ public class iZooto : NSObject
     {
         let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))
         let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token))
-        if (adid != nil && token != nil && userID != 0 )
+        if (adid != "" && token != "" && userID != 0 )
         {
             let dicData = sharedUserDefault?.bool(forKey:AppConstant.iZ_KEY_ADVERTISEMENT_ID)
             if(dicData == false)
@@ -409,7 +409,7 @@ public class iZooto : NSObject
                 bestAttemptContent.sound = .default()
             }
             
-            if(bundleName != nil)
+            if(bundleName != "")
             {
                 let groupName = "group."+bundleName+".iZooto"
                 
@@ -435,7 +435,7 @@ public class iZooto : NSObject
                         
                     }
                     
-                    let deviceToken = userDefaults.string(forKey: "DEVICETOKEN")
+                    let deviceToken = userDefaults.string(forKey: "DEVICETOKEN") ?? ""
                     let pid = userDefaults.integer(forKey: "PID")
                     
                     if (notificationData?.cfg != nil)
@@ -792,7 +792,18 @@ public class iZooto : NSObject
             if (notificationData?.act2name != nil && notificationData?.act2name != "")
             {
                 alert.addAction(UIAlertAction(title: notificationData?.act2name, style: .default, handler: { (action: UIAlertAction!) in
-                    UIApplication.shared.openURL(NSURL(string: notificationData!.act2link!)! as URL)
+                    
+                    let izUrlStr = notificationData!.act2link!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                    if let url = URL(string:izUrlStr!) {
+                                                               
+                        DispatchQueue.main.async {
+                            
+                            UIApplication.shared.open(url)
+                            
+                        }
+                                                           
+                    }
+                    
                 }))
             }
             alert.addAction(UIAlertAction(title: AppConstant.iZ_KEY_ALERT_DISMISS, style: .default, handler: nil))
@@ -838,28 +849,33 @@ public class iZooto : NSObject
     @objc public static func notificationHandler(response : UNNotificationResponse)
     {
         
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+                   let badgeC = userDefaults.integer(forKey:"Badge")
+                   self.badgeCount = badgeC
+                   userDefaults.set(badgeC - 1, forKey: "Badge")
+                   userDefaults.synchronize()
+               }
+               
+               badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+               if(badgeNumber == -1)
+               {
+                   UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
+               }
+               else if(badgeNumber == 1)
+               {
+                   UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+                   
+               }else{
+                   
+                   UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
+               }
+        
+       
+        
         let userInfo = response.notification.request.content.userInfo
         let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
         
-        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-        if(badgeNumber == -1)
-        {
-            UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
-            
-            
-        }
-        else
-        {
-            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-            
-        }
-        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-            userDefaults.set(0, forKey: "Badge")
-            userDefaults.synchronize()
-        }
-        
         clickTrack(notificationData: notificationData!, actionType: "0")
-        notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
         if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
         {
             let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
@@ -897,6 +913,9 @@ public class iZooto : NSObject
         }
         else
         {
+           
+            notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+
             if notificationData?.category != nil
             {
                 
@@ -1225,7 +1244,8 @@ public class iZooto : NSObject
     @objc public static func addUserProperties( data : Dictionary<String,Any>)
     {
         let returnData =  Utils.dataValidate(data: data)
-        if returnData != nil {
+        if (!returnData.isEmpty)
+             {
             if let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed),
                let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue) {
                 let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
