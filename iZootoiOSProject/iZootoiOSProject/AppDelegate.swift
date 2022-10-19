@@ -23,20 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     // handle deeplink
     func onNotificationOpen(action: Dictionary<String, Any>) {
-
-       
-    }
+        print("DeepLink",action )
+       }
     
     // Handle url
-    func onHandleLandingURL(url: String) {// setlandingURL
+        
+        func onHandleLandingURL(url: String) {// setlandingURL
         print("ClickURL",url)
+       
+         
 //    UIApplication.shared.keyWindow!.rootViewController?.present(new V, animated: true, completion: nil)
       
     }
     
     // Notification Received
     func onNotificationReceived(payload: Payload) {
-        print("Payload",payload.alert?.body! as Any )
+        print("Payload",payload.alert?.title! as Any )
         
 
     }
@@ -52,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-     
+
         getAdvertisementId();
 
        
@@ -134,7 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
    // @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        print(notification.request.content.userInfo)
+      //  print(notification.request.content.userInfo)
         iZooto.handleForeGroundNotification(notification: notification, displayNotification: "None", completionHandler: completionHandler)
 
         
@@ -146,6 +148,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         completionHandler()
 
     }
+        
+        func popup(){
+            let alert = UIAlertController(title: "Test", message:"Message", preferredStyle: UIAlertController.Style.alert)
+                    
+            // add an action (button)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+                   
+            // show the alert
+            self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+        }
     
 }
 

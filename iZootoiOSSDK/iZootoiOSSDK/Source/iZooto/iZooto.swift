@@ -310,11 +310,11 @@ public class iZooto : NSObject
                 userDefaults.synchronize()
             }
             if(RestAPI.SDKVERSION != sharedUserDefault?.string(forKey: "SDKVERSION"))
-                       {
-                           sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
-                           RestAPI.registerToken(token: token, izootoid: mizooto_id)
-
-                       }
+            {
+                sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
+                RestAPI.registerToken(token: token, izootoid: mizooto_id)
+                
+            }
             
         }
         else
@@ -325,7 +325,7 @@ public class iZooto : NSObject
                 
                 RestAPI.registerToken(token: token, izootoid: mizooto_id)
                 sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
-
+                
                 sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
                 if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
                     userDefaults.set(token, forKey: "DEVICETOKEN")
@@ -369,13 +369,13 @@ public class iZooto : NSObject
     @objc public static func  getAdvertisementID(adid : NSString)
     {
         let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))
-        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token))
+        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? ""
         if (adid != "" && token != "" && userID != 0 )
         {
             let dicData = sharedUserDefault?.bool(forKey:AppConstant.iZ_KEY_ADVERTISEMENT_ID)
             if(dicData == false)
             {
-                RestAPI.registerToken(token: token!, izootoid: userID!, adid: adid)
+                RestAPI.registerToken(token: token, izootoid: userID!, adid: adid)
             }
             
             
@@ -385,6 +385,68 @@ public class iZooto : NSObject
         }
         
     }
+    
+    // Fallback Url Call
+    @available(iOS 10.0, *)
+    @objc private static func fallBackAdsApi(bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
+        
+        let str = RestAPI.FALLBACK_URL
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        if let url = URL(string: izUrlString) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        if let jsonDictionary = json as? [String:Any] {
+                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                            bestAttemptContent.title = jsonDictionary["t"] as! String
+                            bestAttemptContent.body = jsonDictionary["m"] as! String
+                            if notificationData?.url! != "" {
+                                notificationData?.url = jsonDictionary["bi"] as? String
+                                if (notificationData?.url!.contains(".webp"))!
+                                {
+                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: ".webp", with: ".jpeg"))!
+                                    
+                                }
+                                if (notificationData?.url!.contains("http:"))!
+                                {
+                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: "http:", with: "https:"))!
+                                    
+                                }
+                            }
+                            
+                            autoreleasepool {
+                                if let urlString = (notificationData?.url!),
+                                   let fileUrl = URL(string: urlString ) {
+                                    
+                                    guard let imageData = NSData(contentsOf: fileUrl) else {
+                                        contentHandler!(bestAttemptContent)
+                                        return
+                                    }
+                                    let string = notificationData?.url!
+                                    let url: URL? = URL(string: string!)
+                                    let urlExtension: String? = url?.pathExtension
+                                    guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                        print(AppConstant.IMAGE_ERROR)
+                                        contentHandler!(bestAttemptContent)
+                                        return
+                                    }
+                                    bestAttemptContent.attachments = [ attachment ]
+                                }
+                            }
+                            
+                        }
+                        contentHandler!(bestAttemptContent)
+                        
+                    } catch let error {
+                        print("Error",error)
+                    }
+                }
+                
+            }.resume()
+        }
+    }
+    
     
     // Handle the payload and show the notification
     @available(iOS 10.0, *)
@@ -396,7 +458,6 @@ public class iZooto : NSObject
         if(notificationData?.inApp != nil)
         {
             
-            notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
             badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
             
             // custom notification sound
@@ -483,62 +544,87 @@ public class iZooto : NSObject
             if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
             {
                 
-                let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-
-                if let url = URL(string: izUrlString!) {
+                let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                
+                if let url = URL(string: izUrlString) {
                     URLSession.shared.dataTask(with: url) { data, response, error in
+                        if(error != nil)
+                        {
+                            fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        }
                         if let data = data {
                             do {
-                                
                                 let json = try JSONSerialization.jsonObject(with: data)
-                                if let jsonArray = json as? [[String:Any]] {
-                                    bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
-                                    bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
-                                    if notificationData?.url != "" {
-                                        notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                        
-                                    }
-                                    if notificationData?.alert?.attachment_url != "" {
-                                        notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                       
-                                        
+                                
+                                //To Check FallBack
+                                if let jsonDictionary = json as? [String:Any] {
+                                    if let value = jsonDictionary["msgCode"] as? String {
+                                        fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                     }
                                     
-                                } else if let jsonDictionary = json as? [String:Any] {
+                                }else{
                                     
-                                    bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
-                                    bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
-                                    if notificationData?.url != "" {
-                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                    }
-                                    if notificationData?.alert?.attachment_url != "" {
+                                    if let jsonArray = json as? [[String:Any]] {
                                         
-                                        notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                        
-                                    }
-                                }
-                                
-                                autoreleasepool {
-                                    if let urlString = (notificationData?.alert?.attachment_url),
-                                       let fileUrl = URL(string: urlString ) {
-                                        
-                                        guard let imageData = NSData(contentsOf: fileUrl) else {
-                                            contentHandler!(bestAttemptContent)
-                                            return
+                                        bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
+                                        bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
+                                        if notificationData?.url != "" {
+                                            notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                            
                                         }
-                                        let string = notificationData?.alert?.attachment_url
-                                        let url: URL? = URL(string: string!)
-                                        let urlExtension: String? = url?.pathExtension
-                                        guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                            print(AppConstant.IMAGE_ERROR)
-                                            contentHandler!(bestAttemptContent)
-                                            return
+                                        if notificationData?.alert?.attachment_url != "" {
+                                            notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                            if (notificationData?.alert?.attachment_url!.contains(".webp"))!
+                                            {
+                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
+                                            }
+                                            
                                         }
-                                        bestAttemptContent.attachments = [ attachment ]
+                                        
+                                    } else if let jsonDictionary = json as? [String:Any] {
+                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
+                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
+                                        if notificationData?.url != "" {
+                                            notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                        }
+                                        if notificationData?.alert?.attachment_url != "" {
+                                            
+                                            notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                            if (notificationData?.alert?.attachment_url!.contains(".webp"))!
+                                            {
+                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
+                                                
+                                            }
+                                            if (notificationData?.alert?.attachment_url!.contains("http:"))!
+                                            {
+                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
+                                                
+                                            }
+                                        }
                                     }
+                                    
+                                    autoreleasepool {
+                                        if let urlString = (notificationData?.alert?.attachment_url),
+                                           let fileUrl = URL(string: urlString ) {
+                                            
+                                            guard let imageData = NSData(contentsOf: fileUrl) else {
+                                                contentHandler!(bestAttemptContent)
+                                                return
+                                            }
+                                            let string = notificationData?.alert?.attachment_url
+                                            let url: URL? = URL(string: string!)
+                                            let urlExtension: String? = url?.pathExtension
+                                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                                print(AppConstant.IMAGE_ERROR)
+                                                contentHandler!(bestAttemptContent)
+                                                return
+                                            }
+                                            bestAttemptContent.attachments = [ attachment ]
+                                        }
+                                    }
+                                    
+                                    contentHandler!(bestAttemptContent)
                                 }
-                                
-                                contentHandler!(bestAttemptContent)
                             } catch let error {
                                 print("Error",error)
                                 
@@ -546,20 +632,33 @@ public class iZooto : NSObject
                         }
                         
                     }.resume()
+                }else{
+                    print("NO Found")
                 }
                 
-                let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
-                let  category = UNNotificationCategory( identifier: "izooto_category", actions: [firstAction], intentIdentifiers: [], options: [])
-                UNUserNotificationCenter.current().setNotificationCategories([category])
+                //                let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
+                //                let  category = UNNotificationCategory( identifier: "izooto_category", actions: [firstAction], intentIdentifiers: [], options: [])
+                //                UNUserNotificationCenter.current().setNotificationCategories([category])
                 
                 
             }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             
             else{
                 if notificationData != nil
                 {
                     
+                    notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
                     
                     autoreleasepool {
                         if let urlString = (notificationData?.alert?.attachment_url),
@@ -795,13 +894,13 @@ public class iZooto : NSObject
                     
                     let izUrlStr = notificationData!.act2link!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
                     if let url = URL(string:izUrlStr!) {
-                                                               
+                        
                         DispatchQueue.main.async {
                             
                             UIApplication.shared.open(url)
                             
                         }
-                                                           
+                        
                     }
                     
                 }))
@@ -813,96 +912,212 @@ public class iZooto : NSObject
         {
             let userInfo = notification.request.content.userInfo
             let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-            if(notificationData?.inApp != nil)
+            if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
             {
-                
-                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                if (notificationData?.cfg != nil)
-                {
-                    let str = String((notificationData?.cfg)!)
-                    let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                    let lastChar = binaryString?.last!
-                    let str1 = String((lastChar)!)
-                    let impr = Int(str1)
-                    if(impr == 1)
-                    {
-                        RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
-                    }
-                    
-                }
                 completionHandler([.badge, .alert, .sound])
                 
             }
             else
             {
-                print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
-                
-                
-                RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
-                
+                if(notificationData?.inApp != nil)
+                {
+                    
+                    notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                    if (notificationData?.cfg != nil)
+                    {
+                        let str = String((notificationData?.cfg)!)
+                        let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                        let lastChar = binaryString?.last!
+                        let str1 = String((lastChar)!)
+                        let impr = Int(str1)
+                        if(impr == 1)
+                        {
+                            RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+                        }
+                        
+                    }
+                    completionHandler([.badge, .alert, .sound])
+                    
+                }
+                else
+                {
+                    print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                    
+                    
+                    RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                    
+                }
             }
         }
         
         
     }
+    
+    // handel the fallback url
+    
+    @objc public static func fallbackClickHandler(){
+        
+        let str = RestAPI.FALLBACK_URL
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        if let url = URL(string: izUrlString) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        if let jsonDictionary = json as? [String:Any] {
+                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                            if notificationData?.url! != "" {
+                                
+                                notificationData?.url = jsonDictionary["ln"] as? String
+                                
+                                let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                
+                                if let url = URL(string:izUrlStr!) {
+                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                    {
+                                        DispatchQueue.main.async {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+                                    else
+                                    {
+                                        DispatchQueue.main.async {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch let error {
+                        print("Error",error)
+                    }
+                }
+            }.resume()
+        }else{
+            print("Wrong URL")
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     // Handle the clicks the notification from Banner,Button
     @objc public static func notificationHandler(response : UNNotificationResponse)
     {
         
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-                   let badgeC = userDefaults.integer(forKey:"Badge")
-                   self.badgeCount = badgeC
-                   userDefaults.set(badgeC - 1, forKey: "Badge")
-                   userDefaults.synchronize()
-               }
-               
-               badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-               if(badgeNumber == -1)
-               {
-                   UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
-               }
-               else if(badgeNumber == 1)
-               {
-                   UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-                   
-               }else{
-                   
-                   UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
-               }
+            let badgeC = userDefaults.integer(forKey:"Badge")
+            self.badgeCount = badgeC
+            userDefaults.set(badgeC - 1, forKey: "Badge")
+            userDefaults.synchronize()
+        }
         
-       
+        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+        if(badgeNumber == -1)
+        {
+            UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
+        }
+        else if(badgeNumber == 1)
+        {
+            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+            
+        }else{
+            
+            UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
+        }
+        
+        
         
         let userInfo = response.notification.request.content.userInfo
         let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
         
         clickTrack(notificationData: notificationData!, actionType: "0")
+        
         if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
         {
-            let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
             
-            if let url = URL(string: izUrlString!)
+            if let url = URL(string: izUrlString)
             {
-                
                 URLSession.shared.dataTask(with: url) { data, response, error in
+                    if error != nil{
+                        self.fallbackClickHandler()
+                    }
                     if let data = data {
                         do {
+
                             let json = try JSONSerialization.jsonObject(with: data)
-                            if let jsonArray = json as? [[String:Any]] {
-                                if notificationData?.url != "" {
-                                    notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                    handleBroserNotification(url: (notificationData?.url)!)
-                                    
+                            
+                            //To Check FallBack
+                            if let jsonDictionary = json as? [String:Any] {
+                                if let value = jsonDictionary["msgCode"] as? String {
+                                    self.fallbackClickHandler()
+
                                 }
+                                
                             }
-                            else if let jsonDictionary = json as? [String:Any] {
-                                if notificationData?.url != "" {
-                                    notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                    handleBroserNotification(url: (notificationData?.url)!)
+                            else
+                            {
+                                
+                                if let jsonArray = json as? [[String:Any]] {
+                                    if notificationData?.url != "" {
+                                        
+                                        notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                        //notificationData?.url = "https:"+notificationData!.url!
+                                        let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                        
+                                        if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                        {
+                                            if let url = URL(string:izUrlStr!) {
+                                                DispatchQueue.main.async {
+                                                    UIApplication.shared.open(url)
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if let url = URL(string:izUrlString) {
+                                                DispatchQueue.main.async {
+                                                    UIApplication.shared.open(url)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else if let jsonDictionary = json as? [String:Any] {
+                                    print("A24",jsonDictionary)
                                     
+                                    if notificationData?.url != "" {
+                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                        
+                                        let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                        
+                                        if let url = URL(string:izUrlStr!) {
+                                            if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                            {
+                                                DispatchQueue.main.async {
+                                                    UIApplication.shared.open(url)
+                                                }
+                                            }
+                                            else
+                                            {
+                                                DispatchQueue.main.async {
+                                                    UIApplication.shared.open(url)
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         } catch let error {
                             print(AppConstant.TAG,error)
+
+                            //FallBack_Click Handler method.....
+                            self.fallbackClickHandler()
                             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
                             let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
                             RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
@@ -913,9 +1128,9 @@ public class iZooto : NSObject
         }
         else
         {
-           
+            
             notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-
+            
             if notificationData?.category != nil
             {
                 
@@ -1245,7 +1460,7 @@ public class iZooto : NSObject
     {
         let returnData =  Utils.dataValidate(data: data)
         if (!returnData.isEmpty)
-             {
+        {
             if let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed),
                let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue) {
                 let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
@@ -1278,12 +1493,12 @@ public class iZooto : NSObject
     }
     // handle the hybrid plugin version
     @objc public static func setPluginVersion(pluginVersion : String){
-         if pluginVersion != ""{
-             sharedUserDefault?.set(pluginVersion, forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
-         }else{
-             sharedUserDefault?.set("", forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
-         }
-       }
+        if pluginVersion != ""{
+            sharedUserDefault?.set(pluginVersion, forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
+        }else{
+            sharedUserDefault?.set("", forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
+        }
+    }
     
     
 }
