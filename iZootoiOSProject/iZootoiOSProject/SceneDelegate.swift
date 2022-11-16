@@ -10,7 +10,21 @@ import UIKit
 import iZootoiOSSDK
 
 @available(iOS 13.0, *)
-class SceneDelegate: UIResponder, UIWindowSceneDelegate ,iZootoNotificationOpenDelegate{
+class SceneDelegate: UIResponder, UIWindowSceneDelegate ,iZootoNotificationOpenDelegate,iZootoLandingURLDelegate{
+    func onHandleLandingURL(url: String) {
+        print(url)
+                    let window = UIApplication.shared.windows.first { $0.isKeyWindow }
+                       let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                       let yourVC = storyboard.instantiateViewController(identifier: "SecondViewController")
+        
+                       let navController = UINavigationController(rootViewController: yourVC)
+                       navController.modalPresentationStyle = .fullScreen
+        
+                       // you can assign your vc directly or push it in navigation stack as follows:
+                       window!.rootViewController = navController
+                       window!.makeKeyAndVisible()
+    }
+    
     
     
 
@@ -19,20 +33,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate ,iZootoNotificationOpenD
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         iZooto.notificationOpenDelegate = self
+        iZooto.landingURLDelegate = self
 
       
         }
     func onNotificationOpen(action: Dictionary<String, Any>) {
-            let window = UIApplication.shared.windows.first { $0.isKeyWindow }
-               let storyboard = UIStoryboard(name: "Main", bundle: nil)
-               let yourVC = storyboard.instantiateViewController(identifier: "SecondViewController")
-               
-               let navController = UINavigationController(rootViewController: yourVC)
-               navController.modalPresentationStyle = .fullScreen
-
-               // you can assign your vc directly or push it in navigation stack as follows:
-               window!.rootViewController = navController
-               window!.makeKeyAndVisible()
+        print(action)
+//            let window = UIApplication.shared.windows.first { $0.isKeyWindow }
+//               let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//               let yourVC = storyboard.instantiateViewController(identifier: "SecondViewController")
+//
+//               let navController = UINavigationController(rootViewController: yourVC)
+//               navController.modalPresentationStyle = .fullScreen
+//
+//               // you can assign your vc directly or push it in navigation stack as follows:
+//               window!.rootViewController = navController
+//               window!.makeKeyAndVisible()
         }
 
     }

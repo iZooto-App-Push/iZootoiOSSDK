@@ -49,13 +49,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         UNUserNotificationCenter.current().delegate = self
         iZooto.registerForPushNotifications()
-        let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": false,"provisionalAuthorization":false]
+        let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-
-        getAdvertisementId();
+       // getAdvertisementId();
 
        
         return true
@@ -136,7 +135,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
    // @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-      //  print(notification.request.content.userInfo)
         iZooto.handleForeGroundNotification(notification: notification, displayNotification: "None", completionHandler: completionHandler)
 
         
@@ -149,15 +147,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     }
         
-        func popup(){
-            let alert = UIAlertController(title: "Test", message:"Message", preferredStyle: UIAlertController.Style.alert)
-                    
-            // add an action (button)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-                   
-            // show the alert
-            self.window?.rootViewController?.present(alert, animated: true, completion: nil)
-        }
+       
     
 }
 

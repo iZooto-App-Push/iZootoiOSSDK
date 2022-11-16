@@ -560,6 +560,7 @@ public class iZooto : NSObject
                                 if let jsonDictionary = json as? [String:Any] {
                                     if let value = jsonDictionary["msgCode"] as? String {
                                         fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        debugPrint(value)
                                     }
                                     
                                 }else{
@@ -1049,14 +1050,15 @@ public class iZooto : NSObject
                     }
                     if let data = data {
                         do {
-
+                            
                             let json = try JSONSerialization.jsonObject(with: data)
                             
                             //To Check FallBack
                             if let jsonDictionary = json as? [String:Any] {
                                 if let value = jsonDictionary["msgCode"] as? String {
                                     self.fallbackClickHandler()
-
+                                    debugPrint(value)
+                                    
                                 }
                                 
                             }
@@ -1089,7 +1091,6 @@ public class iZooto : NSObject
                                     }
                                 }
                                 else if let jsonDictionary = json as? [String:Any] {
-                                    print("A24",jsonDictionary)
                                     
                                     if notificationData?.url != "" {
                                         notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
@@ -1114,8 +1115,7 @@ public class iZooto : NSObject
                                 }
                             }
                         } catch let error {
-                            print(AppConstant.TAG,error)
-
+                            
                             //FallBack_Click Handler method.....
                             self.fallbackClickHandler()
                             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
@@ -1159,7 +1159,7 @@ public class iZooto : NSObject
                             }
                             else
                             {
-                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
+                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act1link != nil && notificationData?.act1link != "")
                                 {
                                     
                                     let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
@@ -1172,8 +1172,6 @@ public class iZooto : NSObject
                                         ViewController.seriveURL = notificationData?.act1link
                                         UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
                                     }
-                                    
-                                    
                                 }
                                 else
                                 {
@@ -1184,8 +1182,10 @@ public class iZooto : NSObject
                                     }
                                     else
                                     {
-                                        if let url = URL(string: notificationData!.act1link!) {
-                                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                        if notificationData!.act1link == nil {
+                                            print("")
+                                        }else{
+                                            handleBroserNotification(url: (notificationData?.act1link)!)
                                         }
                                     }
                                 }
@@ -1215,7 +1215,7 @@ public class iZooto : NSObject
                             }
                             else
                             {
-                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
+                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act2link != nil && notificationData?.act2link != "")
                                 {
                                     
                                     let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
@@ -1232,9 +1232,10 @@ public class iZooto : NSObject
                                 }
                                 else
                                 {
-                                    if let url = URL(string: notificationData!.act2link!)
-                                    {
-                                        UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                    if notificationData!.act2link == nil {
+                                        print("")
+                                    }else{
+                                        handleBroserNotification(url: (notificationData?.act2link)!)
                                     }
                                 }
                             }
@@ -1249,7 +1250,7 @@ public class iZooto : NSObject
                         
                     }
                     else{
-                        if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
+                        if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
                         {
                             
                             let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
@@ -1264,10 +1265,12 @@ public class iZooto : NSObject
                             }
                         }
                         else{
-                            
-                            handleBroserNotification(url: (notificationData?.url)!)
-                            
-                            
+                            // clickTrack(notificationData: notifcationData!, actionType: "0")
+                            if notificationData!.url == nil {
+                                print("")
+                            }else{
+                                handleBroserNotification(url: (notificationData?.url)!)
+                            }
                         }
                     }
                 }
@@ -1282,7 +1285,7 @@ public class iZooto : NSObject
                 }
                 else
                 {
-                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "")
+                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
                     {
                         
                         let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
@@ -1298,13 +1301,15 @@ public class iZooto : NSObject
                     }
                     else
                     {
-                        handleBroserNotification(url: (notificationData?.url)!)
-                        
+                        if notificationData!.url == nil {
+                            print("")
+                        }else{
+                            handleBroserNotification(url: (notificationData?.url)!)
+                        }
                     }
                 }
             } //close else
         }
-        
     }
     
     
@@ -1387,36 +1392,22 @@ public class iZooto : NSObject
         }
         
     }
-    @objc public static func tapNotification(userinfo : [AnyHashable: Any])
-    {
-        let notifcationData = Payload(dictionary: (userinfo[AppConstant.iZ_NOTIFCATION_KEY_NAME] as? NSDictionary)!)
-        var data = Dictionary<String,Any>()
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_ID] = notifcationData?.act1id
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_TITLE] = notifcationData?.act1name
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_URL] = notifcationData?.act1link
-        data[AppConstant.iZ_KEY_DEEPL_LINK_ADDITIONAL_DATA] = notifcationData?.ap
-        data[AppConstant.iZ_KEY_DEEP_LINK_LANDING_URL] = notifcationData?.url
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_ID] = notifcationData?.act2id
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_TITLE] = notifcationData?.act2name
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_URL] = notifcationData?.act2link
-        data[AppConstant.iZ_KEY_DEEPL_LINK_ACTION_TYPE] = actionType
-        iZooto.notificationOpenDelegate?.onNotificationOpen(action: data)
-    }
+   
     
-    // handle the addtional data
+    // handle the addtional data/deepLink Data
     @objc public static func handleClicks(response : UNNotificationResponse , actionType : String)
     {
         let userInfo = response.notification.request.content.userInfo
         let notifcationData = Payload(dictionary: (userInfo[AppConstant.iZ_NOTIFCATION_KEY_NAME] as? NSDictionary)!)
         var data = Dictionary<String,Any>()
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_ID] = notifcationData?.act1id
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_TITLE] = notifcationData?.act1name
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_URL] = notifcationData?.act1link
-        data[AppConstant.iZ_KEY_DEEPL_LINK_ADDITIONAL_DATA] = notifcationData?.ap
-        data[AppConstant.iZ_KEY_DEEP_LINK_LANDING_URL] = notifcationData?.url
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_ID] = notifcationData?.act2id
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_TITLE] = notifcationData?.act2name
-        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_URL] = notifcationData?.act2link
+        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_ID] = notifcationData?.act1id ?? ""
+        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_TITLE] = notifcationData?.act1name ?? ""
+        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_URL] = notifcationData?.act1link ?? ""
+        data[AppConstant.iZ_KEY_DEEPL_LINK_ADDITIONAL_DATA] = notifcationData?.ap ?? ""
+        data[AppConstant.iZ_KEY_DEEP_LINK_LANDING_URL] = notifcationData?.url ?? ""
+        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_ID] = notifcationData?.act2id ?? ""
+        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_TITLE] = notifcationData?.act2name ?? ""
+        data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_URL] = notifcationData?.act2link ?? ""
         data[AppConstant.iZ_KEY_DEEPL_LINK_ACTION_TYPE] = actionType
         notificationOpenDelegate?.onNotificationOpen(action: data)
     }

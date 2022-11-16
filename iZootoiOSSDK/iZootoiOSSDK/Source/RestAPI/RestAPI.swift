@@ -29,7 +29,7 @@ public class RestAPI : NSObject
      static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
      static let LASTVISITURL="https://lvi.izooto.com/lvi";
      static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
-     static let  SDKVERSION = "2.0.5"
+     static let  SDKVERSION = "2.0.6"
     //fallback url
       static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     

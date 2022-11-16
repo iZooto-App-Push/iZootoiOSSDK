@@ -65,7 +65,7 @@ class AppConstant : NSObject
     static let iZ_KEY_DEEPL_LINK_BUTTON2_ID = "button2ID"
     static let iZ_KEY_DEEPL_LINK_BUTTON2_TITLE = "button2Title"
     static let iZ_KEY_DEEPL_LINK_BUTTON2_URL = "button2URL"
-    static let iZ_KEY_DEEPL_LINK_ADDITIONAL_DATA = "button2URL"
+    static let iZ_KEY_DEEPL_LINK_ADDITIONAL_DATA = "additionalData"
     static let iZ_KEY_DEEPL_LINK_ACTION_TYPE = "button2URL"
     static let iZ_KEY_DEEP_LINK_LANDING_URL = "landingURL"
     
