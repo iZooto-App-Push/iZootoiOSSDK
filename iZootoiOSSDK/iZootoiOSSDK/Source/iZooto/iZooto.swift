@@ -364,6 +364,54 @@ public class iZooto : NSObject
             }
         }
     }
+    // Check the notification enable or not from device setting
+        @objc  public static func checkNotificationEnable()
+        {
+            UNUserNotificationCenter.current().getNotificationSettings(){ (setttings) in
+                
+                switch setttings.authorizationStatus{
+                case .authorized:
+                    
+                    print("enabled notification setting")
+                    
+                case .denied:
+                    
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
+                        alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
+                            
+                            
+                            DispatchQueue.main.async {
+                                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                                    return
+                                }
+                                
+                                if UIApplication.shared.canOpenURL(settingsUrl) {
+                                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                                        print("Settings opened: \(success)") // Prints true
+                                    })
+                                }
+                            }
+                        }))
+                        
+                        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+                    }
+                    
+                case .notDetermined:
+                    
+                    print("")
+                    
+                case .provisional:
+                    
+                    print("something vital went wrong here")
+                    
+                case .ephemeral:
+                    
+                    print("something vital went wrong here")
+                }
+            }
+        }
     
     // getAdvertisement ID
     @objc public static func  getAdvertisementID(adid : NSString)
@@ -644,17 +692,6 @@ public class iZooto : NSObject
                 
             }
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             else{
                 if notificationData != nil
                 {
@@ -725,45 +762,45 @@ public class iZooto : NSObject
     }
     
     // Check the notification enable or not from device setting
-    @objc  public static func checkNotificationEnable()
-    {
-        let isNotificationEnabled = UIApplication.shared.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
-        if isNotificationEnabled!{
-            print("enabled notification setting")
-        }else{
-            
-            let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
-                
-                
-                DispatchQueue.main.async {
-                    guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                        return
-                    }
-                    
-                    if UIApplication.shared.canOpenURL(settingsUrl) {
-                        if #available(iOS 10.0, *) {
-                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                print("Settings opened: \(success)") // Prints true
-                            })
-                        } else {
-                            UIApplication.shared.openURL(settingsUrl as URL)
-                        }
-                    }
-                }
-            }))
-            
-            
-            
-            
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-            
-            
-            
-            
-        }
-    }
+  //  @objc  public static func checkNotificationEnable()
+//    {
+//        let isNotificationEnabled = UIApplication.shared.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
+//        if isNotificationEnabled!{
+//            print("enabled notification setting")
+//        }else{
+//
+//            let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
+//            alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
+//            alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
+//
+//
+//                DispatchQueue.main.async {
+//                    guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+//                        return
+//                    }
+//
+//                    if UIApplication.shared.canOpenURL(settingsUrl) {
+//                        if #available(iOS 10.0, *) {
+//                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+//                                print("Settings opened: \(success)") // Prints true
+//                            })
+//                        } else {
+//                            UIApplication.shared.openURL(settingsUrl as URL)
+//                        }
+//                    }
+//                }
+//            }))
+//
+//
+//
+//
+//            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+//
+//
+//
+//
+//        }
+//    }
     
     // for jsonObject
     @objc private static func getParseValue(jsonData :[String : Any], sourceString : String) -> String
@@ -1082,7 +1119,7 @@ public class iZooto : NSObject
                                         }
                                         else
                                         {
-                                            if let url = URL(string:izUrlString) {
+                                            if let url = URL(string:izUrlStr!) {
                                                 DispatchQueue.main.async {
                                                     UIApplication.shared.open(url)
                                                 }

@@ -54,9 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-       // getAdvertisementId();
-
-       
         return true
     }
         

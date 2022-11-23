@@ -19,7 +19,7 @@ protocol ResponseHandler  : AnyObject{
 public class RestAPI : NSObject
 {
      static let   BASEURL = "https://aevents.izooto.com/app.php"
-     static let   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
+     static let   DATURL="https://cdn.izooto.com/app/app_"
      static let   IMPRESSION_URL="https://impr.izooto.com/imp";
      static let   LOG = "iZooto :"
      static let EVENT_URL = "https://et.izooto.com/evt";
@@ -29,10 +29,10 @@ public class RestAPI : NSObject
      static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
      static let LASTVISITURL="https://lvi.izooto.com/lvi";
      static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
-     static let  SDKVERSION = "2.0.6"
-    //fallback url
-      static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
-    
+     static let SUBSCRIPTIONURL = "https://usub.izooto.com/sunsub";
+     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
+     static let  SDKVERSION = "2.0.7"
+
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
         if(isSubscribe != -1 && userid != 0)
@@ -46,7 +46,7 @@ public class RestAPI : NSObject
                                                 URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN,value: token),
                                                 URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
                                                 URLQueryItem(name: AppConstant.iZ_KEY_PT, value: "0")]
-            var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub")!)
+            var request = URLRequest(url: URL(string: self.SUBSCRIPTIONURL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
@@ -67,7 +67,7 @@ public class RestAPI : NSObject
     
     public static   func getRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
     {
-        let requestURL = URL(string: "https://cdn.izooto.com/app/app_\(uuid).dat")
+        let requestURL = URL(string: self.DATURL + "\(uuid).dat")
         let request = URLRequest(url: requestURL!)
         let requestTask = URLSession.shared.dataTask(with: request) {
             (data: Data?, response: URLResponse?, error: Error?) in
@@ -207,7 +207,7 @@ public class RestAPI : NSObject
                                                 URLQueryItem(name: "op", value: "view"),
                                                 URLQueryItem(name: "ver", value: SDKVERSION)
                                                 ]
-            var request = URLRequest(url: URL(string: "https://impr.izooto.com/imp")!)
+            var request = URLRequest(url: URL(string: self.IMPRESSION_URL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
@@ -476,7 +476,6 @@ public class RestAPI : NSObject
         }
         else
         {
-            print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR)
             sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, pid: 0, token: "", rid: "", cid: "")
             
         }
