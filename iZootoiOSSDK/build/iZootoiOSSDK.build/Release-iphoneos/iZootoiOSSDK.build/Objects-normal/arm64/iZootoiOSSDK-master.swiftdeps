@@ -1,0 +1,13 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "01352fb839c6040450b2457a40e6b212b33ec009adadbe75bbd5e7e71a77024d"
+build_start_time: [1671517847, 143385887]
+build_end_time: [1671517847, 198685169]
+inputs:
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppConstant.swift": !dirty [1669093850, 472821235]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/ShareUserDefault.swift": !dirty [1654507277, 553590774]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/UserDefaults.swift": !dirty [1654507277, 553823471]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/Utils.swift": !dirty [1666099473, 570298194]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/Payload/Payload.swift": !dirty [1654507277, 554691076]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/RestAPI/RestAPI.swift": !dirty [1670916729, 851535797]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/ViewController.swift": !dirty [1654507277, 556103944]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift": !dirty [1669197549, 396302700]

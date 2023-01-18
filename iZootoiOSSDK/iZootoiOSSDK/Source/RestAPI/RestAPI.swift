@@ -31,8 +31,7 @@ public class RestAPI : NSObject
      static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
      static let SUBSCRIPTIONURL = "https://usub.izooto.com/sunsub";
      static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
-     static let  SDKVERSION = "2.0.7"
-
+     static let  SDKVERSION = "2.0.8"
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
         if(isSubscribe != -1 && userid != 0)
@@ -500,7 +499,7 @@ public class RestAPI : NSObject
                                 URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
                                 URLQueryItem(name:AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
                                 URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
-                                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
+                                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: "\(adid)"),
                                 URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
                                 URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
                                 URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())"),

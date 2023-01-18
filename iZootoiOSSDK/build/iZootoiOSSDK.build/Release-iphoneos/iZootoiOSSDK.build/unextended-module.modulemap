@@ -1,0 +1,10 @@
+framework module iZootoiOSSDK {
+  umbrella header "iZootoiOSSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module iZootoiOSSDK.__Swift {
+  exclude header "iZootoiOSSDK-Swift.h"
+}

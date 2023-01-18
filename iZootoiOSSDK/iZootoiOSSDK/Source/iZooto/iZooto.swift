@@ -404,11 +404,11 @@ public class iZooto : NSObject
                     
                 case .provisional:
                     
-                    print("something vital went wrong here")
+                    print("something  went wrong here")
                     
                 case .ephemeral:
                     
-                    print("something vital went wrong here")
+                    print("something  went wrong here")
                 }
             }
         }
@@ -425,7 +425,6 @@ public class iZooto : NSObject
             {
                 RestAPI.registerToken(token: token, izootoid: userID!, adid: adid)
             }
-            
             
         }
         else{
@@ -591,7 +590,6 @@ public class iZooto : NSObject
             
             if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
             {
-                
                 let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
                 
                 if let url = URL(string: izUrlString) {
@@ -602,19 +600,65 @@ public class iZooto : NSObject
                         }
                         if let data = data {
                             do {
+
                                 let json = try JSONSerialization.jsonObject(with: data)
-                                
+
                                 //To Check FallBack
                                 if let jsonDictionary = json as? [String:Any] {
                                     if let value = jsonDictionary["msgCode"] as? String {
                                         fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
-                                        debugPrint(value)
+                                    }
+                                    else
+                                    {
+                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
+                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
+                                        if notificationData?.url != "" {
+                                            notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                        }
+                                        if notificationData?.alert?.attachment_url != "" {
+                                            
+                                            notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                            if (notificationData?.alert?.attachment_url!.contains(".webp"))!
+                                            {
+                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
+                                                
+                                            }
+                                            if (notificationData?.alert?.attachment_url!.contains("http:"))!
+                                            {
+                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
+                                                
+                                            }
+                                        }
                                     }
                                     
-                                }else{
+                                    autoreleasepool {
+                                        if let urlString = (notificationData?.alert?.attachment_url),
+                                           let fileUrl = URL(string: urlString ) {
+                                            
+                                            guard let imageData = NSData(contentsOf: fileUrl) else {
+                                                contentHandler!(bestAttemptContent)
+                                                return
+                                            }
+                                            let string = notificationData?.alert?.attachment_url
+                                            let url: URL? = URL(string: string!)
+                                            let urlExtension: String? = url?.pathExtension
+                                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                                print(AppConstant.IMAGE_ERROR)
+                                                contentHandler!(bestAttemptContent)
+                                                return
+                                            }
+                                            bestAttemptContent.attachments = [ attachment ]
+                                        }
+                                    }
                                     
+                                    contentHandler!(bestAttemptContent)
+                                
+
+                                    }
+                                    
+                                else{
                                     if let jsonArray = json as? [[String:Any]] {
-                                        
+
                                         bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
                                         bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
                                         if notificationData?.url != "" {
@@ -631,6 +675,7 @@ public class iZooto : NSObject
                                         }
                                         
                                     } else if let jsonDictionary = json as? [String:Any] {
+
                                         bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
                                         bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
                                         if notificationData?.url != "" {
@@ -675,14 +720,15 @@ public class iZooto : NSObject
                                     contentHandler!(bestAttemptContent)
                                 }
                             } catch let error {
-                                print("Error",error)
+                                fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+
                                 
                             }
                         }
                         
                     }.resume()
                 }else{
-                    print("NO Found")
+                    print("No Found")
                 }
                 
                 //                let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
@@ -862,10 +908,12 @@ public class iZooto : NSObject
                         }
                     }
                     else{
+
                         let array = sourceString.split(separator: ".")
                         let response = jsonData["\(array[0])"] as! [String:Any]
                         let documents = response["\(array[1])"] as! [String:Any]
-                        let field = documents["\("doc")"] as! [[String:Any]]
+                       // let field = documents["\("doc")"] as! [[String:Any]]
+                        let field = documents["doc"] as! [[String:Any]]
                         if(!field.isEmpty)
                         {
                             let responseData = field[0]["\(array[3])"]as! [String:Any]
@@ -1097,8 +1145,40 @@ public class iZooto : NSObject
                                     debugPrint(value)
                                     
                                 }
+                                else
+                                {
+                                    
+                                    if notificationData?.url != "" {
+                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                        
+                                        let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                        
+                                        if let url = URL(string:izUrlStr!) {
+                                            if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                            {
+                                                DispatchQueue.main.async {
+                                                    UIApplication.shared.open(url)
+                                                }
+                                            }
+                                            else
+                                            {
+                                                DispatchQueue.main.async {
+                                                    UIApplication.shared.open(url)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                
+                                
+                                
+                                
+                                
                                 
                             }
+                                
+                            
                             else
                             {
                                 
