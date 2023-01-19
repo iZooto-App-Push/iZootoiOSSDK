@@ -32,6 +32,8 @@ public class RestAPI : NSObject
      static let SUBSCRIPTIONURL = "https://usub.izooto.com/sunsub";
      static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
      static let  SDKVERSION = "2.0.8"
+    // call the subscription method
+    
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
         if(isSubscribe != -1 && userid != 0)
