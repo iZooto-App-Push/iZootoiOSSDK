@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		28248A9E26C5528300F5560A /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28248A9D26C5528300F5560A /* SecondViewController.swift */; };
-		285BA60823F12D8100520F59 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		28621614254950AD00B178F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */; };
 		28740CA02459649500E51907 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 28740C9F2459649500E51907 /* logo.png */; };
 		28740CA22459672300E51907 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 28740CA12459672300E51907 /* title.png */; };
@@ -81,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				285BA60823F12D8100520F59 /* (null) in Frameworks */,
 				F8DD71FB556D805564942262 /* Pods_iZootoiOSProject.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -510,7 +508,7 @@
 				CODE_SIGN_ENTITLEMENTS = iZootoiOSProject/iZootoiOSProject.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
@@ -519,7 +517,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iZootoiOSProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -540,7 +538,7 @@
 				CODE_SIGN_ENTITLEMENTS = iZootoiOSProject/iZootoiOSProject.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
@@ -549,7 +547,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iZootoiOSProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -567,7 +565,7 @@
 				CODE_SIGN_ENTITLEMENTS = iZootoNotificationExtendsServices/iZootoNotificationExtendsServices.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoNotificationExtendsServices/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -576,7 +574,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iZootoiOSProject.iZootoNotificationExtendsServices;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -595,7 +593,7 @@
 				CODE_SIGN_ENTITLEMENTS = iZootoNotificationExtendsServices/iZootoNotificationExtendsServices.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoNotificationExtendsServices/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -604,7 +602,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iZootoiOSProject.iZootoNotificationExtendsServices;
 				PRODUCT_NAME = "$(TARGET_NAME)";
