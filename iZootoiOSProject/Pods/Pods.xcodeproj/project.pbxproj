@@ -21,7 +21,6 @@
 		6B915D46A203239B4BA1D19613AC01A2 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */; };
 		7056F600695AA7B016F3821229A6E82F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		74C4195CF647EA979387BE55D496AC96 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		8E7F321051A3A36B98D7A7762ED3828B /* iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CDF8363B463D296E8FCEC918D2A50D /* iZootoiOSSDK-dummy.m */; };
 		9AB7BC14290EFE00272F1148B75DDFB3 /* ShareUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1711A8A3FF58DE2D6E0B51ED849AE79E /* ShareUserDefault.swift */; };
 		C8552764CAD5388E48E1B28BDB74750A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		D4055F5FBEBBA99058AA501DE558749F /* iZootoiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 36034E759035B3E6D69A6D002413DF79 /* iZootoiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -457,7 +456,6 @@
 			files = (
 				3DDE5784AAE63D4EFCCC140D317C308B /* AppConstant.swift in Sources */,
 				E8C476BD8A204AFE7578AA2CF02CF3D8 /* iZooto.swift in Sources */,
-				8E7F321051A3A36B98D7A7762ED3828B /* iZootoiOSSDK-dummy.m in Sources */,
 				28B62DB826CFE0A4004372E9 /* SDKLog.swift in Sources */,
 				089F4C3CBB426BDF73F053081F60BB67 /* Payload.swift in Sources */,
 				12E3E8595CC7CF041A6B4EAD6E69FC6B /* RestAPI.swift in Sources */,
@@ -560,9 +558,7 @@
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 14;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -584,6 +580,9 @@
 				PRODUCT_NAME = iZootoiOSSDK;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -813,9 +812,7 @@
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 14;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -838,6 +835,9 @@
 				PRODUCT_NAME = iZootoiOSSDK;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
