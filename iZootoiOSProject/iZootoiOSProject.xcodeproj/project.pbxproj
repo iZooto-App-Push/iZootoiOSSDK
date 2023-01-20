@@ -9,17 +9,11 @@
 /* Begin PBXBuildFile section */
 		28248A9E26C5528300F5560A /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28248A9D26C5528300F5560A /* SecondViewController.swift */; };
 		28621614254950AD00B178F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */; };
-		28740CA02459649500E51907 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 28740C9F2459649500E51907 /* logo.png */; };
-		28740CA22459672300E51907 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 28740CA12459672300E51907 /* title.png */; };
 		28AEAE5C23ED7B8100A1BFD2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */; };
 		28AEAE5E23ED7B8100A1BFD2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5D23ED7B8100A1BFD2 /* SceneDelegate.swift */; };
 		28AEAE6023ED7B8100A1BFD2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5F23ED7B8100A1BFD2 /* ViewController.swift */; };
-		28AEAE6323ED7B8100A1BFD2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28AEAE6123ED7B8100A1BFD2 /* Main.storyboard */; };
-		28AEAE6523ED7B8200A1BFD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28AEAE6423ED7B8200A1BFD2 /* Assets.xcassets */; };
-		28AEAE6823ED7B8200A1BFD2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28AEAE6623ED7B8200A1BFD2 /* LaunchScreen.storyboard */; };
 		28AEAE9623ED895E00A1BFD2 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE9523ED895E00A1BFD2 /* NotificationService.swift */; };
 		28AEAE9A23ED895E00A1BFD2 /* iZootoNotificationExtendsServices.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 28AEAE9323ED895E00A1BFD2 /* iZootoNotificationExtendsServices.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		28DE164E268473F6001842E5 /* pikachu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 28DE164D268473F6001842E5 /* pikachu.mp3 */; };
 		672F094C0C9EF1920C919C47 /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF5B8FFE013C2EB5CCD5345C /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */; };
 		F8DD71FB556D805564942262 /* Pods_iZootoiOSProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F27B6B814988AA52A6791498 /* Pods_iZootoiOSProject.framework */; };
 /* End PBXBuildFile section */
@@ -250,12 +244,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28740CA02459649500E51907 /* logo.png in Resources */,
-				28AEAE6823ED7B8200A1BFD2 /* LaunchScreen.storyboard in Resources */,
-				28DE164E268473F6001842E5 /* pikachu.mp3 in Resources */,
-				28AEAE6523ED7B8200A1BFD2 /* Assets.xcassets in Resources */,
-				28AEAE6323ED7B8100A1BFD2 /* Main.storyboard in Resources */,
-				28740CA22459672300E51907 /* title.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
