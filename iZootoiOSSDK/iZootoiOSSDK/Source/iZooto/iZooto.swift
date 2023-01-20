@@ -606,6 +606,7 @@ public class iZooto : NSObject
                                 //To Check FallBack
                                 if let jsonDictionary = json as? [String:Any] {
                                     if let value = jsonDictionary["msgCode"] as? String {
+                                        print(value)
                                         fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                     }
                                     else
@@ -720,6 +721,7 @@ public class iZooto : NSObject
                                     contentHandler!(bestAttemptContent)
                                 }
                             } catch let error {
+                                
                                 fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
 
                                 

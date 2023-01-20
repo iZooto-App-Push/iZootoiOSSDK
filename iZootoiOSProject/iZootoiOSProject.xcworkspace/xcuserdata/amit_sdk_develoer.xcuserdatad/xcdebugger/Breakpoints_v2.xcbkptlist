@@ -14,8 +14,8 @@
             filePath = "../iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "890"
-            endingLineNumber = "890"
+            startingLineNumber = "892"
+            endingLineNumber = "892"
             landmarkName = "getParseValue(jsonData:sourceString:)"
             landmarkType = "7">
             <Locations>
@@ -48,114 +48,6 @@
                   startingLineNumber = "859"
                   endingLineNumber = "859"
                   offsetFromSymbolStart = "5944">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DF7D3C06-C64F-4801-BE54-413DB5A5E479"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "660"
-            endingLineNumber = "660"
-            landmarkName = "didReceiveNotificationExtensionRequest(bundleName:soundName:request:bestAttemptContent:contentHandler:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "DF7D3C06-C64F-4801-BE54-413DB5A5E479 - 9854f9e2c5c64446"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static iZootoiOSSDK.iZooto.didReceiveNotificationExtensionRequest(bundleName: Swift.String, soundName: Swift.String, request: __C.UNNotificationRequest, bestAttemptContent: __C.UNMutableNotificationContent, contentHandler: Swift.Optional&lt;(__C.UNNotificationContent) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "iZootoiOSSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "626"
-                  endingLineNumber = "626"
-                  offsetFromSymbolStart = "2572">
-               </Location>
-               <Location
-                  uuid = "DF7D3C06-C64F-4801-BE54-413DB5A5E479 - 9854f9e2c5c64446"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static iZootoiOSSDK.iZooto.didReceiveNotificationExtensionRequest(bundleName: Swift.String, soundName: Swift.String, request: __C.UNNotificationRequest, bestAttemptContent: __C.UNMutableNotificationContent, contentHandler: Swift.Optional&lt;(__C.UNNotificationContent) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "iZootoiOSSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "626"
-                  endingLineNumber = "626"
-                  offsetFromSymbolStart = "2672">
-               </Location>
-               <Location
-                  uuid = "DF7D3C06-C64F-4801-BE54-413DB5A5E479 - 9854f9e2c5c647a5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static iZootoiOSSDK.iZooto.didReceiveNotificationExtensionRequest(bundleName: Swift.String, soundName: Swift.String, request: __C.UNNotificationRequest, bestAttemptContent: __C.UNMutableNotificationContent, contentHandler: Swift.Optional&lt;(__C.UNNotificationContent) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "iZootoiOSSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "625"
-                  endingLineNumber = "625"
-                  offsetFromSymbolStart = "944">
-               </Location>
-               <Location
-                  uuid = "DF7D3C06-C64F-4801-BE54-413DB5A5E479 - 9854f9e2c5c647a5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static iZootoiOSSDK.iZooto.didReceiveNotificationExtensionRequest(bundleName: Swift.String, soundName: Swift.String, request: __C.UNNotificationRequest, bestAttemptContent: __C.UNMutableNotificationContent, contentHandler: Swift.Optional&lt;(__C.UNNotificationContent) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "iZootoiOSSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "625"
-                  endingLineNumber = "625"
-                  offsetFromSymbolStart = "960">
-               </Location>
-               <Location
-                  uuid = "DF7D3C06-C64F-4801-BE54-413DB5A5E479 - 9854f9e2c5c640f9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static iZootoiOSSDK.iZooto.didReceiveNotificationExtensionRequest(bundleName: Swift.String, soundName: Swift.String, request: __C.UNNotificationRequest, bestAttemptContent: __C.UNMutableNotificationContent, contentHandler: Swift.Optional&lt;(__C.UNNotificationContent) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "iZootoiOSSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "661"
-                  endingLineNumber = "661"
-                  offsetFromSymbolStart = "560">
-               </Location>
-               <Location
-                  uuid = "DF7D3C06-C64F-4801-BE54-413DB5A5E479 - 9854f9e2c5c640d8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static iZootoiOSSDK.iZooto.didReceiveNotificationExtensionRequest(bundleName: Swift.String, soundName: Swift.String, request: __C.UNNotificationRequest, bestAttemptContent: __C.UNMutableNotificationContent, contentHandler: Swift.Optional&lt;(__C.UNNotificationContent) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "iZootoiOSSDK"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/amit_sdk_develoer/Documents/iOSSDK/sdk/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "660"
-                  endingLineNumber = "660"
-                  offsetFromSymbolStart = "412">
                </Location>
             </Locations>
          </BreakpointContent>
