@@ -605,9 +605,10 @@ public class iZooto : NSObject
 
                                 //To Check FallBack
                                 if let jsonDictionary = json as? [String:Any] {
+                                    
                                     if let value = jsonDictionary["msgCode"] as? String {
-                                        print(value)
                                         fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        print(value)
                                     }
                                     else
                                     {
@@ -627,77 +628,35 @@ public class iZooto : NSObject
                                             if (notificationData?.alert?.attachment_url!.contains("http:"))!
                                             {
                                                 notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
-                                                
                                             }
                                         }
                                     }
-                                    
-                                    autoreleasepool {
-                                        if let urlString = (notificationData?.alert?.attachment_url),
-                                           let fileUrl = URL(string: urlString ) {
-                                            
-                                            guard let imageData = NSData(contentsOf: fileUrl) else {
-                                                contentHandler!(bestAttemptContent)
-                                                return
-                                            }
-                                            let string = notificationData?.alert?.attachment_url
-                                            let url: URL? = URL(string: string!)
-                                            let urlExtension: String? = url?.pathExtension
-                                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                                print(AppConstant.IMAGE_ERROR)
-                                                contentHandler!(bestAttemptContent)
-                                                return
-                                            }
-                                            bestAttemptContent.attachments = [ attachment ]
-                                        }
-                                    }
-                                    
-                                    contentHandler!(bestAttemptContent)
-                                
-
-                                    }
+                                }
                                     
                                 else{
                                     if let jsonArray = json as? [[String:Any]] {
-
-                                        bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
-                                        bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
-                                        if notificationData?.url != "" {
-                                            notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                            
-                                        }
-                                        if notificationData?.alert?.attachment_url != "" {
-                                            notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                            if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                            {
-                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
+                                        if jsonArray[0]["msgCode"] is String {
+                                            fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                            return
+                                        }else{
+                                            bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
+                                            bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
+                                            if notificationData?.url != "" {
+                                                notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                                
                                             }
-                                            
+                                            if notificationData?.alert?.attachment_url != "" {
+                                                notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                                if (notificationData?.alert?.attachment_url!.contains(".webp"))!
+                                                {
+                                                    notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
+                                                }
+                                                
+                                            }
                                         }
                                         
-                                    } else if let jsonDictionary = json as? [String:Any] {
-
-                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
-                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
-                                        if notificationData?.url != "" {
-                                            notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                        }
-                                        if notificationData?.alert?.attachment_url != "" {
-                                            
-                                            notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                            if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                            {
-                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
-                                                
-                                            }
-                                            if (notificationData?.alert?.attachment_url!.contains("http:"))!
-                                            {
-                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
-                                                
-                                            }
-                                        }
                                     }
-                                    
+                                }
                                     autoreleasepool {
                                         if let urlString = (notificationData?.alert?.attachment_url),
                                            let fileUrl = URL(string: urlString ) {
@@ -719,12 +678,10 @@ public class iZooto : NSObject
                                     }
                                     
                                     contentHandler!(bestAttemptContent)
-                                }
+                              //  }
                             } catch let error {
-                                
                                 fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
-
-                                
+                                print("Error",error)
                             }
                         }
                         
@@ -863,6 +820,7 @@ public class iZooto : NSObject
             {
                 let array = sourceString.split(separator: ".")
                 let count = array.count
+                print(count)
                 if count == 2 {
                     if array.first != nil {
                         if let content = jsonData["\(array[0])"] as? [[String:Any]] {
@@ -910,18 +868,21 @@ public class iZooto : NSObject
                         }
                     }
                     else{
+                        print("Database")
 
                         let array = sourceString.split(separator: ".")
                         let response = jsonData["\(array[0])"] as! [String:Any]
                         let documents = response["\(array[1])"] as! [String:Any]
                        // let field = documents["\("doc")"] as! [[String:Any]]
                         let field = documents["doc"] as! [[String:Any]]
+                        print("field",field)
+                        print("Array",array[3])
+
                         if(!field.isEmpty)
                         {
                             let responseData = field[0]["\(array[3])"]as! [String:Any]
                             let response  = responseData["\(array[4])"]!
                             return response as! String
-                            
                         }
                     }
                 }

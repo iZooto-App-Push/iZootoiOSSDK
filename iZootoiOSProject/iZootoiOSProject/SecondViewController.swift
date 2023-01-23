@@ -10,7 +10,7 @@ import UIKit
 
 class SecondViewController: UIViewController {
     
-    var window = UIWindow(frame:UIScreen.main.bounds)
+ //   var window = UIWindow(frame:UIScreen.main.bounds)
     
       override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,13 +22,13 @@ class SecondViewController: UIViewController {
     
       @available(iOS 13.0, *)
       @IBAction func backButtonClicked(_ sender: UIButton) {
-        let window = UIApplication.shared.windows.first { $0.isKeyWindow }
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let yourVC = storyboard.instantiateViewController(identifier: "HomeViewController")
-        let navController = UINavigationController(rootViewController: yourVC)
-        navController.modalPresentationStyle = .fullScreen
-        window!.rootViewController = navController
-        window!.makeKeyAndVisible()
+//        let window = UIApplication.shared.windows.first { $0.isKeyWindow }
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let yourVC = storyboard.instantiateViewController(identifier: "HomeViewController")
+//        let navController = UINavigationController(rootViewController: yourVC)
+//        navController.modalPresentationStyle = .fullScreen
+//        window!.rootViewController = navController
+//        window!.makeKeyAndVisible()
       }
     }
 
