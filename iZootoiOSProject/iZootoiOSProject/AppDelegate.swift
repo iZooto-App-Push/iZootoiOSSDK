@@ -47,16 +47,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         UNUserNotificationCenter.current().delegate = self
-        iZooto.registerForPushNotifications()
+        iZooto.promptForPushNotifications()
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
+        promptForEnableAdvetismentID()
+        
         return true
     }
         
-        func requestPermission() {
+        func promptForEnableAdvetismentID() {
             if #available(iOS 14, *) {
                 ATTrackingManager.requestTrackingAuthorization { status in
                     switch status {
@@ -64,6 +66,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         // Tracking authorization dialog was shown
                         // and we are authorized
                         print("Authorized")
+                        let adID = ASIdentifierManager.shared().advertisingIdentifier;
+                        iZooto.getAdvertisementID(adid: "\(adID)" as NSString)
                         
                         
                         // Now that we are authorized we can get the IDFA

@@ -210,7 +210,29 @@ public class iZooto : NSObject
     }
     // register for pushNotification Setting
     
-    @objc public  static  func registerForPushNotifications() {
+    @objc static  func registerForPushNotifications() {
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+        }
+        if #available(iOS 10.0, *) {
+            
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+                (granted, error) in
+                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                guard granted else { return }
+                getNotificationSettings()
+                
+                
+            }
+            
+        }
+        
+    }
+    
+   // promptForPushNotifications
+    
+    @objc public  static  func promptForPushNotifications() {
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
         }
@@ -233,7 +255,7 @@ public class iZooto : NSObject
     
     
     // provision setting
-    @objc private static func   registerForPushNotificationsProvisional()
+    @objc private static func  registerForPushNotificationsProvisional()
     {
         
         if #available(iOS 12.0, *) {

@@ -31,7 +31,7 @@ public class RestAPI : NSObject
      static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
      static let SUBSCRIPTIONURL = "https://usub.izooto.com/sunsub";
      static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
-     static let  SDKVERSION = "2.0.9"
+     static let  SDKVERSION = "2.0.9.1"
 
     // call the subscription method
     
