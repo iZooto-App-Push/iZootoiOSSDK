@@ -4,20 +4,20 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-iZootoiOSProject-iZootoNotificationExtendsServices.xcscheme</key>
+		<key>Pods-iZootoiOSProject-iZootoNotificationExtendsServices.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>isShown</key>
-			<false/>
+			<true/>
 		</dict>
-		<key>Pods-iZootoiOSProject.xcscheme</key>
+		<key>Pods-iZootoiOSProject.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>isShown</key>
-			<false/>
+			<true/>
 		</dict>
-		<key>iZootoiOSSDK.xcscheme</key>
+		<key>iZootoiOSSDK.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>isShown</key>
-			<false/>
+			<true/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
