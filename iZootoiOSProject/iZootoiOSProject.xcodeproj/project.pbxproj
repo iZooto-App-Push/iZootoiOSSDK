@@ -317,6 +317,8 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
