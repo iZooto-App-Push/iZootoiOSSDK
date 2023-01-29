@@ -10,6 +10,7 @@
 		18FBFD0EAD66CA0F404AAF1C6A10FA21 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
 		1A99869FCFE1FA64299F50EB37D71EF7 /* iZooto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ED628679D9EBE31B3F223000FB4969 /* iZooto.swift */; };
 		1B027259545E16D92D78307370745365 /* PhoneConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07A2348E3E784D2B4BE0D754BAF1489 /* PhoneConfiguration.swift */; };
+		24775E368BC314BA964018DF6BF4CAB5 /* iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 20812220CA9438455EBA6997C8452F0A /* iZootoiOSSDK-dummy.m */; };
 		26A28158B7F418D6A2E66AAD240187D3 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */; };
 		2749C1CA107609451F81704D4F48B646 /* Pods-iZootoiOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B201C4F280ABED4678173B09385B7B0 /* Pods-iZootoiOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		292D81ABF792CA6172187F1B6D3CE2B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
@@ -49,16 +50,16 @@
 
 /* Begin PBXFileReference section */
 		06445526E96D172E0CEB407B7D3552E2 /* Pods-iZootoiOSProject-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iZootoiOSProject-frameworks.sh"; sourceTree = "<group>"; };
-		08593562ADB71AFF2F2C3943E72C6EC1 /* Pods-iZootoiOSProject */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-iZootoiOSProject"; path = Pods_iZootoiOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		08593562ADB71AFF2F2C3943E72C6EC1 /* Pods_iZootoiOSProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iZootoiOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C4D03A9015BC6E61D8251F048C88EBB /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig"; sourceTree = "<group>"; };
 		14A5AC2D6F3292340BD195CF76EC0C64 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist"; sourceTree = "<group>"; };
 		17BAE9F21037DF3C0DDB93B8C3268F0C /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-acknowledgements.markdown"; sourceTree = "<group>"; };
 		20812220CA9438455EBA6997C8452F0A /* iZootoiOSSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "iZootoiOSSDK-dummy.m"; sourceTree = "<group>"; };
-		25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = iZootoiOSSDK; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m"; sourceTree = "<group>"; };
 		3AC193045FEBEACCFB09A2029C78EFB9 /* Pods-iZootoiOSProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iZootoiOSProject.release.xcconfig"; sourceTree = "<group>"; };
 		41D3B78CBEACDF9E32B31DF111B87C7D /* AppConstant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
-		4565D72D237CA69635BCDE67C990106D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices"; path = Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4565D72D237CA69635BCDE67C990106D /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		733F3E8393611280B14E68B7D275777F /* Payload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		750A5D8F17FF3C975C3CB064A4A5652E /* iZootoiOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = iZootoiOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -288,9 +289,9 @@
 		FD6C73DDEE6B0B650DFE56C80D986C01 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK */,
-				08593562ADB71AFF2F2C3943E72C6EC1 /* Pods-iZootoiOSProject */,
-				4565D72D237CA69635BCDE67C990106D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */,
+				25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK.framework */,
+				08593562ADB71AFF2F2C3943E72C6EC1 /* Pods_iZootoiOSProject.framework */,
+				4565D72D237CA69635BCDE67C990106D /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -342,7 +343,7 @@
 			);
 			name = "Pods-iZootoiOSProject";
 			productName = Pods_iZootoiOSProject;
-			productReference = 08593562ADB71AFF2F2C3943E72C6EC1 /* Pods-iZootoiOSProject */;
+			productReference = 08593562ADB71AFF2F2C3943E72C6EC1 /* Pods_iZootoiOSProject.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		83D6E2A01DA2DAE5556AFEF3CC5DDCE0 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */ = {
@@ -361,7 +362,7 @@
 			);
 			name = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices";
 			productName = Pods_iZootoiOSProject_iZootoNotificationExtendsServices;
-			productReference = 4565D72D237CA69635BCDE67C990106D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */;
+			productReference = 4565D72D237CA69635BCDE67C990106D /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B937209D37B790611891BD8A8E7A54A9 /* iZootoiOSSDK */ = {
@@ -379,7 +380,7 @@
 			);
 			name = iZootoiOSSDK;
 			productName = iZootoiOSSDK;
-			productReference = 25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK */;
+			productReference = 25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -450,6 +451,7 @@
 			files = (
 				CD48079C400104C8FF5FBAF381922083 /* AppConstant.swift in Sources */,
 				1A99869FCFE1FA64299F50EB37D71EF7 /* iZooto.swift in Sources */,
+				24775E368BC314BA964018DF6BF4CAB5 /* iZootoiOSSDK-dummy.m in Sources */,
 				96B58A543E295823FB703134CF66B662 /* NetworkClient.swift in Sources */,
 				7DF9CCABB315CC112581BA48AAA45DC2 /* Payload.swift in Sources */,
 				1B027259545E16D92D78307370745365 /* PhoneConfiguration.swift in Sources */,
@@ -493,7 +495,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3AC193045FEBEACCFB09A2029C78EFB9 /* Pods-iZootoiOSProject.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -531,7 +533,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B20B387BB3616A65AD79A3F89274D473 /* Pods-iZootoiOSProject.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -568,6 +570,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8BC3B22317438C77CEDD564C9ABC0DBF /* iZootoiOSSDK.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -577,6 +581,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -604,7 +609,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A81A1DF39BB0619FE4CFB53D0B781F7A /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -641,6 +646,7 @@
 		903A0004D3E6651EFD5D2E16214D101B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)\n\n";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -703,6 +709,7 @@
 		B4EFE046ACF8F37157F6E322C7FCFC28 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)\n\n";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -770,6 +777,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C8B97D514DF6FC13EF086E22E2BFD30E /* iZootoiOSSDK.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -779,6 +788,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -805,7 +815,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0C4D03A9015BC6E61D8251F048C88EBB /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
