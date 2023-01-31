@@ -11,7 +11,7 @@
 		28248A9E26C5528300F5560A /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28248A9D26C5528300F5560A /* SecondViewController.swift */; };
 		28AEAE5C23ED7B8100A1BFD2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5B23ED7B8100A1BFD2 /* AppDelegate.swift */; };
 		28AEAE6023ED7B8100A1BFD2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE5F23ED7B8100A1BFD2 /* ViewController.swift */; };
-		6CB51D69297E980C00E541E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28AEAE6123ED7B8100A1BFD2 /* Main.storyboard */; };
+		6C35C9032988E183009026B8 /* Main.storyboard in Sources */ = {isa = PBXBuildFile; fileRef = 28AEAE6123ED7B8100A1BFD2 /* Main.storyboard */; };
 		6CB51D71297E989700E541E5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB51D70297E989700E541E5 /* NotificationService.swift */; };
 		6CB51D75297E989700E541E5 /* iZootoNotificationExtendsServices.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6CB51D6E297E989700E541E5 /* iZootoNotificationExtendsServices.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A4C7268E14EAE389CBB8F995 /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A26DC21A7C2514A64234302 /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */; };
@@ -249,7 +249,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CB51D69297E980C00E541E5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C35C9032988E183009026B8 /* Main.storyboard in Sources */,
 				28248A9E26C5528300F5560A /* SecondViewController.swift in Sources */,
 				28AEAE6023ED7B8100A1BFD2 /* ViewController.swift in Sources */,
 				28AEAE5C23ED7B8100A1BFD2 /* AppDelegate.swift in Sources */,

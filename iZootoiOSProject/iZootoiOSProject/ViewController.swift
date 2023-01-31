@@ -15,8 +15,8 @@ class ViewController: UIViewController {
    
     
     @IBAction func addProperties(_ sender: Any) {
-        //let data = ["language": "bangla"] as [String : Any]
-           //iZooto.addUserProperties(data: data)
+        let data = ["language": "arbi"] as [String : Any]
+           iZooto.addUserProperties(data: data)
       //  iZooto.registerForPushNotifications()
 
     }

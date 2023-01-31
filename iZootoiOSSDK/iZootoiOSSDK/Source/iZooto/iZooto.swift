@@ -230,7 +230,7 @@ public class iZooto : NSObject
         
     }
     
-   // promptForPushNotifications
+    // promptForPushNotifications
     
     @objc public  static  func promptForPushNotifications() {
         if #available(iOS 10.0, *) {
@@ -387,53 +387,53 @@ public class iZooto : NSObject
         }
     }
     // Check the notification enable or not from device setting
-        @objc  public static func checkNotificationEnable()
-        {
-            UNUserNotificationCenter.current().getNotificationSettings(){ (setttings) in
+    @objc  public static func checkNotificationEnable()
+    {
+        UNUserNotificationCenter.current().getNotificationSettings(){ (setttings) in
+            
+            switch setttings.authorizationStatus{
+            case .authorized:
                 
-                switch setttings.authorizationStatus{
-                case .authorized:
-                    
-                    print("enabled notification setting")
-                    
-                case .denied:
-                    
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
-                        alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
-                        alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
-                            
-                            
-                            DispatchQueue.main.async {
-                                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                                    return
-                                }
-                                
-                                if UIApplication.shared.canOpenURL(settingsUrl) {
-                                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                        print("Settings opened: \(success)") // Prints true
-                                    })
-                                }
-                            }
-                        }))
+                print("enabled notification setting")
+                
+            case .denied:
+                
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
                         
-                        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-                    }
+                        
+                        DispatchQueue.main.async {
+                            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                                return
+                            }
+                            
+                            if UIApplication.shared.canOpenURL(settingsUrl) {
+                                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                                    print("Settings opened: \(success)") // Prints true
+                                })
+                            }
+                        }
+                    }))
                     
-                case .notDetermined:
-                    
-                    print("")
-                    
-                case .provisional:
-                    
-                    print("something  went wrong here")
-                    
-                case .ephemeral:
-                    
-                    print("something  went wrong here")
+                    UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
                 }
+                
+            case .notDetermined:
+                
+                print("")
+                
+            case .provisional:
+                
+                print("something  went wrong here")
+                
+            case .ephemeral:
+                
+                print("something  went wrong here")
             }
         }
+    }
     
     // getAdvertisement ID
     @objc public static func  getAdvertisementID(adid : NSString)
@@ -622,9 +622,8 @@ public class iZooto : NSObject
                         }
                         if let data = data {
                             do {
-
                                 let json = try JSONSerialization.jsonObject(with: data)
-
+                                
                                 //To Check FallBack
                                 if let jsonDictionary = json as? [String:Any] {
                                     
@@ -654,7 +653,7 @@ public class iZooto : NSObject
                                         }
                                     }
                                 }
-                                    
+                                
                                 else{
                                     if let jsonArray = json as? [[String:Any]] {
                                         if jsonArray[0]["msgCode"] is String {
@@ -679,31 +678,30 @@ public class iZooto : NSObject
                                         
                                     }
                                 }
-                                    autoreleasepool {
-                                        if let urlString = (notificationData?.alert?.attachment_url),
-                                           let fileUrl = URL(string: urlString ) {
-                                            
-                                            guard let imageData = NSData(contentsOf: fileUrl) else {
-                                                contentHandler!(bestAttemptContent)
-                                                return
-                                            }
-                                            let string = notificationData?.alert?.attachment_url
-                                            let url: URL? = URL(string: string!)
-                                            let urlExtension: String? = url?.pathExtension
-                                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                                print(AppConstant.IMAGE_ERROR)
-                                                contentHandler!(bestAttemptContent)
-                                                return
-                                            }
-                                            bestAttemptContent.attachments = [ attachment ]
+                                autoreleasepool {
+                                    if let urlString = (notificationData?.alert?.attachment_url),
+                                       let fileUrl = URL(string: urlString ) {
+                                        
+                                        guard let imageData = NSData(contentsOf: fileUrl) else {
+                                            contentHandler!(bestAttemptContent)
+                                            return
                                         }
+                                        let string = notificationData?.alert?.attachment_url
+                                        let url: URL? = URL(string: string!)
+                                        let urlExtension: String? = url?.pathExtension
+                                        guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                            print(AppConstant.IMAGE_ERROR)
+                                            contentHandler!(bestAttemptContent)
+                                            return
+                                        }
+                                        bestAttemptContent.attachments = [ attachment ]
                                     }
-                                    
-                                    contentHandler!(bestAttemptContent)
-                              //  }
+                                }
+                                
+                                contentHandler!(bestAttemptContent)
+                                //  }
                             } catch let error {
                                 fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
-                                print("Error",error)
                             }
                         }
                         
@@ -747,8 +745,6 @@ public class iZooto : NSObject
                     
                     contentHandler!(bestAttemptContent)
                     
-                    
-                    
                 }
             }
             
@@ -787,48 +783,6 @@ public class iZooto : NSObject
         }
         return sourceString
     }
-    
-    // Check the notification enable or not from device setting
-  //  @objc  public static func checkNotificationEnable()
-//    {
-//        let isNotificationEnabled = UIApplication.shared.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
-//        if isNotificationEnabled!{
-//            print("enabled notification setting")
-//        }else{
-//
-//            let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
-//            alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
-//            alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
-//
-//
-//                DispatchQueue.main.async {
-//                    guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-//                        return
-//                    }
-//
-//                    if UIApplication.shared.canOpenURL(settingsUrl) {
-//                        if #available(iOS 10.0, *) {
-//                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-//                                print("Settings opened: \(success)") // Prints true
-//                            })
-//                        } else {
-//                            UIApplication.shared.openURL(settingsUrl as URL)
-//                        }
-//                    }
-//                }
-//            }))
-//
-//
-//
-//
-//            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-//
-//
-//
-//
-//        }
-//    }
-    
     // for jsonObject
     @objc private static func getParseValue(jsonData :[String : Any], sourceString : String) -> String
     {
@@ -842,7 +796,6 @@ public class iZooto : NSObject
             {
                 let array = sourceString.split(separator: ".")
                 let count = array.count
-                print(count)
                 if count == 2 {
                     if array.first != nil {
                         if let content = jsonData["\(array[0])"] as? [[String:Any]] {
@@ -890,16 +843,12 @@ public class iZooto : NSObject
                         }
                     }
                     else{
-                        print("Database")
-
                         let array = sourceString.split(separator: ".")
                         let response = jsonData["\(array[0])"] as! [String:Any]
                         let documents = response["\(array[1])"] as! [String:Any]
-                       // let field = documents["\("doc")"] as! [[String:Any]]
+                        // let field = documents["\("doc")"] as! [[String:Any]]
                         let field = documents["doc"] as! [[String:Any]]
-                        print("field",field)
-                        print("Array",array[3])
-
+                        
                         if(!field.isEmpty)
                         {
                             let responseData = field[0]["\(array[3])"]as! [String:Any]
@@ -924,9 +873,7 @@ public class iZooto : NSObject
         
         return sourceString
     }
-    
-    
-    
+
     // Parsing the jsonObject
     @objc  private static func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
@@ -1070,12 +1017,6 @@ public class iZooto : NSObject
     }
     
     
-    
-    
-    
-    
-    
-    
     // Handle the clicks the notification from Banner,Button
     @objc public static func notificationHandler(response : UNNotificationResponse)
     {
@@ -1155,14 +1096,8 @@ public class iZooto : NSObject
                                     }
                                 }
                                 
-                                
-                                
-                                
-                                
-                                
-                                
                             }
-                                
+                            
                             
                             else
                             {
@@ -1413,9 +1348,6 @@ public class iZooto : NSObject
             } //close else
         }
     }
-    
-    
-    
     @objc  static func clickTrack(notificationData : Payload,actionType : String)
     {
         if(notificationData.cfg != nil)
@@ -1432,10 +1364,6 @@ public class iZooto : NSObject
         }
         
     }
-    
-    
-    
-    
     
     // Handle the InApp/Webview
     @objc static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
@@ -1494,7 +1422,7 @@ public class iZooto : NSObject
         }
         
     }
-   
+    
     
     // handle the addtional data/deepLink Data
     @objc public static func handleClicks(response : UNNotificationResponse , actionType : String)
