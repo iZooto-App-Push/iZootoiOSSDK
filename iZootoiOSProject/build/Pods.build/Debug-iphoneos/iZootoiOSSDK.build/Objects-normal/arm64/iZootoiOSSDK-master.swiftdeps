@@ -1,0 +1,18 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "08f6062064642d029aa729a36a8e2dbb037f6abd7c8b106c8d9f09dea4e494c3"
+build_start_time: [1675335106, 359899044]
+build_end_time: [1675335111, 186028003]
+inputs:
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppConstant.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/NetworkClient.swift": [1669197707, 0]
+  ? "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/PhoneConfiguration.swift"
+  : [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/SDKLog.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/ServerRequest.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/ShareUserDefault.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/UserDefaults.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/Utils.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Payload/Payload.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/RestAPI/RestAPI.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/ViewController.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift": [1675334601, 683222532]

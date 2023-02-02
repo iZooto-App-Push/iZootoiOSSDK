@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import iZootoiOSSDK
 import AppTrackingTransparency
 import AdSupport
 import WebKit
-import iZootoiOSSDK
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,iZootoNotificationOpenDelegate ,iZootoNotificationReceiveDelegate
@@ -53,12 +54,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-        promptForEnableAdvetismentID()
-        
         return true
     }
         
-        func promptForEnableAdvetismentID() {
+        func requestPermission() {
             if #available(iOS 14, *) {
                 ATTrackingManager.requestTrackingAuthorization { status in
                     switch status {
@@ -66,8 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         // Tracking authorization dialog was shown
                         // and we are authorized
                         print("Authorized")
-                        let adID = ASIdentifierManager.shared().advertisingIdentifier;
-                        iZooto.getAdvertisementID(adid: "\(adID)" as NSString)
                         
                         
                         // Now that we are authorized we can get the IDFA

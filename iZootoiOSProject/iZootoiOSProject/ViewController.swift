@@ -15,8 +15,8 @@ class ViewController: UIViewController {
    
     
     @IBAction func addProperties(_ sender: Any) {
-        let data = ["language": "arbi"] as [String : Any]
-           iZooto.addUserProperties(data: data)
+        //let data = ["language": "bangla"] as [String : Any]
+           //iZooto.addUserProperties(data: data)
       //  iZooto.registerForPushNotifications()
 
     }
@@ -51,8 +51,8 @@ class ViewController: UIViewController {
         print("clicks")
         
         if #available(iOS 13.0, *) {
-          //  let svc = (storyboard?.instantiateViewController(identifier: "green_vc")) as! SecondViewController
-           // present(svc, animated: true)
+            let svc = (storyboard?.instantiateViewController(identifier: "green_vc")) as! SecondViewController
+            present(svc, animated: true)
 
         } else {
             // Fallback on earlier versions
