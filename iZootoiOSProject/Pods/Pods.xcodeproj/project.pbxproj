@@ -10,7 +10,6 @@
 		18FBFD0EAD66CA0F404AAF1C6A10FA21 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
 		1A99869FCFE1FA64299F50EB37D71EF7 /* iZooto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ED628679D9EBE31B3F223000FB4969 /* iZooto.swift */; };
 		1B027259545E16D92D78307370745365 /* PhoneConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07A2348E3E784D2B4BE0D754BAF1489 /* PhoneConfiguration.swift */; };
-		24775E368BC314BA964018DF6BF4CAB5 /* iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 20812220CA9438455EBA6997C8452F0A /* iZootoiOSSDK-dummy.m */; };
 		26A28158B7F418D6A2E66AAD240187D3 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */; };
 		2749C1CA107609451F81704D4F48B646 /* Pods-iZootoiOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B201C4F280ABED4678173B09385B7B0 /* Pods-iZootoiOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		292D81ABF792CA6172187F1B6D3CE2B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
@@ -451,7 +450,6 @@
 			files = (
 				CD48079C400104C8FF5FBAF381922083 /* AppConstant.swift in Sources */,
 				1A99869FCFE1FA64299F50EB37D71EF7 /* iZooto.swift in Sources */,
-				24775E368BC314BA964018DF6BF4CAB5 /* iZootoiOSSDK-dummy.m in Sources */,
 				96B58A543E295823FB703134CF66B662 /* NetworkClient.swift in Sources */,
 				7DF9CCABB315CC112581BA48AAA45DC2 /* Payload.swift in Sources */,
 				1B027259545E16D92D78307370745365 /* PhoneConfiguration.swift in Sources */,
