@@ -26,13 +26,15 @@ public class iZooto : NSObject
     private  static var mizooto_id = Int()
     private static var rid : String!
     private static var cid : String!
+    private static var myIdLnArray: [[String:Any]] = []
+    private static var myRCArray: [[String:Any]] = []
     private static var tokenData : String!
     private let application : UIApplication
-    @available(iOS 10.0, *)
+    @available(iOS 11.0, *)
     private static var firstAction : UNNotificationAction!
-    @available(iOS 10.0, *)
+    @available(iOS 11.0, *)
     private static var secondAction : UNNotificationAction!
-    @available(iOS 10.0, *)
+    @available(iOS 11.0, *)
     private static var category : UNNotificationCategory!
     private static var type : String!
     //  public static var iZootoActionDelegate : iZootoNotificationActionDelegate?
@@ -56,19 +58,35 @@ public class iZooto : NSObject
     private static var keySettingDetails = Dictionary<String,Any>()
     @objc  public static var notificationReceivedDelegate : iZootoNotificationReceiveDelegate?
     @objc   public static var notificationOpenDelegate : iZootoNotificationOpenDelegate?
+    
+    @objc private static var finalData = [String: Any]()
+    @objc private static let tempData = NSMutableDictionary()
+    @objc private static var succ = "false"
+    @objc private static var alertData = [String: Any]()
+    @objc private static var gData = [String: Any]()
+    @objc private static var anData: [[String: Any]] = []
+    
+    
+    @objc private static var cpcFinalValue = ""
+    @objc private static var cpcValue = ""
+    @objc private static var cprValue = ""
+    @objc private static var finalCPCValue = "0.00000"
+    @objc private static var count = 0
+    @objc private static var fuCount = 0
+    
+    
+    
+    @objc private static var finalDataValue = NSMutableDictionary()
+    @objc private static var servedData = NSMutableDictionary()
+    @objc private static var bidsData = [NSMutableDictionary()]
+    //to store category details
+    private static var categoryArray: [[String:Any]] = []
+    
     @objc public init(application : UIApplication)
     {
         self.application = application
         
     }
-    
-    @objc public static func initWithLaunchOptions(launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
-    {
-        
-        
-    }
-    
-    
     @objc public static func setAppId(izooto_app_id:String)
     {
         
@@ -77,7 +95,7 @@ public class iZooto : NSObject
             
         }
         else{
-            print(AppConstant.IZ_TAG,AppConstant.REGISTERED_ERROR_MESSAGE)
+            debugPrint(AppConstant.IZ_TAG,AppConstant.REGISTERED_ERROR_MESSAGE)
             return
         }
         
@@ -94,11 +112,11 @@ public class iZooto : NSObject
                 mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
             }
             else{
-                print(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
+                debugPrint(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
             }
         }
         registerForPushNotifications() // check for prompt
-        if #available(iOS 10.0, *) {
+        if #available(iOS 11.0, *) {
             UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
         }
         
@@ -134,7 +152,7 @@ public class iZooto : NSObject
                 mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
             }
             else{
-                print(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
+                debugPrint(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
             }
         }
         
@@ -144,7 +162,7 @@ public class iZooto : NSObject
             if nativeWebviewKey{
                 sharedUserDefault?.set(keySettingDetails[AppConstant.iZ_KEY_WEBVIEW]!, forKey:AppConstant.ISWEBVIEW)
             } else {
-                print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_WEBVIEW_ERROR)
+                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_WEBVIEW_ERROR)
             }
             let provisionalKey = keySettingDetails[AppConstant.iZ_KEY_PROVISIONAL] != nil
             if(provisionalKey)
@@ -160,7 +178,7 @@ public class iZooto : NSObject
             }
             else
             {
-                print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_PROVISIONAL_NOT_FOUND)
+                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_PROVISIONAL_NOT_FOUND)
                 
             }
             let autoPromptkey = keySettingDetails[AppConstant.iZ_KEY_AUTO_PROMPT] != nil
@@ -178,11 +196,11 @@ public class iZooto : NSObject
                 }
             }
             else {
-                print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND)
+                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND)
                 RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND, className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_KEY_INITIALISE, pid: 0, token: "\(izooto_uuid ?? "")", rid: "0", cid: "0")
             }
             
-            if #available(iOS 10.0, *) {
+            if #available(iOS 11.0, *) {
                 UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
             }
         }
@@ -191,7 +209,7 @@ public class iZooto : NSObject
             registerForPushNotifications() // check for prompt
             
             
-            if #available(iOS 10.0, *) {
+            if #available(iOS 11.0, *) {
                 UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
             }
             
@@ -207,62 +225,38 @@ public class iZooto : NSObject
         {
             addEvent(eventName: eventName!, data: eventData!)
         }
+        
+        
     }
     // register for pushNotification Setting
     
-    @objc static  func registerForPushNotifications() {
-        if #available(iOS 10.0, *) {
+    @objc public  static  func registerForPushNotifications() {
+        if #available(iOS 11.0, *) {
             UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
         }
-        if #available(iOS 10.0, *) {
+        if #available(iOS 11.0, *) {
             
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                 (granted, error) in
                 UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
                 guard granted else { return }
                 getNotificationSettings()
-                
-                
             }
-            
         }
-        
-    }
-    
-    // promptForPushNotifications
-    
-    @objc public  static  func promptForPushNotifications() {
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-        }
-        if #available(iOS 10.0, *) {
-            
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-                (granted, error) in
-                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
-                guard granted else { return }
-                getNotificationSettings()
-                
-                
-            }
-            
-        }
-        
     }
     
     
     
     // provision setting
-    @objc private static func  registerForPushNotificationsProvisional()
+    @objc private static func   registerForPushNotificationsProvisional()
     {
         
         if #available(iOS 12.0, *) {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge,.provisional]) {
                 (granted, error) in
                 // UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
                 guard granted else { return }
                 getNotificationSettingsProvisional()
             }
@@ -272,7 +266,7 @@ public class iZooto : NSObject
     //  Handle notification prompt setting
     
     @objc  private static func getNotificationSettings() {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 11.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 
                 guard settings.authorizationStatus == .authorized else { return }
@@ -280,14 +274,14 @@ public class iZooto : NSObject
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
-                
             }
         }
     }
-    // Handle provisional setting
     
+    
+    // Handle provisional setting
     @objc  private static func getNotificationSettingsProvisional() {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 11.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 if #available(iOS 12.0, *) {
                     guard settings.authorizationStatus == .provisional else { return }
@@ -295,10 +289,10 @@ public class iZooto : NSObject
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
-                
             }
         }
     }
+    
     
     // Capture the token from APNS
     
@@ -320,7 +314,7 @@ public class iZooto : NSObject
             guard let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
             else
             {return}
-            print(AppConstant.DEVICE_TOKEN," \(token)")
+            debugPrint(AppConstant.DEVICE_TOKEN," \(token)")
             if(formattedDate != (sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_LAST_VISIT)))
             {
                 RestAPI.lastVisit(userid: mizooto_id, token:token)
@@ -337,7 +331,6 @@ public class iZooto : NSObject
                 RestAPI.registerToken(token: token, izootoid: mizooto_id)
                 
             }
-            
         }
         else
         {
@@ -361,8 +354,6 @@ public class iZooto : NSObject
                 RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.IZ_TAG, methodName: "GetToken", pid: mizooto_id, token: token, rid: "", cid: "")
             }
         }
-        
-        
     }
     
     // handle the badge count
@@ -375,7 +366,6 @@ public class iZooto : NSObject
         if(badgeNumber == 1)
         {
             sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
-            
         }
         else
         {
@@ -383,54 +373,6 @@ public class iZooto : NSObject
                 userDefaults.set(0, forKey: "Badge")
                 userDefaults.synchronize()
                 
-            }
-        }
-    }
-    // Check the notification enable or not from device setting
-    @objc  public static func checkNotificationEnable()
-    {
-        UNUserNotificationCenter.current().getNotificationSettings(){ (setttings) in
-            
-            switch setttings.authorizationStatus{
-            case .authorized:
-                
-                print("enabled notification setting")
-                
-            case .denied:
-                
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
-                    alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
-                        
-                        
-                        DispatchQueue.main.async {
-                            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                                return
-                            }
-                            
-                            if UIApplication.shared.canOpenURL(settingsUrl) {
-                                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                    print("Settings opened: \(success)") // Prints true
-                                })
-                            }
-                        }
-                    }))
-                    
-                    UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-                }
-                
-            case .notDetermined:
-                
-                print("")
-                
-            case .provisional:
-                
-                print("something  went wrong here")
-                
-            case .ephemeral:
-                
-                print("something  went wrong here")
             }
         }
     }
@@ -447,7 +389,6 @@ public class iZooto : NSObject
             {
                 RestAPI.registerToken(token: token, izootoid: userID!, adid: adid)
             }
-            
         }
         else{
             sharedUserDefault?.set(adid, forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
@@ -455,9 +396,9 @@ public class iZooto : NSObject
         
     }
     
-    // Fallback Url Call
-    @available(iOS 10.0, *)
-    @objc private static func fallBackAdsApi(bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
+    // Ad's Fallback Url Call
+    @available(iOS 11.0, *)
+    @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
         
         let str = RestAPI.FALLBACK_URL
         let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
@@ -468,9 +409,15 @@ public class iZooto : NSObject
                         let json = try JSONSerialization.jsonObject(with: data)
                         if let jsonDictionary = json as? [String:Any] {
                             let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
-                            bestAttemptContent.title = jsonDictionary["t"] as! String
+                            bestAttemptContent.title = jsonDictionary[AppConstant.iZ_T_KEY] as! String
                             bestAttemptContent.body = jsonDictionary["m"] as! String
                             if notificationData?.url! != "" {
+                                
+                                let groupName = "group."+bundleName+".iZooto"
+                                if let userDefaults = UserDefaults(suiteName: groupName) {
+                                    userDefaults.set(notificationData?.url!, forKey: "fallBackLandingUrl")
+                                }
+                                
                                 notificationData?.url = jsonDictionary["bi"] as? String
                                 if (notificationData?.url!.contains(".webp"))!
                                 {
@@ -480,7 +427,13 @@ public class iZooto : NSObject
                                 if (notificationData?.url!.contains("http:"))!
                                 {
                                     notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: "http:", with: "https:"))!
-                                    
+                                }
+                            }
+                            if fallCategory != ""{
+                                storeCategories(notificationData: notificationData!, category: fallCategory)
+                                if notificationData!.act1name != "" && notificationData!.act1name != nil{
+                                    debugPrint("Ankey button called")
+                                    addCTAButtons()
                                 }
                             }
                             
@@ -496,7 +449,7 @@ public class iZooto : NSObject
                                     let url: URL? = URL(string: string!)
                                     let urlExtension: String? = url?.pathExtension
                                     guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                        print(AppConstant.IMAGE_ERROR)
+                                        debugPrint(AppConstant.IMAGE_ERROR)
                                         contentHandler!(bestAttemptContent)
                                         return
                                     }
@@ -505,10 +458,12 @@ public class iZooto : NSObject
                             }
                             
                         }
+                        //   if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
                         contentHandler!(bestAttemptContent)
+                        //   }
                         
                     } catch let error {
-                        print("Error",error)
+                        debugPrint("Error",error)
                     }
                 }
                 
@@ -517,171 +472,753 @@ public class iZooto : NSObject
     }
     
     
+    @objc private static func payLoadDataChange(payload: [String:Any],bundleName: String, completion: @escaping ([String:Any]) -> Void) {
+        
+        if let jsonDictionary = payload as? [String:Any] {
+            if let aps = jsonDictionary["aps"] as? NSDictionary{
+                if let category = aps.value(forKey: "category"){
+                    tempData.setValue(category, forKey: "category")
+                }
+                
+                if let alert = aps.value(forKey: AppConstant.iZ_ALERTKEY) {
+                    alertData = alert as! [String : Any]
+                    tempData.setValue(alertData, forKey: AppConstant.iZ_ALERTKEY)
+                    tempData.setValue(1, forKey: "mutable-content")
+                    tempData.setValue(0, forKey: "content_available")
+                }
+                if let g = aps.value(forKey: AppConstant.iZ_G_KEY), let gt = aps.value(forKey: AppConstant.iZ_G_KEY) as? NSDictionary {
+                    gData = gt as! [String : Any]
+                    tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
+                    
+                    let groupName = "group."+bundleName+".iZooto"
+                    if let userDefaults = UserDefaults(suiteName: groupName) {
+                        if let pid = userDefaults.string(forKey: "PID"){
+                            finalDataValue.setValue(pid, forKey: "pid")
+                        }else{
+                            finalDataValue.setValue("0", forKey: "pid")
+                        }
+                    }
+                    
+                    finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_IDKEY))! as! String, forKey: "pid")
+                    finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_RKEY))! as! String, forKey: "rid")
+                    finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_TPKEY))! as! String, forKey: "type")
+                    finalDataValue.setValue("0", forKey: "result")
+                    finalDataValue.setValue(RestAPI.SDKVERSION, forKey: "av")
+                    
+                    //tp = 4
+                    if (gt.value(forKey: AppConstant.iZ_TPKEY))! as! String == "4" {
+                        if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                            let startDate = Date()
+                            bidsData.removeAll()
+                            
+                            if let dict = anKey[0] as? [String : Any] {
+                                
+                                DispatchQueue.main.async {
+                                    
+                                    let fuValue = dict["fu"] as? String ?? ""
+                                    cpcValue = dict["cpc"] as? String ?? ""
+                                    cprValue = dict["ctr"] as? String ?? ""
+                                    let cpmValue = dict["cpm"] as? String ?? ""
+                                    if cpcValue != ""{
+                                        cpcFinalValue = cpcValue
+                                    }else{
+                                        cpcFinalValue = cpmValue
+                                    }
+                                    
+                                    let izUrlString = (fuValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                                    
+                                    let session: URLSession = {
+                                        let configuration = URLSessionConfiguration.default
+                                        configuration.timeoutIntervalForRequest = 2
+                                        return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+                                    }()
+                                    
+                                    if let url = URL(string: izUrlString) {
+                                        session.dataTask(with: url) { data, response, error in
+                                            if(error != nil)
+                                            {
+                                                let t = Date().timeIntervalSince(startDate)
+                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t] as NSMutableDictionary
+                                                bidsData.append(servedData)
+                                                
+                                                anData = [anKey[0] as! [String : Any]]
+                                                tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                                finalData["aps"] = tempData
+                                                //Bids & Served
+                                                finalDataValue.setValue(t, forKey: "ta")
+                                                finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
+                                                finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
+                                                
+                                                storeBids(bundleName: bundleName, finalData: finalDataValue)
+                                                
+                                                completion(finalData)
+                                            }
+                                            if let data = data {
+                                                do {
+                                                    
+                                                    let json = try JSONSerialization.jsonObject(with: data)
+                                                    
+                                                    //To Check FallBack
+                                                    if let jsonDictionary = json as? [String:Any] {
+                                                        if let value = jsonDictionary["msgCode"] as? String {
+                                                            let t = Date().timeIntervalSince(startDate)
+                                                            bidsData.append([AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                        }else{
+                                                            if let jsonDictionary = json as? [String:Any] {
+                                                                if cpmValue != ""{
+                                                                    let cpc =  "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                                                    
+                                                                    finalCPCValue = String(Double(cpc)!/(10  * Double(cprValue)!))
+                                                                }else{
+                                                                    finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                                                }
+                                                                
+                                                                let t = Date().timeIntervalSince(startDate)
+                                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t]
+                                                                finalDataValue.setValue("1", forKey: "result")
+                                                                bidsData.append(servedData)
+                                                            }
+                                                        }
+                                                    }else{
+                                                        if let jsonArray = json as? [[String:Any]] {
+                                                            if jsonArray[0]["msgCode"] is String{
+                                                                anData = [anKey[0] as! [String : Any]]
+                                                                let t = Date().timeIntervalSince(startDate)
+                                                                bidsData.append([AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                            }else{
+                                                                
+                                                                if cpmValue != ""{
+                                                                    let cpc =  "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                                                    
+                                                                    finalCPCValue = String(Double(cpc)!/(10  * Double(cprValue)!))
+                                                                }else{
+                                                                    finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
+                                                                }
+                                                                
+                                                                finalDataValue.setValue("1", forKey: "result")
+                                                                let t = Date().timeIntervalSince(startDate)
+                                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t]
+                                                                bidsData.append(servedData)
+                                                            }
+                                                        }
+                                                    }
+                                                    anData = [anKey[0] as! [String : Any]]
+                                                    tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                                    finalData["aps"] = tempData
+                                                    //Bids & Served
+                                                    let ta = Date().timeIntervalSince(startDate)
+                                                    finalDataValue.setValue(ta, forKey: "ta")
+                                                    finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
+                                                    finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
+                                                    
+                                                    storeBids(bundleName: bundleName, finalData: finalDataValue)
+                                                    
+                                                    completion(finalData)
+                                                    
+                                                } catch let error {
+                                                    let t = Date().timeIntervalSince(startDate)
+                                                    servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t] as NSMutableDictionary
+                                                    bidsData.append(servedData)
+                                                    
+                                                    anData = [anKey[0] as! [String : Any]]
+                                                    tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                                    finalData["aps"] = tempData
+                                                    //Bids & Served
+                                                    finalDataValue.setValue(t, forKey: "ta")
+                                                    finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
+                                                    finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
+                                                    
+                                                    storeBids(bundleName: bundleName, finalData: finalDataValue)
+                                                    
+                                                    completion(finalData)
+                                                }
+                                            }
+                                        }.resume()
+                                    }else{
+                                        debugPrint("Not Found")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    //tp = 5
+                    else if (gt.value(forKey: AppConstant.iZ_TPKEY))! as! String == "5" {
+                        if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                            self.succ = "false"
+                            
+                            bidsData.removeAll()
+                            var fuDataArray = [String]()
+                            for (index,valueDict) in anKey.enumerated()   {
+                                
+                                if let dict = valueDict as? [String: Any] {
+                                    debugPrint("", index)
+                                    
+                                    let fuValue = dict["fu"] as? String ?? ""
+                                    //hit fu
+                                    let izUrlString = (fuValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                                    fuDataArray.append(izUrlString)
+                                }
+                            }
+                            self.fuCount = 0
+                            callFetchUrlForTp5(fuArray: fuDataArray, urlString: fuDataArray[0], anKey: anKey, bundleName: bundleName, completion: completion)
+                        }
+                    }
+                    
+                    //tp = 6
+                    else {
+                        
+                        if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                            
+                            let startDate = Date()
+                            bidsData.removeAll()
+                            
+                            var finalArray: [[String:Any]] = []
+                            var servedArray: [[String:Any]] = []
+                            let myGroup = DispatchGroup()
+                            
+                            for (index,valueDict) in anKey.enumerated()   {
+                                if var dict = valueDict as? [String: Any] {
+                                    
+                                    myGroup.enter()
+                                    
+                                    //hit fu
+                                    DispatchQueue.main.async {
+                                        
+                                        var cpcFinalValue = ""
+                                        var cpcValue = ""
+                                        var ctrValue = ""
+                                        var cpmValue = ""
+                                        let fuValue = dict["fu"] as? String ?? ""
+                                        cpcValue = dict["cpc"] as? String ?? ""
+                                        ctrValue = dict["ctr"] as? String ?? ""
+                                        cpmValue = dict["cpm"] as? String ?? ""
+                                        if cpcValue != ""{
+                                            cpcFinalValue = cpcValue
+                                        }else{
+                                            cpcFinalValue = cpmValue
+                                        }
+                                        let session: URLSession = {
+                                            let configuration = URLSessionConfiguration.default
+                                            configuration.timeoutIntervalForRequest = 2
+                                            return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+                                        }()
+                                        
+                                        let izUrlString = (fuValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                                        
+                                        if let url = URL(string: izUrlString) {
+                                            session.dataTask(with: url) { data, response, error in
+                                                if(error != nil)
+                                                {
+                                                    anData = [anKey[index] as! [String : Any]]
+                                                    let t = Date().timeIntervalSince(startDate)
+                                                    bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                    //debugPrint("TOP ERROR")
+                                                    dict.updateValue(("0.00"), forKey: "cpcc")
+                                                    finalArray.append(dict)
+                                                }
+                                                if let data = data {
+                                                    do {
+                                                        let json = try JSONSerialization.jsonObject(with: data)
+                                                        //To Check FallBack
+                                                        if let jsonDictionary = json as? [String:Any] {
+                                                            if let value = jsonDictionary["msgCode"] as? String {
+                                                                debugPrint(value)
+                                                                let t = Date().timeIntervalSince(startDate)
+                                                                bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                                // debugPrint("jsonDictionary Error", value)
+                                                            }else{
+                                                                if let jsonDictionary = json as? [String:Any] {
+                                                                    
+                                                                    if cpmValue != ""{
+                                                                        let cpc =  "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                                                        
+                                                                        finalCPCValue = String(Double(cpc)!/(10  * Double(ctrValue)!))
+                                                                    }else{
+                                                                        finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                                                    }
+                                                                    
+                                                                    //debugPrint("DictCPC",finalCPCValue)
+                                                                    finalDataValue.setValue("\(index + 1)", forKey: "result")
+                                                                    let t = Date().timeIntervalSince(startDate)
+                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: finalCPCValue, AppConstant.iZ_T_KEY:t]
+                                                                    servedArray.append(servedData as! [String : Any])
+                                                                    bidsData.append(servedData)
+                                                                }
+                                                            }
+                                                        }else{
+                                                            if let jsonArray = json as? [[String:Any]] {
+                                                                
+                                                                if jsonArray[0]["msgCode"] is String{
+                                                                    let t = Date().timeIntervalSince(startDate)
+                                                                    bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                                    // debugPrint("Array error")
+                                                                }else{
+                                                                    
+                                                                    if cpmValue != ""{
+                                                                        let cpc =  "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                                                        
+                                                                        finalCPCValue = String(Double(cpc)!/(10  * Double(ctrValue)!))
+                                                                        //   print("CPC",finalCPCValue )
+                                                                    }else{
+                                                                        finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
+                                                                    }
+                                                                    
+                                                                    
+                                                                    // debugPrint("ArrayCPC",finalCPCValue)
+                                                                    finalDataValue.setValue("\(index + 1)", forKey: "result")
+                                                                    let t = Date().timeIntervalSince(startDate)
+                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: finalCPCValue, AppConstant.iZ_T_KEY:t]
+                                                                    servedArray.append(servedData as! [String : Any])
+                                                                    bidsData.append(servedData)
+                                                                }
+                                                            }
+                                                        }
+                                                        dict.updateValue((finalCPCValue), forKey: "cpcc")
+                                                        finalArray.append(dict)
+                                                    } catch let error {
+                                                        debugPrint(" Error",error)
+                                                        let t = Date().timeIntervalSince(startDate)
+                                                        bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                        dict.updateValue(("0.00"), forKey: "cpcc")
+                                                        finalArray.append(dict)
+                                                    }
+                                                }
+                                                if finalArray.count == (anKey as AnyObject).count{
+                                                    
+                                                    let sortedArray = finalArray.sorted { $0["cpcc"] as! String > $1["cpcc"] as! String}
+                                                    
+                                                    let cpccSortedDict = sortedArray.first! as? NSDictionary
+                                                    // debugPrint("Sorted: \(cpccSortedDict!.value(forKey: "cpcc") as! String)")
+                                                    
+                                                    anData = [sortedArray.first!] as! [[String: Any]]
+                                                    
+                                                    tempData.setValue(alertData, forKey: AppConstant.iZ_ALERTKEY)
+                                                    tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                                    tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
+                                                    
+                                                    tempData.setValue(1, forKey: "mutable-content")
+                                                    tempData.setValue(0, forKey: "content_available")
+                                                    
+                                                    finalData["aps"] = tempData
+                                                    
+                                                    //Bids & Served
+                                                    let ta = Date().timeIntervalSince(startDate)
+                                                    finalDataValue.setValue(ta, forKey: "ta")
+                                                    
+                                                    // To save final served as per cpc
+                                                    if servedArray.count != 0{
+                                                        for data in servedArray{
+                                                            let dict = data as NSDictionary
+                                                            let cpc = dict.value(forKey: AppConstant.iZ_B_KEY) as? String
+                                                            let result = dict.value(forKey: AppConstant.iZ_A_KEY) as? Int
+                                                            if cpc == cpccSortedDict!.value(forKey: "cpcc") as? String{
+                                                                finalDataValue.setValue(dict, forKey: AppConstant.iZ_SERVEDKEY)
+                                                                finalDataValue.setValue(result, forKey: "result")
+                                                            }
+                                                        }
+                                                    }else{
+                                                        let dict = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY: "0.137836933135"]
+                                                        finalDataValue.setValue(dict, forKey: AppConstant.iZ_SERVEDKEY)
+                                                        finalDataValue.setValue("0", forKey: "result")
+                                                    }
+                                                    //        finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
+                                                    
+                                                    finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
+                                                    // debugPrint("Type 6", finalDataValue)
+                                                    storeBids(bundleName: bundleName, finalData: finalDataValue)
+                                                    
+                                                    completion(finalData)
+                                                }
+                                            }.resume()
+                                        }else{
+                                            debugPrint("Not Found")
+                                        }
+                                    }
+                                    myGroup.leave()
+                                }
+                            }
+                            myGroup.notify(queue: .main) {
+                                debugPrint("F")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc private static func callFetchUrlForTp5(fuArray: [String], urlString: String, anKey: NSArray, bundleName: String, completion: @escaping ([String : Any]) -> Void){
+        
+        let startDate = Date()
+        let fu = fuArray[fuCount]
+        let dict = anKey[fuCount] as? NSDictionary
+        let cpmValue = dict!["cpm"] as? String ?? ""
+        let ctrValue = dict!["ctr"] as? String ?? ""
+        let cpcValue = dict!["cpc"] as? String ?? ""
+        
+        if cpcValue != ""{
+            cpcFinalValue = cpcValue
+        }else{
+            cpcFinalValue = cpmValue
+        }
+        
+        let session: URLSession = {
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = 2
+            return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+        }()
+        
+        if let url = URL(string: fu) {
+            session.dataTask(with: url) { data, response, error in
+                
+                if(error != nil)
+                {
+                    let t = Date().timeIntervalSince(startDate)
+                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                    
+                    if succ != "done"{
+                        fuCount += 1
+                        if fuArray.count > fuCount {
+                            callFetchUrlForTp5(fuArray: fuArray, urlString: fuArray[fuCount],anKey: anKey, bundleName: bundleName, completion: completion)
+                        }
+                    }
+                    
+                    if fuCount == anKey.count{
+                        anData = [anKey[fuCount - 1] as! [String : Any]]
+                        tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                        finalData["aps"] = tempData
+                        
+                        servedData = [AppConstant.iZ_A_KEY: fuCount, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t]
+                        finalDataValue.setValue(t, forKey: "ta")
+                        finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
+                        finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
+                        storeBids(bundleName: bundleName, finalData: finalDataValue)
+                        completion(finalData)
+                    }
+                }
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        //To Check FallBack
+                        if let jsonDictionary = json as? [String:Any] {
+                            if let value = jsonDictionary["msgCode"] as? String {
+                                
+                                let t = Date().timeIntervalSince(startDate)
+                                bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                
+                                if fuCount == anKey.count{
+                                    servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t]
+                                    anData = [anKey[fuCount - 1] as! [String : Any]]
+                                    tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                    finalData["aps"] = tempData
+                                    
+                                    completion(finalData)
+                                }
+                            }else{
+                                if let jsonDictionary = json as? [String:Any] {
+                                    
+                                    if cpmValue != ""{
+                                        let cpc =  "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                        
+                                        finalCPCValue = String(Double(cpc)!/(10  * Double(ctrValue)!))
+                                    }else{
+                                        finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
+                                    }
+                                    
+                                    let t = Date().timeIntervalSince(startDate)
+                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY:finalCPCValue, AppConstant.iZ_T_KEY:t])
+                                    
+                                    anData = [anKey[fuCount] as! [String : Any]]
+                                    tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                    finalData["aps"] = tempData
+                                    
+                                    if succ != "done"{
+                                        succ = "true"
+                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: finalCPCValue, AppConstant.iZ_T_KEY:t]
+                                        finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
+                                    }
+                                }
+                            }
+                        }else{
+                            if let jsonArray = json as? [[String:Any]] {
+                                if jsonArray[0]["msgCode"] is String{
+                                    let t = Date().timeIntervalSince(startDate)
+                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                    
+                                    if fuCount == anKey.count{
+                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t]
+                                        anData = [anKey[fuCount - 1] as! [String : Any]]
+                                        tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                        finalData["aps"] = tempData
+                                        completion(finalData)
+                                    }
+                                }else{
+                                    if cpmValue != ""{
+                                        let cpc =  "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
+                                        
+                                        finalCPCValue = String(Double(cpc)!/(10  * Double(ctrValue)!))
+                                    }else{
+                                        finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
+                                    }
+                                    
+                                    let t = Date().timeIntervalSince(startDate)
+                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t])
+                                    
+                                    anData = [anKey[fuCount] as! [String : Any]]
+                                    tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                    finalData["aps"] = tempData
+                                    if succ != "done"{
+                                        succ = "true"
+                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t]
+                                        finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
+                                    }
+                                }
+                            }
+                        }
+                    } catch let error {
+                        if !error.localizedDescription.isEmpty{
+                            let t = Date().timeIntervalSince(startDate)
+                            bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                            if succ != "done"{
+                                fuCount += 1
+                                if fuArray.count > fuCount {
+                                    callFetchUrlForTp5(fuArray: fuArray, urlString: fuArray[fuCount],anKey: anKey, bundleName: bundleName, completion: completion)
+                                }
+                            }
+                            if fuCount == anKey.count{
+                                anData = [anKey[fuCount - 1] as! [String : Any]]
+                                tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                finalData["aps"] = tempData
+                                
+                                completion(finalData)
+                                
+                            }
+                        }
+                    }
+                    
+                    if succ == "true"{
+                        succ = "done"
+                        //Bids & Served
+                        let ta = Date().timeIntervalSince(startDate)
+                        finalDataValue.setValue(ta, forKey: "ta")
+                        finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
+                        finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
+                        //  debugPrint("Type 5", finalDataValue)
+                        
+                        storeBids(bundleName: bundleName, finalData: finalDataValue)
+                        
+                        completion(finalData)
+                        return
+                    }
+                }
+            }.resume()
+            
+        }
+    }
+    
+    
     // Handle the payload and show the notification
-    @available(iOS 10.0, *)
+    @available(iOS 11.0, *)
     @objc public static func didReceiveNotificationExtensionRequest(bundleName : String,soundName :String,
                                                                     request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
     {
+        
         let userInfo = request.content.userInfo
-        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-        if(notificationData?.inApp != nil)
-        {
-            
-            badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-            
-            // custom notification sound
-            if (soundName != "")
-            {
-                bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
-            }
-            else
-            {
-                bestAttemptContent.sound = .default()
-            }
-            
-            if(bundleName != "")
-            {
-                let groupName = "group."+bundleName+".iZooto"
+        
+        if let jsonDictionary = userInfo as? [String:Any] {
+            if let aps = jsonDictionary["aps"] as? NSDictionary{
                 
-                if let userDefaults = UserDefaults(suiteName: groupName) {
+                if aps.value(forKey: AppConstant.iZ_ANKEY) != nil {
                     
-                    badgeCount = userDefaults.integer(forKey:"Badge")
-                    if badgeCount > 0 {
-                        if(badgeNumber > 0)
-                        {
-                            bestAttemptContent.badge = 1 as NSNumber
+                    self.payLoadDataChange(payload: ((userInfo as? [String: Any])!), bundleName: bundleName) { data in
+                        let totalData = data["aps"] as? NSDictionary
+                        let notificationData = Payload(dictionary: (data["aps"] as? NSDictionary)!)
+                        
+                        if notificationData?.ankey != nil {
                             
-                        }
-                        else
-                        {
-                            userDefaults.set(badgeCount + 1, forKey: "Badge")
-                            bestAttemptContent.badge = badgeCount + 1 as NSNumber
-                        }
-                    } else {
-                        
-                        
-                        userDefaults.set(1, forKey: "Badge")
-                        bestAttemptContent.badge = 1
-                        
-                    }
-                    
-                    let deviceToken = userDefaults.string(forKey: "DEVICETOKEN") ?? ""
-                    let pid = userDefaults.integer(forKey: "PID")
-                    
-                    if (notificationData?.cfg != nil)
-                    {
-                        let str = String((notificationData?.cfg)!)
-                        let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                        let lastChar = binaryString?.last!
-                        let str1 = String((lastChar)!)
-                        let impr = Int(str1)
-                        if(impr == 1)
-                        {
-                            RestAPI.callImpression(notificationData: notificationData!,userid: pid,token:"\(deviceToken)")
-                            
-                        }
-                    }
-                    userDefaults.synchronize()
-                    
-                    
-                }
-                
-                else
-                {
-                    print(AppConstant.IZ_TAG,AppConstant.iZ_APP_GROUP_ERROR_)
-                }
-            }
-            
-            if #available(iOS 15.0, *) {
-                bestAttemptContent.relevanceScore = notificationData?.relevence_score ?? 0
-                if(notificationData?.interrutipn_level == 1 )
-                {
-                    bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.passive
-                }
-                if(notificationData?.interrutipn_level == 2)
-                {
-                    bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.timeSensitive
-                    
-                }
-                if(notificationData?.interrutipn_level == 3)
-                {
-                    bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.critical
-                    
-                }
-            }
-            
-            if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
-            {
-                let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-                
-                if let url = URL(string: izUrlString) {
-                    URLSession.shared.dataTask(with: url) { data, response, error in
-                        if(error != nil)
-                        {
-                            fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
-                        }
-                        if let data = data {
-                            do {
-                                let json = try JSONSerialization.jsonObject(with: data)
+                            if(notificationData?.global?.inApp != nil)
+                            {
+                                badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
                                 
-                                //To Check FallBack
-                                if let jsonDictionary = json as? [String:Any] {
+                                // custom notification sound
+                                if (soundName != "")
+                                {
+                                    bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
+                                }
+                                else
+                                {
+                                    bestAttemptContent.sound = .default()
+                                }
+                                
+                                if(bundleName != "")
+                                {
+                                    let groupName = "group."+bundleName+".iZooto"
                                     
-                                    if let value = jsonDictionary["msgCode"] as? String {
-                                        fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
-                                        print(value)
+                                    if let userDefaults = UserDefaults(suiteName: groupName) {
+                                        
+                                        badgeCount = userDefaults.integer(forKey:"Badge")
+                                        if badgeCount > 0 {
+                                            if(badgeNumber > 0)
+                                            {
+                                                bestAttemptContent.badge = 1 as NSNumber
+                                            }
+                                            else
+                                            {
+                                                userDefaults.set(badgeCount + 1, forKey: "Badge")
+                                                bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                                            }
+                                        } else {
+                                            userDefaults.set(1, forKey: "Badge")
+                                            bestAttemptContent.badge = 1
+                                        }
+                                        
+                                        let deviceToken = userDefaults.string(forKey: "DEVICETOKEN") ?? ""
+                                        let pid = userDefaults.integer(forKey: "PID")
+                                        //To call izooto Impression API
+                                        if (notificationData?.global?.cfg != nil)
+                                        {
+                                            let str = String((notificationData?.global?.cfg)!)
+                                            let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                                            let lastChar = binaryString?.last!
+                                            let str1 = String((lastChar)!)
+                                            let impr = Int(str1)
+                                            if(impr == 1)
+                                            {
+                                                RestAPI.callImpression(notificationData: notificationData!,userid: pid,token:"\(deviceToken)")
+                                                
+                                            }
+                                        }
+                                        
+                                        let id = notificationData?.global?.rid
+                                        
+                                        //Call Ad_mediation Impression API
+                                        if let ids = userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as? [[String : Any]]{
+                                            
+                                            for data in ids {
+                                                if let dataDict = data as? NSDictionary {
+                                                    if dataDict.value(forKey: "rid") as? String == id {
+                                                        RestAPI.callAdMediationImpressionApi(finalDict: dataDict)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        userDefaults.synchronize()
                                     }
                                     else
                                     {
-                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
-                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
-                                        if notificationData?.url != "" {
-                                            notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                        }
-                                        if notificationData?.alert?.attachment_url != "" {
-                                            
-                                            notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                            if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                            {
-                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
-                                                
-                                            }
-                                            if (notificationData?.alert?.attachment_url!.contains("http:"))!
-                                            {
-                                                notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
-                                            }
-                                        }
+                                        debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_APP_GROUP_ERROR_)
                                     }
                                 }
                                 
-                                else{
-                                    if let jsonArray = json as? [[String:Any]] {
-                                        if jsonArray[0]["msgCode"] is String {
-                                            fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
-                                            return
-                                        }else{
-                                            bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
-                                            bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
-                                            if notificationData?.url != "" {
-                                                notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                                
-                                            }
-                                            if notificationData?.alert?.attachment_url != "" {
-                                                notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                                if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                                {
-                                                    notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
-                                                }
-                                                
-                                            }
-                                        }
+                                //Relevance Score
+                                self.setRelevanceScore(notificationData: notificationData!, bestAttemptContent: bestAttemptContent)
+                                
+                                if notificationData?.ankey?.fetchUrlAd != nil && notificationData?.ankey?.fetchUrlAd != ""
+                                {
+                                    self.commonFuUrlFetcher(bestAttemptContent: bestAttemptContent, bundleName: bundleName, notificationData: notificationData!,totalData: totalData!, contentHandler: contentHandler)
+                                }
+                            }
+                            else
+                            {
+                                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                            }
+                        }
+                    }
+                }else{
+                    //to get all aps data & pass it to commonfu function
+                    let totalData = userInfo["aps"] as? NSDictionary
+                    
+                    let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                    
+                    if(notificationData?.inApp != nil)
+                    {
+                        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+                        
+                        // custom notification sound
+                        if (soundName != "")
+                        {
+                            bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
+                        }
+                        else
+                        {
+                            bestAttemptContent.sound = .default()
+                        }
+                        
+                        if(bundleName != "")
+                        {
+                            let groupName = "group."+bundleName+".iZooto"
+                            
+                            if let userDefaults = UserDefaults(suiteName: groupName) {
+                                
+                                badgeCount = userDefaults.integer(forKey:"Badge")
+                                if badgeCount > 0 {
+                                    if(badgeNumber > 0)
+                                    {
+                                        bestAttemptContent.badge = 1 as NSNumber
+                                    }
+                                    else
+                                    {
+                                        userDefaults.set(badgeCount + 1, forKey: "Badge")
+                                        bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                                    }
+                                } else {
+                                    userDefaults.set(1, forKey: "Badge")
+                                    bestAttemptContent.badge = 1
+                                }
+                                
+                                let deviceToken = userDefaults.string(forKey: "DEVICETOKEN") ?? ""
+                                let pid = userDefaults.integer(forKey: "PID")
+                                
+                                if (notificationData?.cfg != nil)
+                                {
+                                    let str = String((notificationData?.cfg)!)
+                                    let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                                    let lastChar = binaryString?.last!
+                                    let str1 = String((lastChar)!)
+                                    let impr = Int(str1)
+                                    if(impr == 1)
+                                    {
+                                        RestAPI.callImpression(notificationData: notificationData!,userid: pid,token:"\(deviceToken)")
                                         
                                     }
                                 }
+                                
+                                userDefaults.synchronize()
+                            }
+                            
+                            else
+                            {
+                                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_APP_GROUP_ERROR_)
+                            }
+                        }
+                        
+                        //Relevance Score
+                        self.setRelevanceScore(notificationData: notificationData!, bestAttemptContent: bestAttemptContent)
+                        
+                        if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
+                        {
+                            self.commonFuUrlFetcher(bestAttemptContent: bestAttemptContent, bundleName: bundleName, notificationData: notificationData!, totalData: totalData!, contentHandler: contentHandler)
+                        }
+                        else{
+                            if notificationData != nil
+                            {
+                                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                                
+                                if notificationData!.category != "" && notificationData!.category != nil
+                                {
+                                    //to store categories
+                                    storeCategories(notificationData: notificationData!, category: "")
+                                    
+                                    if notificationData?.act1name != "" && notificationData?.act1name != nil {
+                                        addCTAButtons()
+                                    }
+                                    
+                                }
+                                
                                 autoreleasepool {
                                     if let urlString = (notificationData?.alert?.attachment_url),
                                        let fileUrl = URL(string: urlString ) {
-                                        
                                         guard let imageData = NSData(contentsOf: fileUrl) else {
                                             contentHandler!(bestAttemptContent)
                                             return
@@ -689,83 +1226,644 @@ public class iZooto : NSObject
                                         let string = notificationData?.alert?.attachment_url
                                         let url: URL? = URL(string: string!)
                                         let urlExtension: String? = url?.pathExtension
+                                        
                                         guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                            print(AppConstant.IMAGE_ERROR)
+                                            debugPrint(AppConstant.IMAGE_ERROR)
                                             contentHandler!(bestAttemptContent)
                                             return
                                         }
                                         bestAttemptContent.attachments = [ attachment ]
                                     }
                                 }
-                                
                                 contentHandler!(bestAttemptContent)
-                                //  }
-                            } catch let error {
-                                fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                             }
                         }
-                        
-                    }.resume()
-                }else{
-                    print("No Found")
+                    }
+                    else
+                    {
+                        debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                    }
                 }
-                
-                //                let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
-                //                let  category = UNNotificationCategory( identifier: "izooto_category", actions: [firstAction], intentIdentifiers: [], options: [])
-                //                UNUserNotificationCenter.current().setNotificationCategories([category])
-                
+            }
+        }
+    }
+    
+    //To set relevance score in above iOS 15
+    @objc private static func setRelevanceScore(notificationData: Payload, bestAttemptContent: UNMutableNotificationContent){
+        if #available(iOS 15.0, *) {
+            bestAttemptContent.relevanceScore = notificationData.relevence_score ?? 0
+            if(notificationData.interrutipn_level == 1 )
+            {
+                bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.passive
+            }
+            if(notificationData.interrutipn_level == 2)
+            {
+                bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.timeSensitive
                 
             }
+            if(notificationData.interrutipn_level == 3)
+            {
+                bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.critical
+            }
+        }
+    }
+    
+    
+    
+    //Common method for fu fetcher
+    
+    @objc private static func commonFuUrlFetcher(bestAttemptContent :UNMutableNotificationContent,bundleName: String,notificationData : Payload,totalData: NSDictionary,contentHandler:((UNNotificationContent) -> Void)?){
+        
+        if notificationData.ankey != nil {
+            var adId = ""
+            var adLn = ""
+            //
+            let izUrlString = (notificationData.ankey?.fetchUrlAd!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
             
-            else{
-                if notificationData != nil
-                {
-                    
-                    notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                    
-                    autoreleasepool {
-                        if let urlString = (notificationData?.alert?.attachment_url),
-                           let fileUrl = URL(string: urlString ) {
-                            guard let imageData = NSData(contentsOf: fileUrl) else {
-                                contentHandler!(bestAttemptContent)
-                                return
-                            }
-                            let string = notificationData?.alert?.attachment_url
-                            let url: URL? = URL(string: string!)
-                            let urlExtension: String? = url?.pathExtension
+            let session: URLSession = {
+                let configuration = URLSessionConfiguration.default
+                configuration.timeoutIntervalForRequest = 2
+                return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+            }()
+            
+            if let url = URL(string: izUrlString) {
+                session.dataTask(with: url) { data, response, error in
+                    if(error != nil)
+                    {
+                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        return
+                    }
+                    if let data = data {
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data)
                             
-                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                print(AppConstant.IMAGE_ERROR)
-                                contentHandler!(bestAttemptContent)
-                                return
+                            //To Check FallBack
+                            if let jsonDictionary = json as? [String:Any] {
+                                if let value = jsonDictionary["msgCode"] as? String {
+                                    fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    return
+                                }else{
+                                    if let jsonDictionary = json as? [String:Any] {
+                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.ankey?.titleAd)!))"
+                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.ankey?.messageAd)!))"
+                                        if var landUrl = (notificationData.ankey?.landingUrlAd)  {
+                                            
+                                            landUrl = "\(getParseValue(jsonData: jsonDictionary, sourceString: landUrl))"
+                                            adLn = landUrl
+                                            if let adIds = notificationData.ankey?.idAd{
+                                                adId = adIds
+                                            }
+                                            
+                                            myIdLnArray.removeAll()
+                                            let dict  = [AppConstant.iZ_IDKEY: adId, AppConstant.iZ_LNKEY: adLn]
+                                            myIdLnArray.append(dict)
+                                        }
+                                        if notificationData.ankey?.bannerImageAd != "" {
+                                            
+                                            notificationData.ankey?.bannerImageAd = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.ankey?.bannerImageAd)!))"
+                                            if ((notificationData.ankey?.bannerImageAd!.contains(".webp")) != nil)
+                                            {
+                                                notificationData.ankey?.bannerImageAd = notificationData.ankey?.bannerImageAd?.replacingOccurrences(of: ".webp", with: ".jpeg")
+                                                
+                                            }
+                                            if ((notificationData.ankey?.bannerImageAd!.contains("http:")) != nil)
+                                            {
+                                                notificationData.ankey?.bannerImageAd = notificationData.ankey?.bannerImageAd?.replacingOccurrences(of: "http:", with: "https:")
+                                            }
+                                        }
+                                        
+                                        
+                                        
+                                        //Check & hit RC for adMediation
+                                        if notificationData.ankey?.adrc != nil{
+                                            adMediationRCDataStore(totalData: totalData, jsonDictionary: jsonDictionary, bundleName: bundleName, aDId : (notificationData.ankey?.idAd)! )
+                                        }
+                                        
+                                        //Check & hit the RV for adMediation
+                                        if ((notificationData.ankey?.adrv != nil)){
+                                            adMediationRVApiCall(totalData: totalData, jsonDictionary: jsonDictionary)
+                                        }
+                                    }
+                                }
+                            }else{
+                                
+                                if let jsonArray = json as? [[String:Any]] {
+                                    if jsonArray[0]["msgCode"] is String {
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        return
+                                    }else{
+                                        bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.ankey?.titleAd)!))"
+                                        bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.ankey?.messageAd)!))"
+                                        
+                                        
+                                        if var landUrl = (notificationData.ankey?.landingUrlAd)  {
+                                            landUrl = "\(getParseArrayValue(jsonData: jsonArray, sourceString: landUrl))"
+                                            adLn = landUrl
+                                            if let adIds = notificationData.ankey?.idAd{
+                                                adId = adIds
+                                            }
+                                            
+                                            myIdLnArray.removeAll()
+                                            let dict  = [AppConstant.iZ_IDKEY: adId, AppConstant.iZ_LNKEY: adLn]
+                                            myIdLnArray.append(dict)
+                                        }
+                                        if notificationData.ankey?.bannerImageAd != "" {
+                                            notificationData.ankey?.bannerImageAd = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.ankey?.bannerImageAd)!))"
+                                            if ((notificationData.ankey?.bannerImageAd!.contains(".webp")) != nil)
+                                            {
+                                                notificationData.ankey?.bannerImageAd = notificationData.ankey?.bannerImageAd?.replacingOccurrences(of: ".webp", with: ".jpg")
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            bestAttemptContent.attachments = [ attachment ]
+                            
+                            if notificationData.category != "" && notificationData.category != nil
+                            {
+                                storeCategories(notificationData: notificationData, category: "")
+                                
+                                if notificationData.global!.act1name != "" && notificationData.global!.act1name != nil{
+                                    addCTAButtons()
+                                }
+                            }
+                            
+                            autoreleasepool {
+                                if let urlString = (notificationData.ankey?.bannerImageAd),
+                                   let fileUrl = URL(string: urlString ) {
+                                    
+                                    guard let imageData = NSData(contentsOf: fileUrl) else {
+                                        contentHandler!(bestAttemptContent)
+                                        return
+                                    }
+                                    let string = notificationData.ankey?.bannerImageAd
+                                    let url: URL? = URL(string: string!)
+                                    let urlExtension: String? = url?.pathExtension
+                                    guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                        debugPrint(AppConstant.IMAGE_ERROR)
+                                        contentHandler!(bestAttemptContent)
+                                        return
+                                    }
+                                    bestAttemptContent.attachments = [ attachment ]
+                                }
+                            }
+                            
+                            storeNotiUrl_ln(bundleName: bundleName)
+                            
+                            // Need to review
+                            if bestAttemptContent.title == notificationData.ankey?.titleAd{
+                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            }else{
+                                contentHandler!(bestAttemptContent)
+                            }
+                            
+                        } catch let error {
+                            self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                         }
                     }
                     
-                    contentHandler!(bestAttemptContent)
+                }.resume()
+            }else{
+                debugPrint("Not Found")
+            }
+            
+        }else{
+            let izUrlString = (notificationData.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+            
+            
+            let session: URLSession = {
+                let configuration = URLSessionConfiguration.default
+                configuration.timeoutIntervalForRequest = 2
+                return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+            }()
+            
+            if let url = URL(string: izUrlString) {
+                session.dataTask(with: url) { data, response, error in
+                    if(error != nil)
+                    {
+                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        return
+                    }
+                    if response == nil{
+                        debugPrint("RESPONSE ======+++++++++++++++")
+                    }
+                    if let data = data {
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data)
+                            
+                            //To Check FallBack
+                            if let jsonDictionary = json as? [String:Any] {
+                                if let value = jsonDictionary["msgCode"] as? String {
+                                    fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    return
+                                }else{
+                                    if let jsonDictionary = json as? [String:Any] {
+                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.alert?.title)!))"
+                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.alert?.body)!))"
+                                        if notificationData.url != "" {
+                                            notificationData.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.url)!))"
+                                            // print("URL TO TEST LANDING", notificationData.url)
+                                        }
+                                        if notificationData.alert?.attachment_url != "" {
+                                            
+                                            notificationData.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.alert?.attachment_url)!))"
+                                            if ((notificationData.alert?.attachment_url!.contains(".webp")) != nil)
+                                            {
+                                                notificationData.alert?.attachment_url = notificationData.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
+                                                
+                                            }
+                                            if ((notificationData.alert?.attachment_url!.contains("http:")) != nil)
+                                            {
+                                                notificationData.alert?.attachment_url = notificationData.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
+                                                
+                                            }
+                                        }
+                                        if notificationData.furv != nil {
+                                            adMediationRVApiCall(totalData: totalData, jsonDictionary: jsonDictionary)
+                                        }
+                                    }
+                                }
+                            }else{
+                                
+                                if let jsonArray = json as? [[String:Any]] {
+                                    if jsonArray[0]["msgCode"] is String {
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        return
+                                    }else{
+                                        bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.alert?.title)!))"
+                                        bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.alert?.body)!))"
+                                        if notificationData.url != "" {
+                                            notificationData.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.url)!))"
+                                            // print("URL TO TEST LANDING", notificationData.url)
+                                        }
+                                        if notificationData.alert?.attachment_url != "" {
+                                            notificationData.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.alert?.attachment_url)!))"
+                                            if ((notificationData.alert?.attachment_url!.contains(".webp")) != nil)
+                                            {
+                                                notificationData.alert?.attachment_url = notificationData.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if notificationData.category != "" && notificationData.category != nil
+                            {
+                                storeCategories(notificationData: notificationData, category: "")
+                                if notificationData.act1name != "" && notificationData.act1name != nil{
+                                    // debugPrint("Fetch single button called")
+                                    addCTAButtons()
+                                }
+                            }
+                            
+                            autoreleasepool {
+                                if let urlString = (notificationData.alert?.attachment_url),
+                                   let fileUrl = URL(string: urlString ) {
+                                    
+                                    guard let imageData = NSData(contentsOf: fileUrl) else {
+                                        //  if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
+                                        contentHandler!(bestAttemptContent)
+                                        //  }
+                                        return
+                                    }
+                                    let string = notificationData.alert?.attachment_url
+                                    let url: URL? = URL(string: string!)
+                                    let urlExtension: String? = url?.pathExtension
+                                    guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                        debugPrint(AppConstant.IMAGE_ERROR)
+                                        //  if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
+                                        contentHandler!(bestAttemptContent)
+                                        //  }
+                                        return
+                                    }
+                                    bestAttemptContent.attachments = [ attachment ]
+                                }
+                            }
+                            
+                            if bestAttemptContent.title == notificationData.ankey?.titleAd{
+                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            }else{
+                                contentHandler!(bestAttemptContent)
+                            }
+                            
+                        } catch let error {
+                            self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        }
+                    }
+                }.resume()
+            }else{
+                debugPrint("Not Found")
+            }
+        }
+    }
+    
+    //To store category Id & CTA Buttons
+    @objc private static func storeCategories(notificationData: Payload, category : String){
+        categoryArray.removeAll()
+        
+        var categoryId = ""
+        var button1Name = ""
+        var button2Name = ""
+        
+        if category != ""{
+            categoryId = category
+            button1Name = "Sponsered"
+            
+        }else{
+            if notificationData.global?.act1name != nil && notificationData.global?.act1name != ""{
+                categoryId = notificationData.category ?? ""
+                button1Name = notificationData.global!.act1name ?? ""
+            }else{
+                if notificationData.act1name != "" && notificationData.act1name != nil  {
+                    categoryId = notificationData.category ?? ""
+                    button1Name = notificationData.act1name ?? ""
+                    button2Name = notificationData.act2name ?? ""
+                }
+            }
+        }
+        
+        let catDict  = [AppConstant.iZ_catId: categoryId , AppConstant.iZ_b1Name:  button1Name, AppConstant.iZ_b2Name: button2Name]
+        categoryArray.append(catDict)
+        
+        var tempArray: [[String : Any]] = []
+        if UserDefaults.standard.value(forKey: AppConstant.iZ_CategoryArray) != nil {
+            tempArray = UserDefaults.standard.value(forKey: AppConstant.iZ_CategoryArray) as! [[String : Any]]
+        }
+        let CategoryMaxCount = 100
+        tempArray.append(contentsOf: categoryArray)
+        if tempArray.count >= CategoryMaxCount{
+            tempArray.removeFirst()
+        }
+        UserDefaults.standard.setValue(tempArray, forKey: AppConstant.iZ_CategoryArray)
+        UserDefaults.standard.synchronize()
+    }
+    
+    //To register Dynamic category nd Actionable buttons on notifications...
+    @objc private static func addCTAButtons(){
+        
+        var notificationCategories: Set<UNNotificationCategory> = []
+        
+        let center: UNUserNotificationCenter = UNUserNotificationCenter.current()
+        
+        var catArray = [Any]()
+        
+        if UserDefaults.standard.array(forKey: AppConstant.iZ_CategoryArray)!.count != 0{
+            catArray  = UserDefaults.standard.array(forKey: AppConstant.iZ_CategoryArray)!
+        }
+        
+        if !catArray.isEmpty{
+            
+            for item in catArray{
+                let dict = item as? NSDictionary
+                let categoryId = dict?.value(forKey: AppConstant.iZ_catId) as? String
+                var name1 = dict?.value(forKey: AppConstant.iZ_b1Name) as? String ?? ""
+                let name1Id = AppConstant.FIRST_BUTTON
+                var name2 = dict?.value(forKey: AppConstant.iZ_b2Name) as? String ?? ""
+                let name2Id = AppConstant.SECOND_BUTTON
+                
+                if name1 != "" && name2 != ""{
                     
+                    if name1.count > 17{
+                        let mySubstring = name1.prefix(17)
+                        name1 = "\(mySubstring)..."
+                    }
+                    if name2.count > 17{
+                        let mySubstring = name2.prefix(17)
+                        name2 = "\(mySubstring)..."
+                    }
+                    
+                    let firstAction = UNNotificationAction( identifier: name1Id, title: " \(name1)", options: .foreground)
+                    
+                    let secondAtion = UNNotificationAction( identifier: name2Id, title: " \(name2)", options: .foreground)
+                    
+                    let category = UNNotificationCategory( identifier: categoryId!, actions: [firstAction, secondAtion], intentIdentifiers: [], options: [])
+                    
+                    notificationCategories.insert(category)
+                    
+                }else{
+                    if name1 != ""{
+                        if(name1.contains("~"))
+                        {
+                            name1 = name1.replacingOccurrences(of: "~", with: "")
+                        }
+                        let firstAction = UNNotificationAction( identifier: name1Id, title: " \(name1)", options: .foreground)
+                        let category = UNNotificationCategory( identifier: categoryId!, actions: [firstAction], intentIdentifiers: [], options: [])
+                        notificationCategories.insert(category)
+                    }
+                }
+            }
+        }
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {(granted, error) in
+            if !granted {
+                print("Notification access denied.")
+            }
+            center.setNotificationCategories(notificationCategories)
+        }
+    }
+    
+    //for rid & bids call mediation click
+    
+    @objc private static func ad_mediationClickCall(notiRid: String){
+        
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+            if let ids = userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as? [[String : Any]]{
+                var tempIdArray = ids// userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as! [[String : Any]]
+                for (index,data) in ids.enumerated() {
+                    if let dataDict = data as? NSDictionary {
+                        if (dataDict.value(forKey: "rid") as! String) == notiRid {
+                            RestAPI.callAdMediationClickApi(finalDict: dataDict)
+                            if index <= tempIdArray.count - 1{
+                                tempIdArray.remove(at: index)
+                            }
+                            userDefaults.setValue(tempIdArray, forKey: AppConstant.iZ_BIDS_SERVED_ARRAY)
+                            userDefaults.synchronize()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    //for hit & remove the landing Url On click Noti
+    
+    @objc private static func ad_mediationLandingUrlOnClick(anKey: NSArray) -> String{
+        var idArray: [[String:Any]] = []
+        var landing = ""
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+            if let ids = userDefaults.value(forKey: AppConstant.iZ_LN_ID_ARRAY) as? [[String : Any]]{
+                idArray = ids
+            }
+            //for Ln & Id
+            for dataaa in anKey {
+                if let dict = dataaa as? NSDictionary {
+                    let id = dict.value(forKey: AppConstant.iZ_IDKEY) as? String
+                    let filterValue = idArray.filter {$0[AppConstant.iZ_IDKEY] as? String == id}
+                    
+                    if !filterValue.isEmpty{
+                        if let value1 = filterValue[0] as? NSDictionary {
+                            landing = value1.value(forKey: AppConstant.iZ_LNKEY) as! String
+                            if let index = idArray.firstIndex(where: {$0[AppConstant.iZ_LNKEY] as? String  == landing }) {
+                                idArray.remove(at: index)
+                            }
+                            userDefaults.setValue(idArray, forKey: AppConstant.iZ_LN_ID_ARRAY)
+                            userDefaults.synchronize()
+                        }
+                    }
                 }
             }
             
-            
         }
-        else
-        {
-            print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+        if landing == ""{
+            landing = RestAPI.fallBackLandingUrl
         }
-        
+        return landing
     }
+    
+    
+    
+    
+    //Store fallBack ln & id
+    
+    @objc private static func storeNotiUrl_ln(bundleName: String){
+        let groupName = "group."+bundleName+".iZooto"
+        if let userDefaults = UserDefaults(suiteName: groupName) {
+            var tempArray: [[String : Any]] = []
+            if userDefaults.value(forKey: AppConstant.iZ_LN_ID_ARRAY) != nil {
+                tempArray = userDefaults.value(forKey: AppConstant.iZ_LN_ID_ARRAY) as! [[String : Any]]
+            }
+            tempArray.append(contentsOf: myIdLnArray)
+            userDefaults.setValue(tempArray, forKey: AppConstant.iZ_LN_ID_ARRAY)
+            userDefaults.synchronize()
+        }
+    }
+    
+    @objc private static func storeBids(bundleName: String, finalData: NSMutableDictionary){
+        let groupName = "group."+bundleName+".iZooto"
+        if let userDefaults = UserDefaults(suiteName: groupName) {
+            var tempArray: [[String : Any]] = []
+            if userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) != nil {
+                tempArray = userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as! [[String : Any]]
+            }
+            tempArray.append(finalData as! [String : Any])
+            userDefaults.setValue(tempArray, forKey: AppConstant.iZ_BIDS_SERVED_ARRAY)
+            userDefaults.synchronize()
+        }
+    }
+    
+    //hit RV with notificatiuon display on devices
+    @objc private static func adMediationRVApiCall(totalData: NSDictionary,jsonDictionary: [String:Any] ){
+        
+        var tempArray = [String]()
+        if let annKey = totalData.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+            
+            if  let rvValue = annKey.value(forKey: "rv") as? NSArray {
+                
+                let finalValue = rvValue[0] as! NSArray
+                
+                for value in finalValue{
+                    
+                    let finalRV = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
+                    tempArray.append(finalRV)
+                }
+                for valuee in tempArray{
+                    RestAPI.callRV_RC_Request(urlString: valuee)
+                }
+                tempArray.removeAll()
+            }
+        }else{
+            if let rvValue = totalData.value(forKey: "rv") as? NSArray {
+                
+                for value in rvValue{
+                    let finalRV = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
+                    tempArray.append(finalRV)
+                }
+                for valuee in tempArray{
+                    RestAPI.callRV_RC_Request(urlString: valuee)
+                }
+                tempArray.removeAll()
+            }
+        }
+    }
+    
+    
+    
+    //Store RC with notificatiuon appear & hit on noti clicked by user
+    @objc private static func adMediationRCDataStore(totalData: NSDictionary,jsonDictionary: [String:Any], bundleName: String, aDId: String){
+        
+        var temArray = [String]()
+        if let annKey = totalData.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+            
+            if  let rvValue = annKey.value(forKey: "rc") as? NSArray {
+                
+                let finalValue = rvValue[0] as! NSArray
+                myRCArray.removeAll()
+                for value in finalValue{
+                    
+                    let finalRC = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
+                    temArray.append(finalRC)
+                    
+                }
+                let dict = ["id": aDId, "rc": temArray] as [String : Any]
+                myRCArray.append(dict)
+                
+                let groupName = "group."+bundleName+".iZooto"
+                if let userDefaults = UserDefaults(suiteName: groupName) {
+                    var tempArray: [[String : Any]] = []
+                    if userDefaults.value(forKey: AppConstant.iZ_rcArray) != nil {
+                        tempArray = userDefaults.value(forKey: AppConstant.iZ_rcArray) as! [[String : Any]]
+                    }
+                    tempArray.append(contentsOf: myRCArray)
+                    userDefaults.setValue(tempArray, forKey: AppConstant.iZ_rcArray)
+                    userDefaults.synchronize()
+                }
+            }
+        }
+    }
+    
+    
+    //Hit the RC on click Notification
+    @objc private static func getRcAndHitAPI(anKey: NSArray){
+        var idArray: [[String:Any]] = []
+        var rcArray: NSArray = []
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+            if let ids = userDefaults.value(forKey: AppConstant.iZ_rcArray) as? [[String : Any]]{
+                idArray = ids
+            }
+            //for Ln & Id
+            for dataaa in anKey {
+                if let dict = dataaa as? NSDictionary {
+                    let id = dict.value(forKey: AppConstant.iZ_IDKEY) as? String
+                    let filterValue = idArray.filter {$0[AppConstant.iZ_IDKEY] as? String == id}
+                    
+                    if !filterValue.isEmpty{
+                        if let value1 = filterValue[0] as? NSDictionary {
+                            rcArray = value1.value(forKey: "rc") as! NSArray
+                            let iddd = value1.value(forKey: AppConstant.iZ_IDKEY) as! String
+                            if let index = idArray.firstIndex(where: {$0[AppConstant.iZ_IDKEY] as? String  == iddd }) {
+                                idArray.remove(at: index)
+                            }
+                            userDefaults.setValue(idArray, forKey: AppConstant.iZ_rcArray)
+                            userDefaults.synchronize()
+                        }
+                    }
+                    
+                    for valuee in rcArray{
+                        RestAPI.callRV_RC_Request(urlString: valuee as! String)
+                    }
+                    
+                    break
+                }
+            }
+        }
+    }
+    
     // for json aaray
-    
-    
     @objc  private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
     {
-        
         if(sourceString.contains("~"))
         {
             return sourceString.replacingOccurrences(of: "~", with: "")
-            
         }
         else
         {
@@ -783,6 +1881,64 @@ public class iZooto : NSObject
         }
         return sourceString
     }
+    
+    // Check the notification enable or not from device setting
+    @objc  public static func checkNotificationEnable()
+    {
+        UNUserNotificationCenter.current().getNotificationSettings(){ (setttings) in
+            
+            switch setttings.authorizationStatus{
+            case .authorized:
+                debugPrint("enabled notification setting")
+                
+            case .denied:
+                
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
+                        
+                        
+                        DispatchQueue.main.async {
+                            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                                return
+                            }
+                            
+                            if UIApplication.shared.canOpenURL(settingsUrl) {
+                                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                                    debugPrint("Settings opened: \(success)") // debugPrints true
+                                })
+                            }
+                        }
+                    }))
+                    
+                    UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+                }
+                
+            case .notDetermined:
+                
+                debugPrint("")
+                
+            case .provisional:
+                
+                debugPrint("something vital went wrong here")
+                
+            case .ephemeral:
+                
+                debugPrint("something vital went wrong here")
+            }
+        }
+    }
+    
+    // Hybrid Plugin Version
+    @objc public static func setPluginVersion(pluginVersion : String){
+        if pluginVersion != ""{
+            sharedUserDefault?.set(pluginVersion, forKey: "Plugin_Version")
+        }else{
+            sharedUserDefault?.set("", forKey: "Plugin_Version")
+        }
+    }
+    
     // for jsonObject
     @objc private static func getParseValue(jsonData :[String : Any], sourceString : String) -> String
     {
@@ -796,6 +1952,7 @@ public class iZooto : NSObject
             {
                 let array = sourceString.split(separator: ".")
                 let count = array.count
+                debugPrint(count)
                 if count == 2 {
                     if array.first != nil {
                         if let content = jsonData["\(array[0])"] as? [[String:Any]] {
@@ -815,6 +1972,14 @@ public class iZooto : NSObject
                                 return responseData["\(array[2])"]! as! String
                             }
                         }
+                        else
+                        {
+                            if let content = jsonData["\(array[0])"] as? [String:Any] {
+                                let value = content["\(array[1])"] as! [String:Any]
+                                let fvalue = value["\(array[2])"] as! String
+                                return fvalue
+                            }
+                        }
                     }
                 }
                 if (count == 4){
@@ -823,9 +1988,21 @@ public class iZooto : NSObject
                     let documents = response["\(array[1])"] as! [String:Any]
                     //  let field = documents["\(array[2])"] as! [[String:Any]]
                     let field = documents["doc"] as! [[String:Any]]
+                    
                     if !field.isEmpty{
-                        let name = field[0]["\(array[3])"]!
-                        return name as! String
+                        if (field[0]["\(array[3])"] as? String != nil){
+                            let name = field[0]["\(array[3])"]!
+                            return (name as? String)!
+                            
+                        }else if (field[0]["\(array[3])"] as? NSArray != nil){
+                            let name = field[0]["\(array[3])"]!
+                            if let checkName = name as? NSArray{
+                                let finalName = checkName[0] as! String
+                                return finalName
+                            }
+                        }else{
+                            return sourceString
+                        }
                     }
                 }
                 if (count == 5){
@@ -843,6 +2020,7 @@ public class iZooto : NSObject
                         }
                     }
                     else{
+                        
                         let array = sourceString.split(separator: ".")
                         let response = jsonData["\(array[0])"] as! [String:Any]
                         let documents = response["\(array[1])"] as! [String:Any]
@@ -859,7 +2037,7 @@ public class iZooto : NSObject
                 }
                 if (count == 6)
                 {
-                    print(sourceString)
+                    debugPrint(sourceString)
                     
                 }
             }
@@ -873,14 +2051,16 @@ public class iZooto : NSObject
         
         return sourceString
     }
-
+    
+    
+    
     // Parsing the jsonObject
     @objc  private static func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-                print(error.localizedDescription)
+                debugPrint(error.localizedDescription)
                 let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
                 let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
                 RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "convertToDictionary", pid: userID, token: token, rid: "0", cid: "0")
@@ -897,8 +2077,10 @@ public class iZooto : NSObject
         let appstate = UIApplication.shared.applicationState
         if (appstate == .active && displayNotification == AppConstant.iZ_KEY_IN_APP_ALERT)
         {
+            
             let userInfo = notification.request.content.userInfo
             let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+            
             let alert = UIAlertController(title: notificationData?.alert?.title, message:notificationData?.alert?.body, preferredStyle: UIAlertController.Style.alert)
             if (notificationData?.act1name != nil && notificationData?.act1name != ""){
                 alert.addAction(UIAlertAction(title: notificationData?.act1name, style: .default, handler: { (action: UIAlertAction!) in
@@ -914,13 +2096,9 @@ public class iZooto : NSObject
                     if let url = URL(string:izUrlStr!) {
                         
                         DispatchQueue.main.async {
-                            
                             UIApplication.shared.open(url)
-                            
                         }
-                        
                     }
-                    
                 }))
             }
             alert.addAction(UIAlertAction(title: AppConstant.iZ_KEY_ALERT_DISMISS, style: .default, handler: nil))
@@ -929,46 +2107,93 @@ public class iZooto : NSObject
         else
         {
             let userInfo = notification.request.content.userInfo
-            let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-            if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
-            {
-                completionHandler([.badge, .alert, .sound])
-                
-            }
-            else
-            {
-                if(notificationData?.inApp != nil)
-                {
-                    
-                    notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                    if (notificationData?.cfg != nil)
-                    {
-                        let str = String((notificationData?.cfg)!)
-                        let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                        let lastChar = binaryString?.last!
-                        let str1 = String((lastChar)!)
-                        let impr = Int(str1)
-                        if(impr == 1)
-                        {
-                            RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
-                        }
+            
+            if let jsonDictionary = userInfo as? [String:Any] {
+                if let aps = jsonDictionary["aps"] as? NSDictionary{
+                    if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) {
+                        debugPrint(anKey)
                         
+                        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                        
+                        if notificationData?.ankey != nil {
+                            if(notificationData?.ankey?.fetchUrlAd != "" && notificationData?.ankey?.fetchUrlAd != nil)
+                            {
+                                // if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
+                                completionHandler([.badge, .alert, .sound])
+                                //  }
+                                
+                            }
+                            else
+                            {
+                                if(notificationData?.global?.inApp != nil)
+                                {
+                                    
+                                    notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                                    if (notificationData?.global?.cfg != nil)
+                                    {
+                                        let str = String((notificationData?.global?.cfg)!)
+                                        let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                                        let lastChar = binaryString?.last!
+                                        let str1 = String((lastChar)!)
+                                        let impr = Int(str1)
+                                        if(impr == 1)
+                                        {
+                                            RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+                                        }
+                                        completionHandler([.badge, .alert, .sound])
+                                    }
+                                }
+                                else
+                                {
+                                    debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                    
+                                    RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                                    
+                                }
+                            }
+                        }
+                        //    }
+                    }else{
+                        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                        
+                        if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
+                        {
+                            // if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
+                            completionHandler([.badge, .alert, .sound])
+                            //  }
+                            
+                        }
+                        else
+                        {
+                            if(notificationData?.inApp != nil)
+                            {
+                                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                                if (notificationData?.cfg != nil)
+                                {
+                                    let str = String((notificationData?.cfg)!)
+                                    let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                                    let lastChar = binaryString?.last!
+                                    let str1 = String((lastChar)!)
+                                    let impr = Int(str1)
+                                    if(impr == 1)
+                                    {
+                                        RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+                                    }
+                                    completionHandler([.badge, .alert, .sound])
+                                    
+                                }
+                            }
+                            else
+                            {
+                                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                
+                                RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                            }
+                        }
                     }
-                    completionHandler([.badge, .alert, .sound])
-                    
-                }
-                else
-                {
-                    print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
-                    
-                    
-                    RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
-                    
                 }
             }
         }
-        
-        
     }
     
     // handel the fallback url
@@ -986,7 +2211,8 @@ public class iZooto : NSObject
                             let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
                             if notificationData?.url! != "" {
                                 
-                                notificationData?.url = jsonDictionary["ln"] as? String
+                                notificationData?.url = jsonDictionary[AppConstant.iZ_LNKEY] as? String
+                                //  debugPrint("URLFALL", notificationData?.url!)
                                 
                                 let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
                                 
@@ -1007,14 +2233,16 @@ public class iZooto : NSObject
                             }
                         }
                     } catch let error {
-                        print("Error",error)
+                        debugPrint("Error",error)
                     }
                 }
             }.resume()
         }else{
-            print("Wrong URL")
+            debugPrint("Wrong URL")
         }
     }
+    
+    
     
     
     // Handle the clicks the notification from Banner,Button
@@ -1025,6 +2253,7 @@ public class iZooto : NSObject
             let badgeC = userDefaults.integer(forKey:"Badge")
             self.badgeCount = badgeC
             userDefaults.set(badgeC - 1, forKey: "Badge")
+            RestAPI.fallBackLandingUrl = userDefaults.value(forKey: "fallBackLandingUrl") as? String ?? ""
             userDefaults.synchronize()
         }
         
@@ -1036,360 +2265,450 @@ public class iZooto : NSObject
         else if(badgeNumber == 1)
         {
             UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-            
         }else{
-            
             UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
         }
         
-        
-        
         let userInfo = response.notification.request.content.userInfo
-        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
         
-        clickTrack(notificationData: notificationData!, actionType: "0")
-        
-        if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
-        {
-            let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-            
-            if let url = URL(string: izUrlString)
-            {
-                URLSession.shared.dataTask(with: url) { data, response, error in
-                    if error != nil{
-                        self.fallbackClickHandler()
+        var adlandingURL:String = ""
+        let indexx = 0
+        if let jsonDictionary = userInfo as? [String:Any] {
+            if let aps = jsonDictionary["aps"] as? NSDictionary{
+                if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                    debugPrint(anKey)
+                    var finalData = [String: Any]()
+                    let tempData = NSMutableDictionary()
+                    var alertData = [String: Any]()
+                    var gData = [String: Any]()
+                    var anData: [[String: Any]] = []
+                    
+                    if let alert = aps.value(forKey: AppConstant.iZ_ALERTKEY) {
+                        alertData = alert as! [String : Any]
                     }
-                    if let data = data {
-                        do {
+                    if let gt = aps.value(forKey: AppConstant.iZ_G_KEY) as? NSDictionary {
+                        gData = gt as! [String : Any]
+                    }
+                    
+                    if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                        
+                        //To get clicked Notification landing Url
+                        adlandingURL = self.ad_mediationLandingUrlOnClick(anKey: anKey)
+                        
+                        //On click hit rc API
+                        getRcAndHitAPI(anKey: anKey)
+                        
+                        
+                        anData = [anKey[indexx] as! [String : Any]]
+                        
+                        tempData.setValue(alertData, forKey: AppConstant.iZ_ALERTKEY)
+                        tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                        tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
+                        
+                        tempData.setValue(1, forKey: "mutable-content")
+                        tempData.setValue(0, forKey: "content_available")
+                        
+                        finalData["aps"] = tempData
+                    }
+                    
+                    let notificationData = Payload(dictionary: (finalData["aps"] as? NSDictionary)!)
+                    
+                    clickTrack(notificationData: notificationData!, actionType: "0")
+                    let notiRid = notificationData?.global?.rid
+                    //for rid & bids call Ad-mediation click
+                    self.ad_mediationClickCall(notiRid: notiRid!)
+                    
+                    if notificationData?.ankey != nil{
+                        if adlandingURL != ""
+                        {
+                            if let unencodedURLString = adlandingURL.removingPercentEncoding {
+                                adlandingURL = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                            } else {
+                                adlandingURL = adlandingURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                            }
                             
-                            let json = try JSONSerialization.jsonObject(with: data)
-                            
-                            //To Check FallBack
-                            if let jsonDictionary = json as? [String:Any] {
-                                if let value = jsonDictionary["msgCode"] as? String {
-                                    self.fallbackClickHandler()
-                                    debugPrint(value)
-                                    
+                            if let url = URL(string: adlandingURL) {
+                                if notificationData?.global!.act1name != nil && notificationData?.global!.act1name != ""
+                                {
+                                    DispatchQueue.main.async {
+                                        UIApplication.shared.open(url)
+                                    }
                                 }
                                 else
                                 {
-                                    
-                                    if notificationData?.url != "" {
-                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                        
-                                        let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                        
-                                        if let url = URL(string:izUrlStr!) {
-                                            if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                            {
-                                                DispatchQueue.main.async {
-                                                    UIApplication.shared.open(url)
-                                                }
-                                            }
-                                            else
-                                            {
-                                                DispatchQueue.main.async {
-                                                    UIApplication.shared.open(url)
-                                                }
-                                            }
-                                        }
+                                    DispatchQueue.main.async {
+                                        UIApplication.shared.open(url)
                                     }
                                 }
-                                
+                            }else{
+                                print("OUTSIDE")
                             }
-                            
-                            
-                            else
-                            {
-                                
-                                if let jsonArray = json as? [[String:Any]] {
-                                    if notificationData?.url != "" {
+                        }
+                    }
+                }else{
+                    let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                    
+                    if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
+                    {
+                        clickTrack(notificationData: notificationData!, actionType: "0")
+                        
+                        let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                        
+                        let session: URLSession = {
+                            let configuration = URLSessionConfiguration.default
+                            configuration.timeoutIntervalForRequest = 2
+                            return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+                        }()
+                        if let url = URL(string: izUrlString)
+                        {
+                            session.dataTask(with: url) { data, response, error in
+                                if error != nil{
+                                    self.fallbackClickHandler()
+                                }
+                                if let data = data {
+                                    do {
                                         
-                                        notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                        //notificationData?.url = "https:"+notificationData!.url!
-                                        let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                        let json = try JSONSerialization.jsonObject(with: data)
                                         
-                                        if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                        {
-                                            if let url = URL(string:izUrlStr!) {
-                                                DispatchQueue.main.async {
-                                                    UIApplication.shared.open(url)
+                                        //To Check FallBack
+                                        if let jsonDictionary = json as? [String:Any] {
+                                            if let value = jsonDictionary["msgCode"] as? String {
+                                                debugPrint(value)
+                                                self.fallbackClickHandler()
+                                                
+                                            }else{
+                                                if let jsonDictionary = json as? [String:Any] {
+                                                    
+                                                    if notificationData?.url != "" {
+                                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                                        
+                                                        var stringUrl = notificationData?.url
+                                                        
+                                                        if let unencodedURLString = stringUrl?.removingPercentEncoding {
+                                                            stringUrl = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                                        } else {
+                                                            stringUrl = stringUrl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                                        }
+                                                        
+                                                        if let url = URL(string: stringUrl!) {
+                                                            if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                                            {
+                                                                DispatchQueue.main.async {
+                                                                    UIApplication.shared.open(url)
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                DispatchQueue.main.async {
+                                                                    UIApplication.shared.open(url)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    if notificationData?.furc != nil{
+                                                        var tempArray = [String]()
+                                                        if let rcValue = aps.value(forKey: "rc") as? NSArray {
+                                                            for value in rcValue{
+                                                                let finalRC = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
+                                                                tempArray.append(finalRC)
+                                                            }
+                                                            debugPrint("Fetcher RC ++++++++", tempArray)
+                                                            for valuee in tempArray{
+                                                                RestAPI.callRV_RC_Request(urlString: valuee)
+                                                            }
+                                                            tempArray.removeAll()
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                         else
                                         {
-                                            if let url = URL(string:izUrlStr!) {
-                                                DispatchQueue.main.async {
-                                                    UIApplication.shared.open(url)
+                                            if let jsonArray = json as? [[String:Any]] {
+                                                if notificationData?.url != "" {
+                                                    
+                                                    notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                                    let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                                    
+                                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                                    {
+                                                        if let url = URL(string:izUrlStr!) {
+                                                            DispatchQueue.main.async {
+                                                                UIApplication.shared.open(url)
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if let url = URL(string:izUrlStr!) {
+                                                            DispatchQueue.main.async {
+                                                                UIApplication.shared.open(url)
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
+                                    } catch let error {
+                                        debugPrint(AppConstant.TAG,error)
+                                        
+                                        //FallBack_Click Handler method.....
+                                        self.fallbackClickHandler()
+                                        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
+                                        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+                                        RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
                                     }
                                 }
-                                else if let jsonDictionary = json as? [String:Any] {
-                                    
-                                    if notificationData?.url != "" {
-                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                        
-                                        let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                        
-                                        if let url = URL(string:izUrlStr!) {
-                                            if notificationData?.act1name != nil && notificationData?.act1name != ""
+                            }.resume()
+                        }
+                    }
+                    else
+                    {
+                        notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                        
+                        if notificationData?.category != nil && notificationData?.category != ""
+                        {
+                            if response.actionIdentifier == AppConstant.FIRST_BUTTON{
+                                
+                                type = "1"
+                                clickTrack(notificationData: notificationData!, actionType: "1")
+                                
+                                if notificationData?.ap != "" && notificationData?.ap != nil
+                                {
+                                    handleClicks(response: response, actionType: "1")
+                                }
+                                else
+                                {
+                                    if notificationData?.act1link != nil && notificationData?.act1link != ""
+                                    {
+                                        let launchURl = notificationData?.act1link!
+                                        if launchURl!.contains("tel:")
+                                        {
+                                            if let url = URL(string: launchURl!)
                                             {
-                                                DispatchQueue.main.async {
-                                                    UIApplication.shared.open(url)
+                                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                            }
+                                            
+                                        }
+                                        else
+                                        {
+                                            if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act1link != nil && notificationData?.act1link != "")
+                                            {
+                                                
+                                                
+                                                let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                                if checkWebview!
+                                                {
+                                                    landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act1link)!)
+                                                }
+                                                else
+                                                {
+                                                    ViewController.seriveURL = notificationData?.act1link
+                                                    UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
                                                 }
                                             }
                                             else
                                             {
-                                                DispatchQueue.main.async {
-                                                    UIApplication.shared.open(url)
+                                                if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
+                                                {
+                                                    handleBroserNotification(url: (notificationData?.url)!)
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    if notificationData!.act1link == nil {
+                                                        debugPrint("")
+                                                    }
+                                                    else
+                                                    {
+                                                        handleBroserNotification(url: (notificationData?.act1link)!)
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        } catch let error {
-                            
-                            //FallBack_Click Handler method.....
-                            self.fallbackClickHandler()
-                            let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-                            let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-                            RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
-                        }
-                    }
-                }.resume()
-            }
-        }
-        else
-        {
-            
-            notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-            
-            if notificationData?.category != nil
-            {
-                
-                switch response.actionIdentifier
-                {
-                case "FirstButton" :
-                    type = "1"
-                    // clickTrack(notificationData: notifcationData!, actionType: "1")
-                    
-                    if notificationData?.ap != "" && notificationData?.ap != nil
-                    {
-                        handleClicks(response: response, actionType: "1")
-                    }
-                    else
-                    {
-                        if notificationData?.act1link != nil && notificationData?.act1link != ""
-                        {
-                            let launchURl = notificationData?.act1link!
-                            if launchURl!.contains("tel:")
-                            {
-                                if let url = URL(string: launchURl!)
+                            else if response.actionIdentifier == AppConstant.SECOND_BUTTON{
+                                print("BUTTON-IDENTIFIER========", response.actionIdentifier)
+                                type = "2"
+                                clickTrack(notificationData: notificationData!, actionType: "2")
+                                if notificationData?.ap != "" && notificationData?.ap != nil
                                 {
-                                    UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                }
-                                
-                            }
-                            else
-                            {
-                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act1link != nil && notificationData?.act1link != "")
-                                {
-                                    
-                                    let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                    if checkWebview!
-                                    {
-                                        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act1link)!)
-                                    }
-                                    else
-                                    {
-                                        ViewController.seriveURL = notificationData?.act1link
-                                        UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                    }
+                                    handleClicks(response: response, actionType: "2")
                                 }
                                 else
                                 {
-                                    if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
+                                    if notificationData?.act2link != nil && notificationData?.act2link != ""
                                     {
-                                        handleBroserNotification(url: (notificationData?.url)!)
+                                        let launchURl = notificationData?.act2link!
+                                        if launchURl!.contains("tel:")
+                                        {
+                                            if let url = URL(string: launchURl!)
+                                            {
+                                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act2link != nil && notificationData?.act2link != "")
+                                            {
+                                                
+                                                let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                                if checkWebview!
+                                                {
+                                                    landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act2link)!)
+                                                }
+                                                else
+                                                {
+                                                    ViewController.seriveURL = notificationData?.act2link
+                                                    UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                                }
+                                                
+                                            }
+                                            else
+                                            {
+                                                
+                                                if notificationData!.act2link == nil {
+                                                    debugPrint("")
+                                                }
+                                                else
+                                                {
+                                                    handleBroserNotification(url: (notificationData?.act2link)!)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }else{
+                                type = "0"
+                                clickTrack(notificationData: notificationData!, actionType: "0")
+                                if notificationData?.ap != "" && notificationData?.ap != nil
+                                {
+                                    handleClicks(response: response, actionType: "0")
+                                    
+                                }
+                                else{
+                                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
+                                    {
                                         
+                                        let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                        if checkWebview!
+                                        {
+                                            landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
+                                        }
+                                        else
+                                        {
+                                            ViewController.seriveURL = notificationData?.url
+                                            UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                        }
                                     }
                                     else
                                     {
-                                        if notificationData!.act1link == nil {
-                                            print("")
-                                        }else{
-                                            handleBroserNotification(url: (notificationData?.act1link)!)
+                                        if notificationData!.url == nil {
+                                            debugPrint("")
+                                        }
+                                        else
+                                        {
+                                            handleBroserNotification(url: (notificationData?.url)!)
+                                            
                                         }
                                     }
                                 }
                             }
-                        }
-                        
-                    }
-                    break
-                case "SecondButton" :
-                    type = "2"
-                    
-                    if notificationData?.ap != "" && notificationData?.ap != nil
-                    {
-                        handleClicks(response: response, actionType: "2")
-                    }
-                    else
-                    {
-                        if notificationData?.act2link != nil && notificationData?.act2link != ""
-                        {
-                            let launchURl = notificationData?.act2link!
-                            if launchURl!.contains("tel:")
+                        }else{
+                            type = "0"
+                            clickTrack(notificationData: notificationData!, actionType: "0")
+                            if notificationData?.ap != "" && notificationData?.ap != nil
                             {
-                                if let url = URL(string: launchURl!)
-                                {
-                                    UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                }
+                                handleClicks(response: response, actionType: "0")
+                                
                             }
-                            else
-                            {
-                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act2link != nil && notificationData?.act2link != "")
+                            else{
+                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
                                 {
                                     
                                     let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
                                     if checkWebview!
                                     {
-                                        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act2link)!)
+                                        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
                                     }
                                     else
                                     {
-                                        ViewController.seriveURL = notificationData?.act2link
+                                        ViewController.seriveURL = notificationData?.url
                                         UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
                                     }
-                                    
                                 }
                                 else
                                 {
-                                    if notificationData!.act2link == nil {
-                                        print("")
-                                    }else{
-                                        handleBroserNotification(url: (notificationData?.act2link)!)
+                                    if notificationData!.url == nil {
+                                        debugPrint("")
+                                    }
+                                    else
+                                    {
+                                        handleBroserNotification(url: (notificationData?.url)!)
+                                        
                                     }
                                 }
                             }
                         }
                     }
-                    break
-                default:
-                    type = "0"
-                    if notificationData?.ap != "" && notificationData?.ap != nil
-                    {
-                        handleClicks(response: response, actionType: "0")
-                        
-                    }
-                    else{
-                        if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
-                        {
-                            
-                            let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                            if checkWebview!
-                            {
-                                landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
-                            }
-                            else
-                            {
-                                ViewController.seriveURL = notificationData?.url
-                                UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                            }
-                        }
-                        else{
-                            // clickTrack(notificationData: notifcationData!, actionType: "0")
-                            if notificationData!.url == nil {
-                                print("")
-                            }else{
-                                handleBroserNotification(url: (notificationData?.url)!)
-                            }
-                        }
-                    }
                 }
-                
             }
-            else{
-                type = "0"
-                
-                if notificationData?.ap != "" && notificationData?.ap != nil
-                {
-                    handleClicks(response: response, actionType: "0")
-                }
-                else
-                {
-                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
-                    {
-                        
-                        let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                        if checkWebview!
-                        {
-                            landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
-                        }
-                        else
-                        {
-                            ViewController.seriveURL = notificationData?.url
-                            UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                        }
-                    }
-                    else
-                    {
-                        if notificationData!.url == nil {
-                            print("")
-                        }else{
-                            handleBroserNotification(url: (notificationData?.url)!)
-                        }
-                    }
-                }
-            } //close else
         }
     }
-    @objc  static func clickTrack(notificationData : Payload,actionType : String)
+    
+    @objc static func clickTrack(notificationData : Payload,actionType : String)
     {
-        if(notificationData.cfg != nil)
-        {
-            let str = String((notificationData.cfg)!)
-            let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-            let data = binaryString!.suffix(2)
-            let clickCFG = data.prefix(1)
-            let click = Int(clickCFG)
-            if(click == 1)
+        if notificationData.ankey != nil{
+            if(notificationData.global?.cfg != nil)
             {
-                RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                let str = String((notificationData.global?.cfg)!)
+                let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                let data = binaryString!.suffix(2)
+                let clickCFG = data.prefix(1)
+                let click = Int(clickCFG)
+                if(click == 1)
+                {
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                }
+            }
+        }else{
+            if(notificationData.cfg != nil)
+            {
+                let str = String((notificationData.cfg)!)
+                let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                let data = binaryString!.suffix(2)
+                let clickCFG = data.prefix(1)
+                let click = Int(clickCFG)
+                if(click == 1)
+                {
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                }
             }
         }
         
     }
     
-    // Handle the InApp/Webview
+    
+    // Handle the InApp/Webview// and landing url listener
     @objc static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
     {
         let userInfo = response.notification.request.content.userInfo
         let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
         
-        
         if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
         {
-            
-            
-            
             ViewController.seriveURL = notifcationData?.url
             UIApplication.shared.keyWindow?.rootViewController?.present(ViewController(), animated: true, completion: nil)
-            
         }
         else
         {
-            
             onHandleLandingURL(response: response, actionType: actionType, launchURL: launchURL)
         }
-        
-        
-        
     }
+    
     // handle the borwser
     @objc  static func onHandleLandingURL(response : UNNotificationResponse , actionType : String,launchURL : String)
     {
@@ -1399,17 +2718,22 @@ public class iZooto : NSObject
         {
             handleBroserNotification(url: launchURL)
         }
-        
-        
-        
     }
+    
+    
     // Check the notification subscribe or not 0-> Subscribe 2- UNSubscribe
     @objc public static func setSubscription(isSubscribe : Bool)
     {
         var value = 0
+        
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+            userDefaults.set(isSubscribe, forKey: "Subscribe")
+        }
+        UserDefaults.standard.set(isSubscribe, forKey: "Subscribe")
         if !isSubscribe
         {
             value = 2
+            
         }
         
         let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
@@ -1418,13 +2742,12 @@ public class iZooto : NSObject
             RestAPI.callSubscription(isSubscribe : value,token : token!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!)
         }
         else{
-            print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_SUBSCRIPTION_ERROR_MESSAGE)
+            debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_SUBSCRIPTION_ERROR_MESSAGE)
         }
-        
     }
     
     
-    // handle the addtional data/deepLink Data
+    // handle the addtional data
     @objc public static func handleClicks(response : UNNotificationResponse , actionType : String)
     {
         let userInfo = response.notification.request.content.userInfo
@@ -1461,18 +2784,14 @@ public class iZooto : NSObject
                 let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
                 if (token != nil && !token!.isEmpty)
                 {
-                    
                     RestAPI.callEvents(eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: token!)
                 }
                 else{
                     sharedUserDefault?.set(data, forKey:AppConstant.KEY_EVENT)
                     sharedUserDefault?.set(eventName, forKey: AppConstant.KEY_EVENT_NAME)
-                    
                 }
-                
             }
         }
-        
     }
     
     
@@ -1501,7 +2820,26 @@ public class iZooto : NSObject
             let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
             RestAPI.sendExceptionToServer(exceptionName: "No Data found in Dictionary", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY, pid: userID, token: token, rid: "0", cid: "0")
         }
-        
+    }
+    // promptForPushNotifications
+    
+    @objc public  static  func promptForPushNotifications() {
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+        }
+        if #available(iOS 10.0, *) {
+            
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+                (granted, error) in
+                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                guard granted else { return }
+                getNotificationSettings()
+                
+                
+            }
+            
+        }
     }
     @objc private static func handleBroserNotification(url : String)
     {
@@ -1512,22 +2850,13 @@ public class iZooto : NSObject
             }
         }
     }
-    // handle the hybrid plugin version
-    @objc public static func setPluginVersion(pluginVersion : String){
-        if pluginVersion != ""{
-            sharedUserDefault?.set(pluginVersion, forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
-        }else{
-            sharedUserDefault?.set("", forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
-        }
-    }
-    
     
 }
 
 
 // Handle banner imange uploading and deleting
-@available(iOS 10.0, *)
-@available(iOSApplicationExtension 10.0, *)
+@available(iOS 11.0, *)
+@available(iOSApplicationExtension 11.0, *)
 extension UNNotificationAttachment {
     
     static func saveImageToDisk(fileIdentifier: String, data: NSData, options: [NSObject : AnyObject]?) -> UNNotificationAttachment? {
@@ -1588,4 +2917,3 @@ extension String {
         return String(data: data, encoding: .utf8)
     }
 }
-

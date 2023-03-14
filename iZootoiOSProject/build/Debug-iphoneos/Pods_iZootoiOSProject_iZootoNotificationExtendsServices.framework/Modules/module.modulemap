@@ -1,6 +1,0 @@
-framework module Pods_iZootoiOSProject_iZootoNotificationExtendsServices {
-  umbrella header "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h"
-
-  export *
-  module * { export * }
-}

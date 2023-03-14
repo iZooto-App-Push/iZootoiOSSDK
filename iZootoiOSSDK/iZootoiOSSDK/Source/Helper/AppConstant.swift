@@ -16,7 +16,7 @@ class AppConstant : NSObject
      static let SUCESSFULLY="Device Register Sucessfully"
      static let BADGE="BADGECOUNTUPDATE"
      static let IMAGE_ERROR = "Image Error"
-     static let FIREST_BUTTON = "FirstButton"
+     static let FIRST_BUTTON = "FirstButton"
      static var SECOND_BUTTON = "SecondButton"
      static let CATEGORY_NAME = "izooto_category"
      static let REQUEST_POST = "POST"
@@ -85,5 +85,32 @@ class AppConstant : NSObject
      static let iZ_DEVICE_NAME = "deviceName"
      static let iZ_KEY_CHECK_VERSION = "check"
      static let iZ_KEY_PLUGIN_VERSION_VALUE = "pluginVersion"
-     static let iZ_KEY_PLUGIN_VRSION_NAME = "pv"
+    static let iZ_KEY_PLUGIN_VRSION_NAME = "pv"
+    //Ad Mediation constant
+    static let iZ_LN_ID_ARRAY = "lnArray"
+    static let iZ_BIDS_SERVED_ARRAY = "bidsArray"
+    static let iZ_ANKEY = "an"
+    static let iZ_LNKEY = "ln"
+    static let iZ_IDKEY = "id"
+    static let iZ_RKEY = "r"
+    static let iZ_TPKEY = "tp"
+    static let iZ_BIDSKEY = "bids"
+    static let iZ_SERVEDKEY = "served"
+    static let iZ_ALERTKEY = "alert"
+    static let iZ_G_KEY = "g"
+    static let iZ_rcArray = "rcArray"
+    
+    //CT
+    static let iZ_catId = "catId"
+    static let iZ_b1Id = "b1Id"
+    static let iZ_b1Name = "b1Name"
+    static let iZ_b2Id = "b2Id"
+    static let iZ_b2Name = "b2Name"
+    static let iZ_CategoryArray = "categoryArray"
+    
+    static let iZ_A_KEY = "a"
+    static let iZ_B_KEY = "b"
+    static let iZ_T_KEY = "t"
+    static let iZ_RETURN_BIDS = "rb"
+  
 }

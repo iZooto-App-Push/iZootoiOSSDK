@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AdSupport
 import AppTrackingTransparency
+import UserNotifications
 
 protocol ResponseHandler  : AnyObject{
     func onSuccess()
@@ -18,21 +19,27 @@ protocol ResponseHandler  : AnyObject{
 @objc
 public class RestAPI : NSObject
 {
-     static let   BASEURL = "https://aevents.izooto.com/app.php"
-     static let   DATURL="https://cdn.izooto.com/app/app_"
-     static let   IMPRESSION_URL="https://impr.izooto.com/imp";
-     static let   LOG = "iZooto :"
-     static let EVENT_URL = "https://et.izooto.com/evt";
-     static let  PROPERTIES_URL="https://prp.izooto.com/prp";
-     static let  CLICK_URL="https://clk.izooto.com/clk";
-     static let LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci";
-     static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
-     static let LASTVISITURL="https://lvi.izooto.com/lvi";
-     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
-     static let SUBSCRIPTIONURL = "https://usub.izooto.com/sunsub";
-     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
-     static let  SDKVERSION = "2.0.7.1"
+    static let BASEURL = "https://aevents.izooto.com/app.php"
+    static let ENCRPTIONURL="https://cdn.izooto.com/app/app_"
+    static let IMPRESSION_URL="https://impr.izooto.com/imp";
+    static let LOG = "iZooto :"
+    static let EVENT_URL = "https://et.izooto.com/evt";
+    static let PROPERTIES_URL="https://prp.izooto.com/prp";
+    static let CLICK_URL="https://clk.izooto.com/clk";
+    static let LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci";
+    static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
+    static let LASTVISITURL="https://lvi.izooto.com/lvi";
+    static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
+    static let MEDIATION_IMPRESSION_URL = "https://med.izooto.com/medi";
+    static let MEDIATION_CLICK_URL = "https://med.izooto.com/medc"
+    static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
+    static let SDKVERSION = "2.0.8"
+    //fallback url
+    static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
+    static var fallBackLandingUrl = ""
 
+    
+    
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
         if(isSubscribe != -1 && userid != 0)
@@ -46,7 +53,7 @@ public class RestAPI : NSObject
                                                 URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN,value: token),
                                                 URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
                                                 URLQueryItem(name: AppConstant.iZ_KEY_PT, value: "0")]
-            var request = URLRequest(url: URL(string: self.SUBSCRIPTIONURL)!)
+            var request = URLRequest(url: URL(string: "\(RestAPI.UNSUBSCRITPION_SUBSCRIPTION)")!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
@@ -67,7 +74,7 @@ public class RestAPI : NSObject
     
     public static   func getRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
     {
-        let requestURL = URL(string: self.DATURL + "\(uuid).dat")
+        let requestURL = URL(string: "\(ENCRPTIONURL)\(uuid).dat")
         let request = URLRequest(url: requestURL!)
         let requestTask = URLSession.shared.dataTask(with: request) {
             (data: Data?, response: URLResponse?, error: Error?) in
@@ -87,15 +94,13 @@ public class RestAPI : NSObject
                         
                     }
                 }
-                
-                
             }
         }
         requestTask.resume()
     }
     
     
-   
+    
     // get Bundle ID
     static func getAppInfo()->String {
         let dictionary = Bundle.main.infoDictionary!
@@ -130,13 +135,13 @@ public class RestAPI : NSObject
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [
-                                                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                                                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                                URLQueryItem(name: "act", value: "\(eventName)"),
-                                                URLQueryItem(name: "et", value: "evt"),
-                                                URLQueryItem(name: "val", value: "\(data)")
-                                                ]
-                                              
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                URLQueryItem(name: "act", value: "\(eventName)"),
+                URLQueryItem(name: "et", value: "evt"),
+                URLQueryItem(name: "val", value: "\(data)")
+            ]
+            
             var request = URLRequest(url: URL(string: RestAPI.EVENT_URL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
             request.allHTTPHeaderFields = requestHeaders
@@ -165,12 +170,12 @@ public class RestAPI : NSObject
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [
-                                                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                                                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                                URLQueryItem(name: "act", value: "add"),
-                                                URLQueryItem(name: "et", value: "userp"),
-                                                URLQueryItem(name: "val", value: "\(data)")
-                                                ]
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                URLQueryItem(name: "act", value: "add"),
+                URLQueryItem(name: "et", value: "userp"),
+                URLQueryItem(name: "val", value: "\(data)")
+            ]
             var request = URLRequest(url: URL(string: RestAPI.PROPERTIES_URL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
             request.allHTTPHeaderFields = requestHeaders
@@ -180,11 +185,8 @@ public class RestAPI : NSObject
                 do {
                     sharedUserDefault?.set("", forKey:"UserPropertiesData")
                     print(AppConstant.ADD_PROPERTIES)
-                    
                 }
-                
             }.resume()
-            
         }
         else
         {
@@ -195,34 +197,64 @@ public class RestAPI : NSObject
     // track the notification impression
     static func callImpression(notificationData : Payload,userid : Int,token : String)
     {
-        if(notificationData.rid != nil && userid != 0 && token != "")
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                                                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                                                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                                URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                                                URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                                                URLQueryItem(name: "op", value: "view"),
-                                                URLQueryItem(name: "ver", value: SDKVERSION)
-                                                ]
-            var request = URLRequest(url: URL(string: self.IMPRESSION_URL)!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                
-                do {
-                    // print("imp","success")
-                    
-                }
-            }.resume()
-        }
-        else
-        {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-            
+        if notificationData.ankey != nil{
+            if(notificationData.global?.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
+                    URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
+                    URLQueryItem(name: "op", value: "view"),
+                    URLQueryItem(name: "ver", value: SDKVERSION)
+                ]
+                var request = URLRequest(url: URL(string: "\(RestAPI.IMPRESSION_URL)")!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+
+                    do {
+                        // print("imp","success")
+
+                    }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "callImpression", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+            }
+        }else{
+            if(notificationData.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                    URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                    URLQueryItem(name: "op", value: "view"),
+                    URLQueryItem(name: "ver", value: SDKVERSION)
+                ]
+                var request = URLRequest(url: URL(string: "\(RestAPI.IMPRESSION_URL)")!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+
+                    do {
+                        // print("imp","success")
+
+                    }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "callImpression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            }
         }
         
     }
@@ -230,36 +262,66 @@ public class RestAPI : NSObject
     // track the notification click
     static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
-        if(notificationData.rid != nil && userid != 0 && token != "")
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                                                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                                                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                                URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                                                URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                                                URLQueryItem(name: "op", value: "click"),
-                                                URLQueryItem(name: "ver", value: SDKVERSION),
-                                                URLQueryItem(name: "btn", value: "\(type)")
-                                               ]
-            var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                do {
-                    // print("C-N")
-                }
-            }.resume()
+        if notificationData.ankey != nil{
+            if(notificationData.global?.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
+                    URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
+                    URLQueryItem(name: "op", value: "click"),
+                    URLQueryItem(name: "ver", value: SDKVERSION),
+                    URLQueryItem(name: "btn", value: "\(type)")
+                ]
+                var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+                    do {
+                        // print("C-N")
+                    }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+            }
+        }else{
+            if(notificationData.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                    URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                    URLQueryItem(name: "op", value: "click"),
+                    URLQueryItem(name: "ver", value: SDKVERSION),
+                    URLQueryItem(name: "btn", value: "\(type)")
+                ]
+                var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+                    do {
+                        // print("C-N")
+                    }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                
+                
+            }
         }
-        else
-        {
-            
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-            
-            
-        }
+        
         
         
     }
@@ -314,13 +376,13 @@ public class RestAPI : NSObject
                 let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
                 var requestBodyComponents = URLComponents()
                 requestBodyComponents.queryItems = [
-                                                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                                                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                                    URLQueryItem(name: "act", value: "add"),
-                                                    URLQueryItem(name: "isid", value: "1"),
-                                                    URLQueryItem(name: "et", value: "userp"),
-                                                    URLQueryItem(name: "val", value: "\(validationData)")
-                                                    ]
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "act", value: "add"),
+                    URLQueryItem(name: "isid", value: "1"),
+                    URLQueryItem(name: "et", value: "userp"),
+                    URLQueryItem(name: "val", value: "\(validationData)")
+                ]
                 var request = URLRequest(url: URL(string: RestAPI.LASTVISITURL)!)
                 request.httpMethod = AppConstant.iZ_POST_REQUEST
                 request.allHTTPHeaderFields = requestHeaders
@@ -339,7 +401,7 @@ public class RestAPI : NSObject
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Token or  pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: "",cid :"")
+            sendExceptionToServer(exceptionName: "Token or  pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastVisit", pid: userid, token: token , rid: "",cid :"")
         }
         
     }
@@ -351,12 +413,12 @@ public class RestAPI : NSObject
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [
-                                                 URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                                                 URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                                 URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                                                 URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                                                 URLQueryItem(name: "op", value: "view")
-                                              ]
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                URLQueryItem(name: "op", value: "view")
+            ]
             var request = URLRequest(url: URL(string: RestAPI.LASTNOTIFICATIONVIEWURL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
             request.allHTTPHeaderFields = requestHeaders
@@ -388,12 +450,12 @@ public class RestAPI : NSObject
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [
-                                                 URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                                                 URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                                 URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                                                 URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                                                 URLQueryItem(name: "op", value: "view")
-                                              ]
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                URLQueryItem(name: "op", value: "view")
+            ]
             
             var request = URLRequest(url: URL(string: RestAPI.LASTNOTIFICATIONCLICKURL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
@@ -421,26 +483,28 @@ public class RestAPI : NSObject
         {
             
             let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
-
-
+            
+            
+            
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems =
             [
-                            URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(izootoid)"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: "8"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: "3"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(currentTimeInMilliSeconds())"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_SDK_VERSION, value:"\(getAppVersion())"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
-                            URLQueryItem(name:AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                            URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
-                            URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
-                            URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
-                            URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())"),
-                            URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)")
-                            
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(izootoid)"),
+                URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: "8"),
+                URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: "3"),
+                URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(currentTimeInMilliSeconds())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_SDK_VERSION, value:"\(getAppVersion())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
+                URLQueryItem(name:AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
+                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
+                URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
+                URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)")
+                
+                
             ]
             var request = URLRequest(url: URL(string: RestAPI.BASEURL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
@@ -476,6 +540,7 @@ public class RestAPI : NSObject
         }
         else
         {
+            print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR)
             sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, pid: 0, token: "", rid: "", cid: "")
             
         }
@@ -488,24 +553,25 @@ public class RestAPI : NSObject
         if(token != "" && izootoid != 0)
         {
             let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
+            
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems =
             [
-                                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(izootoid)"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: "8"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: "3"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(currentTimeInMilliSeconds())"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_SDK_VERSION, value:"\(getAppVersion())"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
-                                URLQueryItem(name:AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                                URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
-                                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
-                                URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
-                                URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())"),
-                                URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)")
-
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(izootoid)"),
+                URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: "8"),
+                URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: "3"),
+                URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(currentTimeInMilliSeconds())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_SDK_VERSION, value:"\(getAppVersion())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
+                URLQueryItem(name:AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
+                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
+                URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
+                URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())"),
+                URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)")
+                
             ]
             var request = URLRequest(url: URL(string: RestAPI.BASEURL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
@@ -531,10 +597,10 @@ public class RestAPI : NSObject
     }
     
     // send exception to the server
- @objc  public static func sendExceptionToServer(exceptionName : String ,className : String ,methodName: String,pid :Int ,token : String,rid : String,cid : String)
+    @objc   static func sendExceptionToServer(exceptionName : String ,className : String ,methodName: String,pid :Int ,token : String,rid : String,cid : String)
     {
         let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
-
+        
         let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
         var requestBodyComponents = URLComponents()
         requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(pid)"),
@@ -546,7 +612,7 @@ public class RestAPI : NSObject
                                             URLQueryItem(name: "rid", value: "\(rid)"),
                                             URLQueryItem(name: "cid", value: "\(cid)"),
                                             URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)"),
-
+                                            
                                             URLQueryItem(name: "osVersion", value: "\(getVersion())"),
                                             URLQueryItem(name: "deviceName", value: "\(getDeviceName())"),
                                             URLQueryItem(name: "check", value: "\(getAppVersion())")]
@@ -563,6 +629,93 @@ public class RestAPI : NSObject
         }.resume()
     }
     
+    
+    //Ad-Mediation Impression
+    @objc  static func callAdMediationImpressionApi(finalDict: NSDictionary){
+        
+        if (finalDict.count != 0) {
+            let jsonData = try? JSONSerialization.data(withJSONObject: finalDict as? [String: Any])
+            // create post request
+            let url = URL(string: "\(MEDIATION_IMPRESSION_URL)")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            // insert json data to the request
+            request.httpBody = jsonData
+            request.addValue("application/json", forHTTPHeaderField: "\(AppConstant.iZ_CONTENT_TYPE)")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {
+                    print(error?.localizedDescription ?? "No data")
+                    return
+                }
+                let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                if let responseJSON = responseJSON as? [String: Any] {
+                    print(responseJSON)
+                }
+            }
+            task.resume()
+        }else{
+            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-mediation Impression API", pid: 0, token: "", rid: "", cid: "")
+        }
+    }
+    
+    
+    //Ad-Mediation ClickAPI
+    @objc  static func callAdMediationClickApi(finalDict: NSDictionary){
+        
+        if (finalDict.count != 0) {
+            let jsonData = try? JSONSerialization.data(withJSONObject: finalDict)
+            
+            // create post request
+            let url = URL(string: "\(MEDIATION_CLICK_URL)")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            // insert json data to the request
+            request.httpBody = jsonData
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {
+                    print(error?.localizedDescription ?? "No data")
+                    return
+                }
+                let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                if let responseJSON = responseJSON as? [String: Any] {
+                    print(responseJSON)
+                }
+            }
+            task.resume()
+            
+        }else{
+            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-mediation Click API", pid: 0, token: "", rid: "", cid: "")
+        }
+    }
+    
+    
+    static func callRV_RC_Request( urlString : String)
+    {
+       // print("CLICKED URL ", urlString)
+        let request = NSMutableURLRequest(url: NSURL(string: urlString)! as URL)
+        let session = URLSession.shared
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
+              if error != nil {
+                  debugPrint("Error: \(AppConstant.FAILURE)")
+              } else {
+                  debugPrint("Response: \(AppConstant.SUCESS)")
+              }
+         })
+
+         task.resume()
+    }
+    
+    
     // current timestamp
     
     static func currentTimeInMilliSeconds()-> Int
@@ -576,27 +729,25 @@ public class RestAPI : NSObject
     {
         let name = UIDevice.current.model
         return name
-        
     }
     
     // get device id
     static func getUUID()->String
     {
         let device_id = UIDevice.current.identifierForVendor!.uuidString
-        
         return device_id
-        
     }
     
     //get add version
     
     static func  getVersion() -> String {
         return UIDevice.current.systemVersion
-        
     }
     
+ 
+   
+    
 }
-
 
 
 
