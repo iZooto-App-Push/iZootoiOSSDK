@@ -33,7 +33,7 @@ public class RestAPI : NSObject
     static let MEDIATION_IMPRESSION_URL = "https://med.izooto.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.izooto.com/medc"
     static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
-    static let SDKVERSION = "2.0.8"
+    static let SDKVERSION = "2.1.0"
     //fallback url
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
