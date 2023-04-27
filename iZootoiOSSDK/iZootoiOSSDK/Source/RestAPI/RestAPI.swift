@@ -33,7 +33,7 @@ public class RestAPI : NSObject
     static let MEDIATION_IMPRESSION_URL = "https://med.izooto.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.izooto.com/medc"
     static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
-    static let SDKVERSION = "2.1.0"
+    static let SDKVERSION = "2.1.1"
     //fallback url
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
@@ -325,6 +325,77 @@ public class RestAPI : NSObject
         
         
     }
+    // last impression send to server
+       @objc   static func lastImpression(notificationData : Payload,userid : Int,token : String,url : String)
+       {
+           if(notificationData.rid != nil && userid != 0 && token != "")
+           {
+               let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+               var requestBodyComponents = URLComponents()
+               requestBodyComponents.queryItems = [
+                   URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                   URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                   URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                   URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                   URLQueryItem(name: "op", value: "view")
+               ]
+               var request = URLRequest(url: URL(string: url)!)
+               request.httpMethod = AppConstant.iZ_POST_REQUEST
+               request.allHTTPHeaderFields = requestHeaders
+               request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+               URLSession.shared.dataTask(with: request){(data,response,error) in
+                   
+                   do {
+                       //print("l","i")
+                       
+                   }
+               }.resume()
+           }
+           else
+           {
+               
+               sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+               
+               
+           }
+           
+           
+           
+       }
+       // last click data send to server
+       @objc   static func lastClick(notificationData : Payload,userid : Int,token : String,url : String)
+       {
+           if(userid != 0 && token != "" && notificationData.rid != nil)
+           {
+               let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+               var requestBodyComponents = URLComponents()
+               requestBodyComponents.queryItems = [
+                   URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                   URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                   URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                   URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                   URLQueryItem(name: "op", value: "view")
+               ]
+               
+               var request = URLRequest(url: URL(string: url)!)
+               request.httpMethod = AppConstant.iZ_POST_REQUEST
+               request.allHTTPHeaderFields = requestHeaders
+               request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+               URLSession.shared.dataTask(with: request){(data,response,error) in
+                   
+                   do {
+                       // print("l","c")
+                       
+                   }
+               }.resume()
+           }
+           else
+           {
+               sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+               
+           }
+           
+       }
     static func performRequest(with urlString : String)
     {
         if let url = URL(string: urlString)

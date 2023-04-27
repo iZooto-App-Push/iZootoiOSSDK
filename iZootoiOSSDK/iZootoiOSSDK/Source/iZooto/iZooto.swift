@@ -432,11 +432,11 @@ public class iZooto : NSObject
                             if fallCategory != ""{
                                 storeCategories(notificationData: notificationData!, category: fallCategory)
                                 if notificationData!.act1name != "" && notificationData!.act1name != nil{
-                                    debugPrint("Ankey button called")
                                     addCTAButtons()
                                 }
                             }
                             
+                            sleep(1)
                             autoreleasepool {
                                 if let urlString = (notificationData?.url!),
                                    let fileUrl = URL(string: urlString ) {
@@ -777,7 +777,6 @@ public class iZooto : NSObject
                                                         dict.updateValue((finalCPCValue), forKey: "cpcc")
                                                         finalArray.append(dict)
                                                     } catch let error {
-                                                        debugPrint(" Error",error)
                                                         let t = Date().timeIntervalSince(startDate)
                                                         bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
                                                         dict.updateValue(("0.00"), forKey: "cpcc")
@@ -1216,6 +1215,7 @@ public class iZooto : NSObject
                                     
                                 }
                                 
+                                sleep(1)
                                 autoreleasepool {
                                     if let urlString = (notificationData?.alert?.attachment_url),
                                        let fileUrl = URL(string: urlString ) {
@@ -1387,6 +1387,7 @@ public class iZooto : NSObject
                                 }
                             }
                             
+                            sleep(1)
                             autoreleasepool {
                                 if let urlString = (notificationData.ankey?.bannerImageAd),
                                    let fileUrl = URL(string: urlString ) {
@@ -1515,6 +1516,7 @@ public class iZooto : NSObject
                                 }
                             }
                             
+                            sleep(1)
                             autoreleasepool {
                                 if let urlString = (notificationData.alert?.attachment_url),
                                    let fileUrl = URL(string: urlString ) {
@@ -1952,7 +1954,6 @@ public class iZooto : NSObject
             {
                 let array = sourceString.split(separator: ".")
                 let count = array.count
-                debugPrint(count)
                 if count == 2 {
                     if array.first != nil {
                         if let content = jsonData["\(array[0])"] as? [[String:Any]] {
@@ -2071,130 +2072,135 @@ public class iZooto : NSObject
     
     
     // Handle the Notification behaviour
-    @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String,completionHandler : @escaping (UNNotificationPresentationOptions) -> Void)
-    
-    {
-        let appstate = UIApplication.shared.applicationState
-        if (appstate == .active && displayNotification == AppConstant.iZ_KEY_IN_APP_ALERT)
-        {
-            
-            let userInfo = notification.request.content.userInfo
-            let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-            
-            let alert = UIAlertController(title: notificationData?.alert?.title, message:notificationData?.alert?.body, preferredStyle: UIAlertController.Style.alert)
-            if (notificationData?.act1name != nil && notificationData?.act1name != ""){
-                alert.addAction(UIAlertAction(title: notificationData?.act1name, style: .default, handler: { (action: UIAlertAction!) in
-                    // UIApplication.shared.openURL(NSURL(string: notificationData!.act1link!)! as URL)
-                    
-                }))
-            }
-            if (notificationData?.act2name != nil && notificationData?.act2name != "")
-            {
-                alert.addAction(UIAlertAction(title: notificationData?.act2name, style: .default, handler: { (action: UIAlertAction!) in
-                    
-                    let izUrlStr = notificationData!.act2link!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                    if let url = URL(string:izUrlStr!) {
-                        
-                        DispatchQueue.main.async {
-                            UIApplication.shared.open(url)
-                        }
-                    }
-                }))
-            }
-            alert.addAction(UIAlertAction(title: AppConstant.iZ_KEY_ALERT_DISMISS, style: .default, handler: nil))
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-        }
-        else
-        {
-            let userInfo = notification.request.content.userInfo
-            
-            if let jsonDictionary = userInfo as? [String:Any] {
-                if let aps = jsonDictionary["aps"] as? NSDictionary{
-                    if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) {
-                        debugPrint(anKey)
-                        
-                        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                        
-                        if notificationData?.ankey != nil {
-                            if(notificationData?.ankey?.fetchUrlAd != "" && notificationData?.ankey?.fetchUrlAd != nil)
-                            {
-                                // if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
-                                completionHandler([.badge, .alert, .sound])
-                                //  }
-                                
-                            }
-                            else
-                            {
-                                if(notificationData?.global?.inApp != nil)
-                                {
+    // Handle the Notification behaviour
+      @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String,completionHandler : @escaping (UNNotificationPresentationOptions) -> Void)
+      
+      {
+          let appstate = UIApplication.shared.applicationState
+          if (appstate == .active && displayNotification == AppConstant.iZ_KEY_IN_APP_ALERT)
+          {
+              
+              let userInfo = notification.request.content.userInfo
+              let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+              
+              let alert = UIAlertController(title: notificationData?.alert?.title, message:notificationData?.alert?.body, preferredStyle: UIAlertController.Style.alert)
+              if (notificationData?.act1name != nil && notificationData?.act1name != ""){
+                  alert.addAction(UIAlertAction(title: notificationData?.act1name, style: .default, handler: { (action: UIAlertAction!) in
+                      // UIApplication.shared.openURL(NSURL(string: notificationData!.act1link!)! as URL)
+                      
+                  }))
+              }
+              if (notificationData?.act2name != nil && notificationData?.act2name != "")
+              {
+                  alert.addAction(UIAlertAction(title: notificationData?.act2name, style: .default, handler: { (action: UIAlertAction!) in
+                      
+                      let izUrlStr = notificationData!.act2link!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                      if let url = URL(string:izUrlStr!) {
+                          
+                          DispatchQueue.main.async {
+                              UIApplication.shared.open(url)
+                          }
+                      }
+                  }))
+              }
+              alert.addAction(UIAlertAction(title: AppConstant.iZ_KEY_ALERT_DISMISS, style: .default, handler: nil))
+              UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+          }
+          else
+          {
+              let userInfo = notification.request.content.userInfo
+              
+              if let jsonDictionary = userInfo as? [String:Any] {
+                  if let aps = jsonDictionary["aps"] as? NSDictionary{
+                      if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) {
+                          
+                          let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                          
+                          if notificationData?.ankey != nil {
+                              if(notificationData?.ankey?.fetchUrlAd != "" && notificationData?.ankey?.fetchUrlAd != nil)
+                              {
+                                  if(notificationData?.global?.inApp != nil)
+                                  {
+                                      
+                                      if (notificationData?.global?.cfg != nil)
+                                      {
+                                          impressionTrack(notificationData: notificationData!)
+
+                                      }
+                                  }
+                                  
+                                  completionHandler([.badge, .alert, .sound])
+
+                              }
+                              else
+                              {
+                                  if(notificationData?.global?.inApp != nil)
+                                  {
+                                      
+                                      if (notificationData?.global?.cfg != nil)
+                                      {
+                                          impressionTrack(notificationData: notificationData!)
+
+                                      }
+                                      completionHandler([.badge, .alert, .sound])
+
+                                  }
+                                  else
+                                  {
+                                      debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                      
+                                      RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                                      
+                                  }
+                              }
+                          }
+                          //    }
+                      }else{
+                          let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                          
+                          if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
+                          {
+                             
+                              
+                              if (notificationData?.cfg != nil)
+                              {
+      
+                                  impressionTrack(notificationData: notificationData!)
+                                  
+                              }
+                              
+                              completionHandler([.badge, .alert, .sound])
+
+                              
+                          }
+                          else
+                          {
+                              if(notificationData?.inApp != nil)
+                              {
+                                  notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                                  if (notificationData?.cfg != nil)
+                                  {
                                     
-                                    notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                                    if (notificationData?.global?.cfg != nil)
-                                    {
-                                        let str = String((notificationData?.global?.cfg)!)
-                                        let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                                        let lastChar = binaryString?.last!
-                                        let str1 = String((lastChar)!)
-                                        let impr = Int(str1)
-                                        if(impr == 1)
-                                        {
-                                            RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
-                                        }
-                                        completionHandler([.badge, .alert, .sound])
-                                    }
-                                }
-                                else
-                                {
-                                    debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
-                                    
-                                    RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
-                                    
-                                }
-                            }
-                        }
-                        //    }
-                    }else{
-                        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                        
-                        if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
-                        {
-                            // if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
-                            completionHandler([.badge, .alert, .sound])
-                            //  }
-                            
-                        }
-                        else
-                        {
-                            if(notificationData?.inApp != nil)
-                            {
-                                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                                if (notificationData?.cfg != nil)
-                                {
-                                    let str = String((notificationData?.cfg)!)
-                                    let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                                    let lastChar = binaryString?.last!
-                                    let str1 = String((lastChar)!)
-                                    let impr = Int(str1)
-                                    if(impr == 1)
-                                    {
-                                        RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
-                                    }
-                                    completionHandler([.badge, .alert, .sound])
-                                    
-                                }
-                            }
-                            else
-                            {
-                                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
-                                
-                                RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+                                  
+                                      impressionTrack(notificationData: notificationData!)
+                                     
+                                      
+                                  }
+                                  completionHandler([.badge, .alert, .sound])
+
+                              }
+                              else
+                              {
+                                  debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                  
+                                  RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
     
     // handel the fallback url
     
@@ -2276,7 +2282,6 @@ public class iZooto : NSObject
         if let jsonDictionary = userInfo as? [String:Any] {
             if let aps = jsonDictionary["aps"] as? NSDictionary{
                 if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
-                    debugPrint(anKey)
                     var finalData = [String: Any]()
                     let tempData = NSMutableDictionary()
                     var alertData = [String: Any]()
@@ -2373,7 +2378,6 @@ public class iZooto : NSObject
                                         //To Check FallBack
                                         if let jsonDictionary = json as? [String:Any] {
                                             if let value = jsonDictionary["msgCode"] as? String {
-                                                debugPrint(value)
                                                 self.fallbackClickHandler()
                                                 
                                             }else{
@@ -2413,7 +2417,6 @@ public class iZooto : NSObject
                                                                 let finalRC = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
                                                                 tempArray.append(finalRC)
                                                             }
-                                                            debugPrint("Fetcher RC ++++++++", tempArray)
                                                             for valuee in tempArray{
                                                                 RestAPI.callRV_RC_Request(urlString: valuee)
                                                             }
@@ -2531,7 +2534,6 @@ public class iZooto : NSObject
                                 }
                             }
                             else if response.actionIdentifier == AppConstant.SECOND_BUTTON{
-                                print("BUTTON-IDENTIFIER========", response.actionIdentifier)
                                 type = "2"
                                 clickTrack(notificationData: notificationData!, actionType: "2")
                                 if notificationData?.ap != "" && notificationData?.ap != nil
@@ -2659,37 +2661,326 @@ public class iZooto : NSObject
         }
     }
     
-    @objc static func clickTrack(notificationData : Payload,actionType : String)
+    @objc static func impressionTrack(notificationData : Payload)
     {
-        if notificationData.ankey != nil{
-            if(notificationData.global?.cfg != nil)
-            {
-                let str = String((notificationData.global?.cfg)!)
-                let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                let data = binaryString!.suffix(2)
-                let clickCFG = data.prefix(1)
-                let click = Int(clickCFG)
-                if(click == 1)
-                {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-                }
-            }
-        }else{
+        if(notificationData.cfg != nil || notificationData.global?.cfg != nil)
+        {
             if(notificationData.cfg != nil)
             {
-                let str = String((notificationData.cfg)!)
-                let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                let data = binaryString!.suffix(2)
-                let clickCFG = data.prefix(1)
-                let click = Int(clickCFG)
-                if(click == 1)
+               
+                let number = Int(notificationData.cfg ?? "0")
+                let binaryString = String(number!, radix: 2)
+                let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
+                let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+                let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
+                let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
+                let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+                let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+                let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
+                let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+                let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
+                let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+                let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
+                let convertBinaryToDecimal = Int(domainURL, radix: 2)!
+                if(firstDigit == 1)
                 {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                    RestAPI.callImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+                }
+                
+                if(seventhDigit == 1)
+                {
+                    let date = Date()
+                    let format = DateFormatter()
+                    format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                    let formattedDate = format.string(from: date)
+                    if(ninthDigit == 1 && seventhDigit == 1)
+                    {
+                        
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_VIEW))
+                        {
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_VIEW)
+                           
+                            if convertBinaryToDecimal != 0{
+                                
+                                let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url)
+                            }
+                            else
+                            {
+                                
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL)
+                            }
+                          
+                        }
+                        
+                    }
+                    if(ninthDigit == 0 && seventhDigit == 1)
+                    {
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_VIEW_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_VIEW_WEEKDAYS)){
+                            
+                            
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_VIEW_WEEKLY)
+                            sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_VIEW_WEEKDAYS)
+                            if convertBinaryToDecimal != 0{
+                                
+                                let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url)
+                            }
+                            else
+                            {
+                                
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL)
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            
+            if(notificationData.global?.cfg != nil)
+            {
+                
+                let number = Int(notificationData.global?.cfg ?? "0")
+                let binaryString = String(number!, radix: 2)
+                let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
+                let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+                let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
+                let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
+                let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+                let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+                let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
+                let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+                let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
+                let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+                let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
+                let convertBinaryToDecimal = Int(domainURL, radix: 2)!
+                if(firstDigit == 1)
+                {
+                    RestAPI.callImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+                }
+                
+                if(seventhDigit == 1)
+                {
+                    let date = Date()
+                    let format = DateFormatter()
+                    format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                    let formattedDate = format.string(from: date)
+                    if(ninthDigit == 1 && seventhDigit == 1)
+                    {
+                        
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_VIEW))
+                        {
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_VIEW)
+                            
+                            if convertBinaryToDecimal != 0{
+                                
+                                let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url)
+                            }
+                            else
+                            {
+                                
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL)
+                            }
+                            
+                        }
+                        
+                    }
+                    if(ninthDigit == 0 && seventhDigit == 1)
+                    {
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_VIEW_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_VIEW_WEEKDAYS)){
+                            
+                            
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_VIEW_WEEKLY)
+                            sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_VIEW_WEEKDAYS)
+                            if convertBinaryToDecimal != 0{
+                                
+                                let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url)
+                            }
+                            else
+                            {
+                                
+                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL)
+                            }
+                            
+                        }
+                    }
                 }
             }
         }
+        else
+        {
+            print(" No CFG Key defined ")
+
+        }
         
     }
+    
+    @objc static func clickTrack(notificationData : Payload,actionType : String)
+    {
+       
+            if(notificationData.cfg != nil || notificationData.global?.cfg != nil)
+            {
+                if(notificationData.cfg != nil){
+                    let number = Int(notificationData.cfg ?? "0")
+                    let binaryString = String(number!, radix: 2)
+                   // let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
+                    let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+                   // let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
+                    let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
+                    let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+                    let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+                   // let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
+                    let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+                   // let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
+                    let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+                    
+                    let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
+                    let convertBinaryToDecimal = Int(domainURL, radix: 2)!
+
+                   
+                    
+                    if(secondDigit == 1)
+                    {
+                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                    }
+                    if eighthDigit == 1
+                    {
+                        let date = Date()
+                        let format = DateFormatter()
+                        format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                        let formattedDate = format.string(from: date)
+                        if(tenthDigit == 1 && eighthDigit == 1){
+                            let date = Date()
+                            let format = DateFormatter()
+                            format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                            let formattedDate = format.string(from: date)
+                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
+                            {
+                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
+                               
+                                if convertBinaryToDecimal != 0{
+                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
+                                }
+                                else
+                                {
+                                    
+                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                                }
+                                
+                                
+                                
+                                
+                              
+                            }
+                        }
+                       if(tenthDigit == 0 && eighthDigit == 1)
+                        {
+                           if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
+                               sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
+                               sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
+                               if convertBinaryToDecimal != 0{
+                                   let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                   RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
+                               }
+                               else
+                               {
+                                   
+                                   RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                               }
+                               
+                               
+                           }
+                        }
+                    }
+                }
+                if(notificationData.global?.cfg != nil ){
+                    
+                    let number = Int(notificationData.global?.cfg ?? "0")
+                    
+                    let binaryString = String(number!, radix: 2)
+                    // let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
+                    let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+                    // let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
+                    let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
+                    let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+                    let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+                    // let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
+                    let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+                    // let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
+                    let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+                    
+                    let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
+                    let convertBinaryToDecimal = Int(domainURL, radix: 2)!
+                    
+                    
+                    
+                    if(secondDigit == 1)
+                    {
+                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                    }
+                    if eighthDigit == 1
+                    {
+                        let date = Date()
+                        let format = DateFormatter()
+                        format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                        let formattedDate = format.string(from: date)
+                        if(tenthDigit == 1 && eighthDigit == 1){
+                            let date = Date()
+                            let format = DateFormatter()
+                            format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                            let formattedDate = format.string(from: date)
+                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
+                            {
+                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
+                                
+                                if convertBinaryToDecimal != 0{
+                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
+                                }
+                                else
+                                {
+                                    
+                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                                }
+                                
+                                
+                                
+                                
+                                
+                            }
+                        }
+                        if(tenthDigit == 0 && eighthDigit == 1)
+                        {
+                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
+                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
+                                sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
+                                if convertBinaryToDecimal != 0{
+                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
+                                }
+                                else
+                                {
+                                    
+                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                                }
+                                
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        else
+        {
+            print(" No CFG defined")
+        }
+        
+        
+    }
+       
     
     
     // Handle the InApp/Webview// and landing url listener
@@ -2917,3 +3208,18 @@ extension String {
         return String(data: data, encoding: .utf8)
     }
 }
+extension Double {
+    func getDigit(digit: Double) -> Int{
+        let power = Int(pow(10, (digit-1)))
+        return (Int(self) / power) % 10
+    }
+}
+extension Date {
+    func dayOfWeek() -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        return dateFormatter.string(from: self).capitalized
+        // or use capitalized(with: locale) if you want
+    }
+}
+

@@ -112,5 +112,14 @@ class AppConstant : NSObject
     static let iZ_B_KEY = "b"
     static let iZ_T_KEY = "t"
     static let iZ_RETURN_BIDS = "rb"
+    
+    static let IZ_LAST_VIEW = "LASTVIEW"
+    static let IZ_LAST_VIEW_WEEKLY = "LASTVIEWWEEKLY"
+    static let IZ_LAST_VIEW_WEEKDAYS = "VIEWWEEKDAYS"
+        
+    static let IZ_LAST_CLICK = "LASTCLICK"
+    static let IZ_LAST_CLICK_WEEKLY = "LASTCLICKWEEKLY"
+    static let IZ_LAST_CLICK_WEEKDAYS = "LCWEEKDAYS"
+           
   
 }
