@@ -30,10 +30,10 @@ public class RestAPI : NSObject
     static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
     static let LASTVISITURL="https://lvi.izooto.com/lvi";
     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
-    static let MEDIATION_IMPRESSION_URL = "https://med.izooto.com/medi";
-    static let MEDIATION_CLICK_URL = "https://med.izooto.com/medc"
+    static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
+    static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc"
     static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
-    static let SDKVERSION = "2.1.1"
+    static let SDKVERSION = "2.1.2"
     //fallback url
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
