@@ -37,6 +37,8 @@ public class RestAPI : NSObject
     //fallback url
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
+    static var fallBackTitle = ""
+
 
     
     

@@ -14,7 +14,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		8OBbEO9M5ZikFHb4LTs1uKid0dI=
+		IFFeYBVcngbQnmb0Y9bVA5bCMbA=
 		</data>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
@@ -50,83 +50,19 @@
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/Info.plist</key>
 		<data>
-		9W9vZe4NXhFla0fYU2PeDwmuKRM=
+		yF2dBmtQVgS9yoPsxbfjYfPSahY=
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
-		5W5/B2wtZlRawTJQXE6jQmYTdE8=
+		wY451vMtzOVq77RmxmPOAehLmAk=
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/iZootoiOSSDK</key>
 		<data>
-		UkgCuBzSUDOP0yn5VPBA973GahE=
-		</data>
-		<key>Frameworks/libswiftAVFoundation.dylib</key>
-		<data>
-		eC98i+d/50HcCdqa1MRmh/kFF5U=
-		</data>
-		<key>Frameworks/libswiftCore.dylib</key>
-		<data>
-		Wmo9GSAT8nxBnB+N19tM7Mz8UAA=
-		</data>
-		<key>Frameworks/libswiftCoreAudio.dylib</key>
-		<data>
-		jedQdFIJ0GioOTZUw7UMiRo2yNY=
-		</data>
-		<key>Frameworks/libswiftCoreFoundation.dylib</key>
-		<data>
-		TQJ2nMePUvE2V7jxUszI0taCIpY=
-		</data>
-		<key>Frameworks/libswiftCoreGraphics.dylib</key>
-		<data>
-		EHR71t0Aa9jnyfI0x1a0toOgxN0=
-		</data>
-		<key>Frameworks/libswiftCoreImage.dylib</key>
-		<data>
-		WloBQuR7edDW2sboDNiFCiOZpmw=
-		</data>
-		<key>Frameworks/libswiftCoreMedia.dylib</key>
-		<data>
-		Kb3lZ1+JJ0jcoBiik+Ka6pq8/Hs=
-		</data>
-		<key>Frameworks/libswiftDarwin.dylib</key>
-		<data>
-		Dx0V/SMjfcMhcuaCHR5LhrgmBeg=
-		</data>
-		<key>Frameworks/libswiftDispatch.dylib</key>
-		<data>
-		nvxA1U424cm+dRBSXwuwUYXFHAE=
-		</data>
-		<key>Frameworks/libswiftFoundation.dylib</key>
-		<data>
-		i+OfBRREU/I1+8/vBO8pi5D+I90=
-		</data>
-		<key>Frameworks/libswiftMetal.dylib</key>
-		<data>
-		wFe9d2yjYzYRnPHg62Kr3hpDB4g=
-		</data>
-		<key>Frameworks/libswiftObjectiveC.dylib</key>
-		<data>
-		JHpv9r+R4V2UFyWShw/noN14WhI=
-		</data>
-		<key>Frameworks/libswiftQuartzCore.dylib</key>
-		<data>
-		KI0gfwftJtXRCzTraTfmAcUalU0=
-		</data>
-		<key>Frameworks/libswiftUIKit.dylib</key>
-		<data>
-		7PWG3lTwuyLuwGB+FugJVwircDc=
-		</data>
-		<key>Frameworks/libswiftos.dylib</key>
-		<data>
-		kJjjQkkvL3U3yQ0UMtX8Ekn6cyM=
-		</data>
-		<key>Frameworks/libswiftsimd.dylib</key>
-		<data>
-		3KEMZkmzTzz7DUnijbk1lEgxv9A=
+		KEVXvjXNHQE52zTox7JHgmRemBk=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		T9cCRk2cxmNqLvy1wz/4TGWhjtQ=
+		osesDGG0pQ6YSBuOMzBhkS5CQhE=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -134,11 +70,11 @@
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/Info.plist</key>
 		<data>
-		J+io1Z2Oeowo+Az3BC3SnaeZMbQ=
+		zGyD39aUfF4gpIxq/rkQ2SEYyUk=
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/_CodeSignature/CodeResources</key>
 		<data>
-		ekEfnah+wQpBP3LEwqtgwOSZ3/4=
+		5zogV6Xiel+54EPJfG5SfkCwzkA=
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/embedded.mobileprovision</key>
 		<data>
@@ -146,7 +82,7 @@
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/iZootoNotificationExtendsServices</key>
 		<data>
-		oQlTPJRkF5VQcyVGceSLbNabHpE=
+		wRzDopxxBkrLtDLCwTQhppb+zLc=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -185,7 +121,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bqrs2UuVYl22CWycPufTjYo4Gx3H8bBloFop30QRlCc=
+			BCXwFJEQalOq8yV1oJfxJjdS4iueZs20rDqC0Cu8rrw=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
@@ -248,147 +184,35 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Jo4j3DLtCp/6I+egYW7z1PAjnMJ2Jhsmyp6zJUrWcuw=
+			iabnVBQ5up9f1qJBft2KM4EcM9VKxec4UeXglDQPq14=
 			</data>
 		</dict>
 		<key>Frameworks/iZootoiOSSDK.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			FnUljscTvngjgHMq2uQMnwr5xMDfsZNt0Xcv0bdMZgU=
+			lLb8WS6aG1gWI1ntGJkNj628gP8I6Gnucme42Z/K+dA=
 			</data>
 		</dict>
 		<key>Frameworks/iZootoiOSSDK.framework/iZootoiOSSDK</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			sppVL1FZA0RUzNMIHu2i/6haYUA4QQOIne1L2ehdET0=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftAVFoundation.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			DATN9UeoGc53RykpPxco48WLm4YjjRaAdROhzowbZcg=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftCore.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			EaxpAvvMIc9A6HsFLgcBJHu3Q1nZ5oKYXX0CauRsQ5M=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftCoreAudio.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			11LJSGfAkvvSgKzCIPWWjSr2GMWAnj4kcfOK55G3xaE=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftCoreFoundation.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ErTUAxlsUfR1pSCW2gIjjbolCvqXMwrWP/ZXDOIXJfI=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftCoreGraphics.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			qcARE1x1/WXtXQER0XtCxXny6TqKOKEy0vRgAjIL1uU=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftCoreImage.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Z7F3sClytUopLhtWC9wogGvnH0T9CjLf+BsAD0I5xqM=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftCoreMedia.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			olggOn9rNC0BATpsjRbqdOav/3kEXxkF32lams9CLsY=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftDarwin.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			cA3ZYOHzdbGKYznavb5x/+defg+ULDejPCMBATSLcRE=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftDispatch.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			q7DUkqiTH9obJumFRjb/Nmyr5DhzNb92PX2q75Rq+yA=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftFoundation.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			fexPR41K6Z2vDcyIHh4vdBgdGxK5Jm8WX3Q7/qM91eY=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftMetal.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			iiXFxqjbcx+hCNEdBl1W9Ee6kZSpQx4kK+KrRcdrZwE=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftObjectiveC.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ywybSbw7vJiCQGlWnFdUHko5/D+Uh5dFrMTHkyzXuWY=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftQuartzCore.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			/tvm1txxIMDM8RKv8v3tnQH+i2VFxfm31W3Ksz0lOfk=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftUIKit.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			xN5YTkDHqmyJsJ1bhbJ6kFIELZCywq7pzuFnHxPoKp0=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftos.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			gYb0ky1vQYiJ+UTloIsb025eJ9/3YQpdW6IPOUuLDrI=
-			</data>
-		</dict>
-		<key>Frameworks/libswiftsimd.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ZV9jW0zLqVh3ITx5OpN1GDNjIiimkjaaaus8QUQ3k6w=
+			9VvOgyaJu3SIvV21zbnlPSKPhEudUVCTF6npeCTKC2U=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lguNsOsfXGJkfBFKsMfnWQQIfKkZlfYgD2iShcsyRZA=
+			6y3RGT2CLYXtcYL3zi6vxJ6CraHuRoCsWiFD5xec43w=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			WqPjM7+wPY5prTdUvFArP+lWWt9TaeCQQkQbDnz+IkU=
+			A4u70rLm/Z3zAAPafqMG0F8tlz4Vc0Qc9G0z0PIeMUU=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/embedded.mobileprovision</key>
@@ -402,7 +226,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			BEHXp5ICNTP/DAtdH/PtkLpR4gdr3otUn0d79gFzmdE=
+			MjhWkD/2BX8eHxSzDFVZVLVfFqfze7t5i4n6CkWD/MQ=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>

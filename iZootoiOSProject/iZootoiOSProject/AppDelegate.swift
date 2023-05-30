@@ -42,9 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
 
     }
-
-   
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         UNUserNotificationCenter.current().delegate = self
@@ -85,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         
-        
+        /* Getting the Advertisement ID*/
         func getAdvertisementId()
         {
            
@@ -119,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             })
         }
 
-  
+  /* Fetching the Device Token*/
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data -> String in
                      return String(format: "%02.2hhx", data)
@@ -130,6 +127,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         iZooto.getToken(deviceToken: deviceToken)
     
     }
+
    // @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         iZooto.handleForeGroundNotification(notification: notification, displayNotification: "None", completionHandler: completionHandler)

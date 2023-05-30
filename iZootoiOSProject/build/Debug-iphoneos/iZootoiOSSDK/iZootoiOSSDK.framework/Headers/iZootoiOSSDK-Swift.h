@@ -306,7 +306,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) id <iZootoNotification
 + (void)setBadgeCountWithBadgeNumber:(NSInteger)badgeNumber;
 + (void)getAdvertisementIDWithAdid:(NSString * _Nonnull)adid;
 + (void)didReceiveNotificationExtensionRequestWithBundleName:(NSString * _Nonnull)bundleName soundName:(NSString * _Nonnull)soundName request:(UNNotificationRequest * _Nonnull)request bestAttemptContent:(UNMutableNotificationContent * _Nonnull)bestAttemptContent contentHandler:(void (^ _Nullable)(UNNotificationContent * _Nonnull))contentHandler SWIFT_AVAILABILITY(ios,introduced=11.0);
-+ (void)checkNotificationEnable;
++ (void)navigateToSettings;
 + (void)setPluginVersionWithPluginVersion:(NSString * _Nonnull)pluginVersion;
 + (void)handleForeGroundNotificationWithNotification:(UNNotification * _Nonnull)notification displayNotification:(NSString * _Nonnull)displayNotification completionHandler:(void (^ _Nonnull)(UNNotificationPresentationOptions))completionHandler;
 + (void)fallbackClickHandler;
