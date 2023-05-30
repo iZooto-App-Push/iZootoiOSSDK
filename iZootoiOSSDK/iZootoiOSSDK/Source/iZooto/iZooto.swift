@@ -542,7 +542,7 @@ public class iZooto : NSObject
                                             {
                                                 let t = Int(Date().timeIntervalSince(startDate) * 1000)
                                                 servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00] as NSMutableDictionary
-                                                bidsData.append(servedData)
+                                                bidsData.append(servedData) // bidding data
                                                 
                                                 anData = [anKey[0] as! [String : Any]]
                                                 tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
