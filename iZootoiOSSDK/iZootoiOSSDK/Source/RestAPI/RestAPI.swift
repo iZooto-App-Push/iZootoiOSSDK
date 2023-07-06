@@ -320,7 +320,7 @@ public class RestAPI : NSObject
                         if let httpResponse = response as? HTTPURLResponse {
                             if httpResponse.statusCode == 200 {
                                 if let data = data {
-                                    debugPrint("callImpression Success")
+                                   // debugPrint("callImpression Success")
                                 }
                             }else{
                                 
@@ -374,7 +374,7 @@ public class RestAPI : NSObject
                         if let httpResponse = response as? HTTPURLResponse {
                             if httpResponse.statusCode == 200 {
                                 if let data = data {
-                                    debugPrint("callImpression Success")
+                                   // debugPrint("callImpression Success")
                                 }
                             }else{
                                 if self.defaults.value(forKey: "callImpression") == nil{
@@ -432,7 +432,7 @@ public class RestAPI : NSObject
                            if let httpResponse = response as? HTTPURLResponse {
                                if httpResponse.statusCode == 200 {
                                    if let data = data {
-                                       debugPrint("clk")
+                                      // debugPrint("clk")
                                        
                                    }
                                }else{
@@ -576,7 +576,7 @@ public class RestAPI : NSObject
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
                             if let data = data {
-                                debugPrint("clickTrack Success")
+                                //debugPrint("clickTrack Success")
                             }
                         }else{
                             if self.defaults.value(forKey: "clickTrack") == nil{
@@ -676,7 +676,7 @@ public class RestAPI : NSObject
                         if let httpResponse = response as? HTTPURLResponse {
                             if httpResponse.statusCode == 200 {
                                 if let data = data {
-                                    debugPrint("lastVisit Success")
+                                   // debugPrint("lastVisit Success")
                                 }
                             }else{
                                 
@@ -741,7 +741,7 @@ public class RestAPI : NSObject
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
                             if let data = data {
-                                debugPrint("lastImpression Success")
+                               // debugPrint("lastImpression Success")
                             }
                         }else{
                             
@@ -800,7 +800,7 @@ public class RestAPI : NSObject
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
                             if let data = data {
-                                debugPrint("LastClick Success")
+                               // debugPrint("LastClick Success")
                             }
                         }else{
                             
@@ -971,7 +971,7 @@ public class RestAPI : NSObject
                             if let data = data {
                                 let isEnabled : Bool = UserDefaults.standard.bool(forKey: AppConstant.iZ_LOG_ENABLED)
                                 if isEnabled {
-                                    print("\(AppConstant.iZ_KEY_ADVERTISEMENT_ID) Success")
+                                    debugPrint("\(AppConstant.iZ_KEY_ADVERTISEMENT_ID) Success")
                                 }
                                 sharedUserDefault?.set(true,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
                                 sharedUserDefault?.set("", forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
@@ -1038,7 +1038,7 @@ public class RestAPI : NSObject
                 }
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {
-                        debugPrint("Success")
+                       // debugPrint("Success")
                     }else{
                         throw NSError(domain: "APIError", code: httpResponse.statusCode, userInfo: nil)
                     }
@@ -1077,7 +1077,7 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            debugPrint("Mediation Impression Success")
+                           // debugPrint("Mediation Impression Success")
                         }else{
                             if defaults.value(forKey: "adImpression") == nil{
                                 defaults.setValue("true", forKey: "adImpression")
@@ -1125,7 +1125,7 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            debugPrint("Mediation click Success")
+                           // debugPrint("Mediation click Success")
                         }else{
                             if self.defaults.value(forKey: "adClick") == nil{
                                 self.defaults.setValue("true", forKey: "adClick")
@@ -1174,7 +1174,7 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            debugPrint("callRV_RC_Request Success")
+                            //debugPrint("callRV_RC_Request Success")
                         }else{
                             if self.defaults.value(forKey: "callRV_RC_Request") == nil{
                                 self.defaults.setValue("true", forKey: "callRV_RC_Request")
