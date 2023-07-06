@@ -36,7 +36,7 @@ public class RestAPI : NSObject
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
     static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
-    static let SDKVERSION = "2.1.3"
+    static let SDKVERSION = "2.1.4"
    
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
@@ -402,120 +402,120 @@ public class RestAPI : NSObject
     }
     
     // track the notification click
-    static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String, userInfo:[AnyHashable : Any])
-    {
-        if notificationData.ankey != nil{
-            if(notificationData.global?.rid != nil && userid != 0 && token != "")
-            {
-                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                    URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
-                    URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
-                    URLQueryItem(name: "op", value: "click"),
-                    URLQueryItem(name: "ver", value: SDKVERSION),
-                    URLQueryItem(name: "btn", value: "\(type)")
-                ]
-                let dict = ["pid": "\(userid)", "bKey": token, "cid":"\(notificationData.id!)" , "rid":"\(notificationData.rid!)", "op":"click", "ver": SDKVERSION, "btn": "\(type)"]
-                var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
-                request.httpMethod = AppConstant.iZ_POST_REQUEST
-                request.allHTTPHeaderFields = requestHeaders
-                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                URLSession.shared.dataTask(with: request){(data,response,error) in
-                    do {
-                        if let error = error {
-                            throw error
-                        }
-                        // Check the HTTP response status code
-                        if let httpResponse = response as? HTTPURLResponse {
-                            if httpResponse.statusCode == 200 {
-                                if let data = data {
-                                    debugPrint("clickTrack Success")
-                                }
-                            }else{
-                                if self.defaults.value(forKey: "clickTrack") == nil{
-                                    self.defaults.setValue("true", forKey: "clickTrack")
-                                    sendExceptionToServer(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                                }
-                            }
-                        }
-                    } catch let error{
-                        self.clickStoreData.append(dict)
-                        UserDefaults.standard.set(self.clickStoreData, forKey: "ClickOffData")
-                        if self.defaults.value(forKey: "clickTrack") == nil{
-                            self.defaults.setValue("true", forKey: "clickTrack")
-                            sendExceptionToServer(exceptionName: "\(error.localizedDescription)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                        }
-                    }
-                }.resume()
-            }
-            else
-            {
-                if self.defaults.value(forKey: "clickTrack") == nil{
-                    self.defaults.setValue("true", forKey: "clickTrack")
-                    sendExceptionToServer(exceptionName: "RID or CID is null, \(userInfo)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                }
-            }
-        }else{
-            if(notificationData.rid != nil && userid != 0 && token != "")
-            {
-                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                    URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                    URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                    URLQueryItem(name: "op", value: "click"),
-                    URLQueryItem(name: "ver", value: SDKVERSION),
-                    URLQueryItem(name: "btn", value: "\(type)")
-                ]
-                let dict = ["pid": "\(userid)", "bKey": token, "cid":"\(notificationData.id!)" , "rid":"\(notificationData.rid!)", "op":"click", "ver": SDKVERSION, "btn": "\(type)"]
-                
-                var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
-                request.httpMethod = AppConstant.iZ_POST_REQUEST
-                request.allHTTPHeaderFields = requestHeaders
-                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                URLSession.shared.dataTask(with: request){(data,response,error) in
-                    
-                    do {
-                        if let error = error {
-                            throw error
-                        }
-                        // Check the HTTP response status code
-                        if let httpResponse = response as? HTTPURLResponse {
-                            if httpResponse.statusCode == 200 {
-                                if let data = data {
-                                    debugPrint("clickTrack Success")
-                                }
-                            }else{
-                                if self.defaults.value(forKey: "clickTrack") == nil{
-                                    self.defaults.setValue("true", forKey: "clickTrack")
-                                    sendExceptionToServer(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                                }
-                            }
-                        }
-                    } catch let error{
-                        self.clickStoreData.append(dict)
-                        UserDefaults.standard.set(self.clickStoreData, forKey: AppConstant.iZ_CLICK_OFFLINE_DATA)
-                        if self.defaults.value(forKey: "clickTrack") == nil{
-                            self.defaults.setValue("true", forKey: "clickTrack")
-                            sendExceptionToServer(exceptionName: "\(error.localizedDescription)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                        }
-                    }
-                }.resume()
-            }
-            else
-            {
-                if self.defaults.value(forKey: "clickTrack") == nil{
-                    self.defaults.setValue("true", forKey: "clickTrack")
-                    sendExceptionToServer(exceptionName: "RID or CID is blank, \(userInfo)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                }
-            }
-        }
-    }
+       static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String, userInfo:[AnyHashable : Any])
+       {
+           if notificationData.ankey != nil{
+               if(notificationData.global?.rid != nil && userid != 0 && token != "")
+               {
+                   let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                   var requestBodyComponents = URLComponents()
+                   requestBodyComponents.queryItems = [
+                       URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                       URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                       URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id ?? ""))"),
+                       URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid ?? ""))"),
+                       URLQueryItem(name: "op", value: "click"),
+                       URLQueryItem(name: "ver", value: SDKVERSION),
+                       URLQueryItem(name: "btn", value: "\(type)")
+                   ]
+                   let dict = ["pid": "\(userid)", "bKey": token, "cid":"\(notificationData.global?.id ?? "")" , "rid":"\(notificationData.global?.rid ?? "")", "op":"click", "ver": SDKVERSION, "btn": "\(type)"]
+                   var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
+                   request.httpMethod = AppConstant.iZ_POST_REQUEST
+                   request.allHTTPHeaderFields = requestHeaders
+                   request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                   URLSession.shared.dataTask(with: request){(data,response,error) in
+                       do {
+                           if let error = error {
+                               throw error
+                           }
+                           // Check the HTTP response status code
+                           if let httpResponse = response as? HTTPURLResponse {
+                               if httpResponse.statusCode == 200 {
+                                   if let data = data {
+                                       debugPrint("clk")
+                                       
+                                   }
+                               }else{
+                                   if self.defaults.value(forKey: "clickTrack") == nil{
+                                       self.defaults.setValue("true", forKey: "clickTrack")
+                                       sendExceptionToServer(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+                                   }
+                               }
+                           }
+                       } catch let error{
+                           self.clickStoreData.append(dict)
+                           UserDefaults.standard.set(self.clickStoreData, forKey: "ClickOffData")
+                           if self.defaults.value(forKey: "clickTrack") == nil{
+                               self.defaults.setValue("true", forKey: "clickTrack")
+                               sendExceptionToServer(exceptionName: "\(error.localizedDescription)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+                           }
+                       }
+                   }.resume()
+               }
+               else
+               {
+                   if self.defaults.value(forKey: "clickTrack") == nil{
+                       self.defaults.setValue("true", forKey: "clickTrack")
+                       sendExceptionToServer(exceptionName: "RID or CID is null, \(userInfo)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+                   }
+               }
+           }else{
+               if(notificationData.rid != nil && userid != 0 && token != "")
+               {
+                   let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                   var requestBodyComponents = URLComponents()
+                   requestBodyComponents.queryItems = [
+                       URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                       URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                       URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
+                       URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
+                       URLQueryItem(name: "op", value: "click"),
+                       URLQueryItem(name: "ver", value: SDKVERSION),
+                       URLQueryItem(name: "btn", value: "\(type)")
+                   ]
+                   let dict = ["pid": "\(userid)", "bKey": token, "cid":"\(notificationData.id ?? "")" , "rid":"\(notificationData.rid ?? "")", "op":"click", "ver": SDKVERSION, "btn": "\(type)"]
+                   
+                   var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
+                   request.httpMethod = AppConstant.iZ_POST_REQUEST
+                   request.allHTTPHeaderFields = requestHeaders
+                   request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                   URLSession.shared.dataTask(with: request){(data,response,error) in
+                       
+                       do {
+                           if let error = error {
+                               throw error
+                           }
+                           // Check the HTTP response status code
+                           if let httpResponse = response as? HTTPURLResponse {
+                               if httpResponse.statusCode == 200 {
+                                   if let data = data {
+                                   }
+                               }else{
+                                   if self.defaults.value(forKey: "clickTrack") == nil{
+                                       self.defaults.setValue("true", forKey: "clickTrack")
+                                       sendExceptionToServer(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                                   }
+                               }
+                           }
+                       } catch let error{
+                           self.clickStoreData.append(dict)
+                           UserDefaults.standard.set(self.clickStoreData, forKey: AppConstant.iZ_CLICK_OFFLINE_DATA)
+                           if self.defaults.value(forKey: "clickTrack") == nil{
+                               self.defaults.setValue("true", forKey: "clickTrack")
+                               sendExceptionToServer(exceptionName: "\(error.localizedDescription)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                           }
+                       }
+                   }.resume()
+               }
+               else
+               {
+                   if self.defaults.value(forKey: "clickTrack") == nil{
+                       self.defaults.setValue("true", forKey: "clickTrack")
+                       sendExceptionToServer(exceptionName: "RID or CID is blank, \(userInfo)", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                   }
+               }
+           }
+       }
     
     static func offlineClickTrackCall(){
         
