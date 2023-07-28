@@ -67,9 +67,26 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBlue
-
+        getNotificationFeedData(isPagination: false) // o index called
+        
+       
+    }
+    
+    func getNotificationFeedData(isPagination : Bool)
+    {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Simulate API call delay
+                   iZooto.getNotificationFeed(isPagination: true){ (jsonString, error) in
+                       if let error = error {
+                           print("\(error.localizedDescription)")
+                       } else if let jsonString = jsonString {
+                           print("Response = ",jsonString) // response data
+                          
+                       }
+                   }
+               }
       
     }
+    
 
 }
 

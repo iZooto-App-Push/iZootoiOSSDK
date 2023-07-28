@@ -3159,6 +3159,29 @@ public class iZooto : NSObject
             }
         }
     }
+    
+    
+ /* added a new method
+  This method returns the jsonString data
+  method name -getNotificationFeed
+  parameeter - isPagination = true -> 1,2,3,4 index  or false -> 0 index called
+  completion  -> return String data
+  */
+    @objc public static func getNotificationFeed(isPagination: Bool,completion: @escaping (String?, Error?) -> Void){
+            if let userID = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.registerID)), let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)){
+                debugPrint(token)
+                RestAPI.fetchDataFromAPI(isPagination: isPagination,iZPID: userID) { (jsonString, error) in
+                    if let error = error {
+                        debugPrint(error)
+                        completion(AppConstant.IZ_NO_MORE_DATA, nil)
+                    } else if let jsonString = jsonString {
+                        completion(jsonString, nil)
+                    }
+                }
+            }else{
+                completion(AppConstant.IZ_INITIALISE_ERROR_MESSAGE, nil)
+            }
+        }
 }
 
 // Handle banner imange uploading and deleting
@@ -3208,4 +3231,16 @@ extension UNNotificationAttachment {
 // Helper function inserted by Swift 4.2 migrator.
 fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
     return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(string: key), value)})
+}
+
+extension String {
+    func sha1() -> String {
+        let data = Data(self.utf8)
+        var digest = [UInt8](repeating: 0, count:Int(CC_SHA1_DIGEST_LENGTH))
+        data.withUnsafeBytes {
+            _ = CC_SHA1($0.baseAddress, CC_LONG(data.count), &digest)
+        }
+        let hexBytes = digest.map { String(format: "%02hhx", $0) }
+        return hexBytes.joined()
+    }
 }

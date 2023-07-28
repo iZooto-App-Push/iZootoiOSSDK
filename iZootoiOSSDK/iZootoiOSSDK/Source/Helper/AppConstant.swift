@@ -130,4 +130,12 @@ class AppConstant : NSObject
     static let IZ_LAST_CLICK_WEEKLY = "LASTCLICKWEEKLY"
     static let IZ_LAST_CLICK_WEEKDAYS = "LCWEEKDAYS"
     
+    static let iZ_M_KEY = "m"
+    static let iZ_BI_KEY = "bi"
+    static let iZ_CT_KEY = "ct"
+    static let iZ_P_KEY = "p"
+    static let IZ_TITLE_KEY = "title"
+    static let IZ_INITIALISE_ERROR_MESSAGE = "iZooto is not initialized properly, Please verify again."
+    static let IZ_NO_MORE_DATA = "No more data"
+    
 }

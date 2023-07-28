@@ -36,7 +36,7 @@ public class RestAPI : NSObject
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
     static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
-    static let SDKVERSION = "2.1.4"
+    static let SDKVERSION = "2.1.5"
    
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
@@ -44,6 +44,13 @@ public class RestAPI : NSObject
     static let defaults = UserDefaults.standard
     private static var clickStoreData: [[String:Any]] = []
     private static var mediationClickStoreData: [[String:Any]] = []
+    
+    // notification feed data
+    
+    static let ALL_NOTIFICATION_DATA = "https://nh.iz.do/nh/"
+    static var index = 0
+    static var stopCalling = false
+    static var lessData = 0
     
     static func callSubscription(isSubscribe : Int,token : String,userid : Int)
     {
@@ -1210,4 +1217,78 @@ public class RestAPI : NSObject
         let bundleID = Bundle.main.bundleIdentifier
         return "group."+bundleID! + ".iZooto"
     }
+    //call the notification feed api
+    @objc static func fetchDataFromAPI(isPagination: Bool,iZPID: String,completion: @escaping (String?, Error?) -> Void) {
+          
+           if isPagination == false{
+               index = 0
+           }
+           if index > 4{
+               completion(AppConstant.IZ_NO_MORE_DATA,nil)
+               return
+           }
+           var arrayOfDictionaries : [[String: Any]] = []
+           let sID = iZPID.sha1()
+           let url = URL(string: RestAPI.ALL_NOTIFICATION_DATA+"\(sID)/\(index).json")
+           guard let requestUrl = url else { fatalError() }
+           var request = URLRequest(url: requestUrl)
+           request.httpMethod = "GET"
+           
+           let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+               if let error = error {
+                   debugPrint("\(error)")
+                   completion(AppConstant.IZ_NO_MORE_DATA, nil)
+                   return
+               }
+               // Convert HTTP Response Data to a String
+               if let data = data {
+                   do {
+                       let jsonResponse = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+                       for data in jsonResponse as! NSArray {
+                           if let dictDa = data as? NSDictionary {
+                               let allData = dictDa.value(forKey: AppConstant.iZ_P_KEY) as? NSDictionary
+                               let title = allData?.value(forKey: AppConstant.iZ_T_KEY) ?? ""
+                               let message = allData?.value(forKey: AppConstant.iZ_M_KEY) ?? ""
+                               let image = allData?.value(forKey: AppConstant.iZ_BI_KEY) ?? ""
+                               let time = allData?.value(forKey: AppConstant.iZ_CT_KEY) ?? ""
+                               let ln = allData?.value(forKey: AppConstant.iZ_LNKEY) ?? ""
+                               let dictionary1: [String: Any] = ["title": title, "message": message, "banner_image": image, "time_stamp": time,"landing_url": ln]
+                               arrayOfDictionaries.append(dictionary1)
+                           }
+                       }
+                       
+                       if arrayOfDictionaries.count != 15{
+                           if lessData == 1{
+                               stopCalling = true
+                           }
+                           lessData = 1
+                           index = index
+                       }else{
+                           lessData = 0
+                           stopCalling = false
+                           index = index + 1
+                       }
+                       
+                       if stopCalling == false{
+                           let jsonData = try JSONSerialization.data(withJSONObject: arrayOfDictionaries, options: .prettyPrinted)
+                           if let jsonString = String(data: jsonData, encoding: .utf8) {
+                               completion(jsonString, nil)
+                               return
+                           }
+                       }else{
+                           completion(AppConstant.IZ_NO_MORE_DATA, nil)
+                           return
+                       }
+                   }
+                   catch let error
+                   {
+                       completion(AppConstant.IZ_NO_MORE_DATA, nil)
+                       print(error)
+                       return
+                       
+                   }
+               }
+           }
+           task.resume()
+       }
 }

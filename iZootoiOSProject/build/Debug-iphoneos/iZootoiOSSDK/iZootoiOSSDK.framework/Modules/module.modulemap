@@ -1,0 +1,11 @@
+framework module iZootoiOSSDK {
+  umbrella header "iZootoiOSSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module iZootoiOSSDK.Swift {
+  header "iZootoiOSSDK-Swift.h"
+  requires objc
+}

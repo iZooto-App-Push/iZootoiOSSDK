@@ -1,0 +1,9 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "fba0cbd82e76d83da771cb858df6a8258f7700dde31e0413d16058674de56b93"
+build_start_time: [1690532193, 464745998]
+build_end_time: [1690532195, 176999092]
+inputs:
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject/AppDelegate.swift": [1688383658, 809562683]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject/SceneDelegate.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject/SecondViewController.swift": [1669197707, 0]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject/ViewController.swift": [1690532192, 579241752]
