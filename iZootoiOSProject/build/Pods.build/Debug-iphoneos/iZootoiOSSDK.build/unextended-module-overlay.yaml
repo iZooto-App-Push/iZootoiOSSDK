@@ -10,5 +10,14 @@
       'name': "module.modulemap",
       'external-contents': "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/Pods.build/Debug-iphoneos/iZootoiOSSDK.build/unextended-module.modulemap",
     }]
-  }]
+    },
+    {
+    'type': 'directory',
+    'name': "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/Debug-iphoneos/iZootoiOSSDK/iZootoiOSSDK.framework/Headers"
+    'contents': [{
+      'type': 'file',
+      'name': "iZootoiOSSDK-Swift.h",
+      'external-contents': "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/Pods.build/Debug-iphoneos/iZootoiOSSDK.build/unextended-interface-header.h",
+    }]
+    }]
 }

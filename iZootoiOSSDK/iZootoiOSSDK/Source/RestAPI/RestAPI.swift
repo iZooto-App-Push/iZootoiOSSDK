@@ -22,7 +22,7 @@ public class RestAPI : NSObject
 {
     //******** Live *******
     
-    static let BASEURL = "https://aevents.izooto.com/app.php"
+    static let BASEURL = "https://aevents.izooto.com/app"
     static let ENCRPTIONURL="https://cdn.izooto.com/app/app_"
     static let IMPRESSION_URL="https://impr.izooto.com/imp";
     static let LOG = "iZooto :"

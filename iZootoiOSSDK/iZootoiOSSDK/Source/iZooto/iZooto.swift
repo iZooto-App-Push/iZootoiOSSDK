@@ -285,7 +285,7 @@ public class iZooto : NSObject
          }
          else
          {
-             sleep(5)
+             sleep(2)
              if(mizooto_id != 0 && token != "")
              {
                  RestAPI.registerToken(token: token, izootoid: mizooto_id)
