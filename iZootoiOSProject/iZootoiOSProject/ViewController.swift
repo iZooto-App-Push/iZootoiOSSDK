@@ -67,7 +67,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBlue
-        getNotificationFeedData(isPagination: false) // o index called
+       // getNotificationFeedData(isPagination: false) // o index called
         
        
     }

@@ -184,7 +184,6 @@ public class iZooto : NSObject
     }
     
     @objc public static func setLogLevel(isEnable: Bool){
-        print("is enable", isEnable)
         UserDefaults.standard.set(isEnable, forKey: AppConstant.iZ_LOG_ENABLED)
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
             userDefaults.set(isEnable, forKey: AppConstant.iZ_LOG_ENABLED)

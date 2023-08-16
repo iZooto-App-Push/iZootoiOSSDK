@@ -26,14 +26,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("DeepLink",action )
        }
     
-    // Handle url
-        
+    /* When add the  landingURLDelegate
+       and clicks the notification
+        then called this method
+     */
         func onHandleLandingURL(url: String) {// setlandingURL
         print("ClickURL",url)
-       
-         
-//    UIApplication.shared.keyWindow!.rootViewController?.present(new V, animated: true, completion: nil)
-      
     }
     
     // Notification Received

@@ -1,8 +1,8 @@
 {
   "buildCommand" : {
-    "command" : "prepareForIndexing",
-    "enableIndexBuildArena" : false,
-    "targets" : null
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildAndRun"
   },
   "configuredTargets" : [
     {
@@ -10,29 +10,24 @@
     }
   ],
   "containerPath" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject.xcworkspace",
-  "continueBuildingAfterErrors" : true,
+  "continueBuildingAfterErrors" : false,
   "enableIndexBuildArena" : false,
   "hideShellScriptEnvironment" : false,
   "parameters" : {
     "action" : "build",
-    "activeArchitecture" : "undefined_arch",
+    "activeArchitecture" : "arm64",
     "activeRunDestination" : {
-      "disableOnlyActiveArch" : true,
+      "disableOnlyActiveArch" : false,
       "platform" : "iphoneos",
       "sdk" : "iphoneos16.4",
       "sdkVariant" : "iphoneos",
       "supportedArchitectures" : [
-        "armv4t",
-        "armv5",
-        "armv6",
-        "armv7",
-        "armv7f",
-        "armv7s",
-        "armv7k",
+        "arm64e",
+        "arm64v8",
         "arm64",
-        "arm64e"
+        "armv8"
       ],
-      "targetArchitecture" : "undefined_arch"
+      "targetArchitecture" : "arm64"
     },
     "arenaInfo" : {
       "buildIntermediatesPath" : "",
@@ -47,7 +42,15 @@
     "overrides" : {
       "synthesized" : {
         "table" : {
-          "ENABLE_PREVIEWS" : "NO"
+          "ASSETCATALOG_FILTER_FOR_DEVICE_MODEL" : "iPhone12,1",
+          "ASSETCATALOG_FILTER_FOR_DEVICE_OS_VERSION" : "16.6",
+          "ASSETCATALOG_FILTER_FOR_THINNING_DEVICE_CONFIGURATION" : "iPhone12,1",
+          "BUILD_ACTIVE_RESOURCES_ONLY" : "YES",
+          "ENABLE_PREVIEWS" : "NO",
+          "TARGET_DEVICE_IDENTIFIER" : "00008030-00155866219B402E",
+          "TARGET_DEVICE_MODEL" : "iPhone12,1",
+          "TARGET_DEVICE_OS_VERSION" : "16.6",
+          "TARGET_DEVICE_PLATFORM_NAME" : "iphoneos"
         }
       }
     }
