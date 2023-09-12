@@ -1,16 +1,28 @@
 {
   "buildCommand" : {
-    "command" : "build",
-    "skipDependencies" : false,
-    "style" : "buildAndRun"
+    "command" : "prepareForIndexing",
+    "enableIndexBuildArena" : false,
+    "targets" : null
   },
   "configuredTargets" : [
+    {
+      "guid" : "8699adb1dd336b26511df848a716bd42d40b7f24d397ba44b5813dd4b8d47ad3"
+    },
+    {
+      "guid" : "8699adb1dd336b26511df848a716bd4283990a1cf586acbbbd07c3e52f36238e"
+    },
+    {
+      "guid" : "8699adb1dd336b26511df848a716bd4206b7ac0a3d92f2a6133380694703b843"
+    },
+    {
+      "guid" : "9ce3803391ced205031cacec296018acf33791a0282e83aefacbd612de097b50"
+    },
     {
       "guid" : "9ce3803391ced205031cacec296018ac5b1cede291b649375ff38e23bf47582c"
     }
   ],
   "containerPath" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject.xcworkspace",
-  "continueBuildingAfterErrors" : false,
+  "continueBuildingAfterErrors" : true,
   "enableIndexBuildArena" : false,
   "hideShellScriptEnvironment" : false,
   "parameters" : {
@@ -55,9 +67,10 @@
       }
     }
   },
+  "qos" : "default",
   "schemeCommand" : "launch",
   "showNonLoggedProgress" : true,
-  "useDryRun" : false,
+  "useDryRun" : true,
   "useImplicitDependencies" : true,
   "useLegacyBuildLocations" : false,
   "useParallelTargets" : true
