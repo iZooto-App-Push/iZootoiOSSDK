@@ -14,7 +14,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		6vr1ruwW76AyvMfgG80uqqHbGDA=
+		Um0CbACv/tIuhQnTJfpcD8tH1Cs=
 		</data>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
@@ -50,19 +50,19 @@
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/Info.plist</key>
 		<data>
-		ErBb4bfj4NH+W9uKwgrl40mh9+g=
+		vyrrye8ow+2SwBjA55GMT4Uut0s=
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
-		jtqwNz8MzJrx8sg7LYTgAwgb6tk=
+		FtfV7mV2GfbqGd/oHNojLyc2TJM=
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/iZootoiOSSDK</key>
 		<data>
-		ZrlFfsIejiWWdU0P/T4qZlH4h48=
+		vWO+bKAf7++c2DmeYDvkOs90YIQ=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		/P5r5RwwKCLOHOV+z9Az12kIn7k=
+		W+lJZvD9x06n2f/hrfAyu0nD5cw=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -70,23 +70,23 @@
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/Info.plist</key>
 		<data>
-		p/tYWMnBKkDASfnUBahOLP8Hw9E=
+		u55odGviZN+qv692seYjFkpoYPI=
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/_CodeSignature/CodeResources</key>
 		<data>
-		Nxqnjk4abuPJjILiIzXpXk7wlUA=
+		VCnA7LPIqsobY601Hvc0DR66+QI=
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/embedded.mobileprovision</key>
 		<data>
-		YUjhAUIr+wlKXlHKQS5F13S8yzg=
+		OUUncDkoYbKNH4SAyhaL2x7oOQI=
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/iZootoNotificationExtendsServices</key>
 		<data>
-		uZ8ADbX0vVwIkqIaJfoss/6uHI0=
+		+ax7l7775n3GkInApgsH9wvLJT0=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		HtEfOEJ51O1l81AWTLbX4C4u/O8=
+		0tpm8j1u2SLN0PJFH/WOAZb2T8A=
 		</data>
 		<key>logo.png</key>
 		<data>
@@ -121,7 +121,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			cVNrTqwFV085tOapzg37vJGfkUgvWHFy+KCyMpfckQc=
+			cISjPnR3asrKbyeouyVvhoGqLI/1Mi0JY5zFmYp2G1Q=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
@@ -184,56 +184,56 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Iyg+sWHznoTqzFAa3q1jtWipxI7Bz5GyS1bcQeIgA4c=
+			LAk8sDh0aCOsB0+unxiwhMDpyT7jR34nUNx47wpZFkU=
 			</data>
 		</dict>
 		<key>Frameworks/iZootoiOSSDK.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			gMzx4r9Q21Fr3MmFet4ABi/v8+jJILqCaPJ+pHfOMEA=
+			F/zu1jm5Oy5MHawBqecwWFxX5O5uPoH3m7Xamj52yyQ=
 			</data>
 		</dict>
 		<key>Frameworks/iZootoiOSSDK.framework/iZootoiOSSDK</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			0bMX+a9BK7Y8PlGisFxqtggqlnXH4fUIpLAGTGfW+c0=
+			AUdhDNPw8Aq1LrzfmzR6G5j6J9+7kdYciW4VZBk959U=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Y9dBBfDbmFxBzEkIeZOAcR+BtgrNxiQ6r6Ft3E8OEc0=
+			lzPWMqgO1IUI42WtHG/I4r4Gt7LRf/+FQUsdh7Vh08s=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			UMonxPxC4mV4wVwwVHt7m3E2ihfd2nI0gK9x3L31J9w=
+			8Xc147TR/Dnolr6Aos2brfJ/t3NeswuFcHHePq/ujw0=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/embedded.mobileprovision</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			GJ/UIUy2O+UE6CSXZU1MWlqE2MQYSzflyPgs2sxtPFE=
+			hLo9ISu+iJzK6xdHZDsuDwwijrDvstTzUe9f0lf6X6Y=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/iZootoNotificationExtendsServices</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			jDgp1zQ75MzPqOf9qx4lX0gHHxp7p8yF5M3qhGt6J8w=
+			S9M1pZ8Hxl9DoKcL1jQ2zILhKCGIgdG3swdy374MXMA=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			svRFfsh5CF0nlSo1YlAokqLvDC9t1DnpBkdo+B+q+yM=
+			1MFg9eAXBQ1b7ppHn3kT5xqRMSCkDAUILRKl8B1l80M=
 			</data>
 		</dict>
 		<key>logo.png</key>

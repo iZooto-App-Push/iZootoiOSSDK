@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         iZooto.promptForPushNotifications()
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
-        iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
+        iZooto.initialisation(izooto_id: "aaef76bb3f286d9cbd693f63d77abf328c6788a5", application: application,  iZootoInitSettings:iZootoInitSettings)
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self

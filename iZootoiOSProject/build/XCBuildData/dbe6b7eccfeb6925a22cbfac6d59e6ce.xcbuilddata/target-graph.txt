@@ -1,12 +1,12 @@
 Target dependency graph (5 targets)
 iZootoiOSSDK in Pods, no dependencies
-Pods-iZootoiOSProject in Pods, depends on:
-iZootoiOSSDK in Pods (explicit)
 Pods-iZootoiOSProject-iZootoNotificationExtendsServices in Pods, depends on:
 iZootoiOSSDK in Pods (explicit)
 iZootoNotificationExtendsServices in iZootoiOSProject, depends on:
 Pods-iZootoiOSProject-iZootoNotificationExtendsServices in Pods (implicit dependency via file 'Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework' in build phase 'Link Binary')
 iZootoiOSSDK in Pods (implicit dependency via options '-framework iZootoiOSSDK' in build setting 'OTHER_LDFLAGS')
+Pods-iZootoiOSProject in Pods, depends on:
+iZootoiOSSDK in Pods (explicit)
 iZootoiOSProject in iZootoiOSProject, depends on:
 iZootoNotificationExtendsServices in iZootoiOSProject (explicit)
 Pods-iZootoiOSProject in Pods (implicit dependency via file 'Pods_iZootoiOSProject.framework' in build phase 'Link Binary')
