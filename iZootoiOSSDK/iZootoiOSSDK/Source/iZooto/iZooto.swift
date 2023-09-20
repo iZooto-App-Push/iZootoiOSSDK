@@ -2750,7 +2750,7 @@ public class iZooto : NSObject
                 }
             }
             
-            if(notificationData.global?.cfg != nil)
+          else if(notificationData.global?.cfg != nil)
             {
                 let number = Int(notificationData.global?.cfg ?? "0")
                 let binaryString = String(number!, radix: 2)
@@ -2813,7 +2813,6 @@ public class iZooto : NSObject
                 }
             }else
             {
-                print(" No CFG Key defined ")
                 let defaults = UserDefaults.standard
                 if defaults.value(forKey: "ImpressionTrackkk") == nil{
                     defaults.setValue("true", forKey: "ImpressionTrackkk")
@@ -2990,7 +2989,6 @@ public class iZooto : NSObject
             }
             else
             {
-                print(" No CFG defined")
                 let defaults = UserDefaults.standard
                 if defaults.value(forKey: "ClickTrackkk") == nil{
                     defaults.setValue("true", forKey: "ClickTrackkk")

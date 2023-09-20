@@ -1,7 +1,7 @@
 version: "Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)"
 options: "0d5e53521692d49bc93f11fe86e596900a3bbf69da160c72d0302040642ca5ae"
-build_start_time: [1694522225, 466130000]
-build_end_time: [1694522228, 52233000]
+build_start_time: [1695192515, 468754000]
+build_end_time: [1695192518, 268156000]
 inputs:
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppConstant.swift": [1690531919, 549776267]
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/NetworkClient.swift": [1669197707, 0]
@@ -13,6 +13,6 @@ inputs:
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/UserDefaults.swift": [1669197707, 0]
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/Utils.swift": [1688383601, 451123018]
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Payload/Payload.swift": [1678793166, 189722821]
-  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/RestAPI/RestAPI.swift": [1692167480, 966323512]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/RestAPI/RestAPI.swift": [1695127074, 66302652]
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/ViewController.swift": [1669197707, 0]
-  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift": [1694516107, 73687594]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift": [1695192514, 949564963]

@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        and clicks the notification
         then called this method
      */
-        func onHandleLandingURL(url: String) {// setlandingURL
+    func onHandleLandingURL(url: String) {// setlandingURL
         print("ClickURL",url)
     }
     
