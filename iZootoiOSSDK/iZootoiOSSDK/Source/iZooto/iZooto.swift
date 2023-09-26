@@ -984,7 +984,7 @@ public class iZooto : NSObject
     
     // Handle the payload and show the notification
     @available(iOS 11.0, *)
-    @objc public static func didReceiveNotificationExtensionRequest(bundleName : String,soundName :String,
+    @objc public static func didReceiveNotificationExtensionRequest(bundleName : String,soundName :String,isBadge:Bool,
                                                                     request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
     {
         let defaults = UserDefaults.standard
@@ -1020,21 +1020,27 @@ public class iZooto : NSObject
                                     let groupName = "group."+bundleName+".iZooto"
                                     
                                     if let userDefaults = UserDefaults(suiteName: groupName) {
-                                        
-                                        badgeCount = userDefaults.integer(forKey:"Badge")
-                                        if badgeCount > 0 {
-                                            if(badgeNumber > 0)
-                                            {
-                                                bestAttemptContent.badge = 1 as NSNumber
+                                        if(isBadge){
+                                            badgeCount = userDefaults.integer(forKey:"Badge")
+                                            if badgeCount > 0 {
+                                                if(badgeNumber > 0)
+                                                {
+                                                    bestAttemptContent.badge = 1 as NSNumber
+                                                }
+                                                else
+                                                {
+                                                    userDefaults.set(badgeCount + 1, forKey: "Badge")
+                                                    bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                                                }
+                                            } else {
+                                                userDefaults.set(1, forKey: "Badge")
+                                                bestAttemptContent.badge = 1
                                             }
-                                            else
-                                            {
-                                                userDefaults.set(badgeCount + 1, forKey: "Badge")
-                                                bestAttemptContent.badge = badgeCount + 1 as NSNumber
-                                            }
-                                        } else {
-                                            userDefaults.set(1, forKey: "Badge")
-                                            bestAttemptContent.badge = 1
+                                        }
+                                        else
+                                        {
+                                            bestAttemptContent.badge = -1
+
                                         }
                                         
                                         isEnabled = userDefaults.bool(forKey: AppConstant.iZ_LOG_ENABLED)
@@ -1111,21 +1117,26 @@ public class iZooto : NSObject
                             let groupName = "group."+bundleName+".iZooto"
                             
                             if let userDefaults = UserDefaults(suiteName: groupName) {
-                                
-                                badgeCount = userDefaults.integer(forKey:"Badge")
-                                if badgeCount > 0 {
-                                    if(badgeNumber > 0)
-                                    {
-                                        bestAttemptContent.badge = 1 as NSNumber
+                                if(isBadge){
+                                    badgeCount = userDefaults.integer(forKey:"Badge")
+                                    if badgeCount > 0 {
+                                        if(badgeNumber > 0)
+                                        {
+                                            bestAttemptContent.badge = 1 as NSNumber
+                                        }
+                                        else
+                                        {
+                                            userDefaults.set(badgeCount + 1, forKey: "Badge")
+                                            bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                                        }
+                                    } else {
+                                        userDefaults.set(1, forKey: "Badge")
+                                        bestAttemptContent.badge = 1
                                     }
-                                    else
-                                    {
-                                        userDefaults.set(badgeCount + 1, forKey: "Badge")
-                                        bestAttemptContent.badge = badgeCount + 1 as NSNumber
-                                    }
-                                } else {
-                                    userDefaults.set(1, forKey: "Badge")
-                                    bestAttemptContent.badge = 1
+                                }
+                                else
+                                {
+                                    bestAttemptContent.badge = -1
                                 }
                                 
                                 isEnabled = userDefaults.bool(forKey: AppConstant.iZ_LOG_ENABLED)

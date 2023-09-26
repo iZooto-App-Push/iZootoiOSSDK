@@ -50,19 +50,19 @@
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/Info.plist</key>
 		<data>
-		vyrrye8ow+2SwBjA55GMT4Uut0s=
+		2tREYEEMjpHJc3GHWD1DjwXdnDU=
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
-		FtfV7mV2GfbqGd/oHNojLyc2TJM=
+		7pEonqd8gQLfOkoOOtsMpWM0FmM=
 		</data>
 		<key>Frameworks/iZootoiOSSDK.framework/iZootoiOSSDK</key>
 		<data>
-		SsvhrHvqywdzEX+NiisQ+5VIA5E=
+		SUDJvsRtnZF8SYw/R5xQZPI0OEI=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		W+lJZvD9x06n2f/hrfAyu0nD5cw=
+		Cx4kbwLqDd1UkeimcmYBnmvYhb0=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -70,11 +70,11 @@
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/Info.plist</key>
 		<data>
-		u55odGviZN+qv692seYjFkpoYPI=
+		iFROd4z48JhFzIJfeE3+a+uZCEI=
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/_CodeSignature/CodeResources</key>
 		<data>
-		VCnA7LPIqsobY601Hvc0DR66+QI=
+		mWSuumUe9wUq4ge2ytemMJjDuTk=
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/embedded.mobileprovision</key>
 		<data>
@@ -82,7 +82,7 @@
 		</data>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/iZootoNotificationExtendsServices</key>
 		<data>
-		kGVXpsaB/PaZpZTnvkO5HBi2Noo=
+		R2NFpVY/+YpNFPSmt0K9q1l7e/g=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -184,35 +184,35 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			LAk8sDh0aCOsB0+unxiwhMDpyT7jR34nUNx47wpZFkU=
+			E24CZ7/qlhRB2KqAyRTcRdUqBozL26wuxAOPTxzQq3Y=
 			</data>
 		</dict>
 		<key>Frameworks/iZootoiOSSDK.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			F/zu1jm5Oy5MHawBqecwWFxX5O5uPoH3m7Xamj52yyQ=
+			RFheEY6QwsD/U3+sV25SosupyUOButSv8mmokEzRAUU=
 			</data>
 		</dict>
 		<key>Frameworks/iZootoiOSSDK.framework/iZootoiOSSDK</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			jAfPKg1+Xy58agQTmXM1260cxtImpl8lknxFgj+4rl0=
+			wTdAAlFciPjBCvpbGZ2YeLQMW7bEHfByIMcMpTqGah0=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lzPWMqgO1IUI42WtHG/I4r4Gt7LRf/+FQUsdh7Vh08s=
+			UJXPhxde8ozAD6XO1mLwG3Nr1brYNwjWjPyn5aTyT8o=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8Xc147TR/Dnolr6Aos2brfJ/t3NeswuFcHHePq/ujw0=
+			/oSXO0LBmopMIamJ/NfHyK4M9O/RqnHaXhRM3oev3xU=
 			</data>
 		</dict>
 		<key>PlugIns/iZootoNotificationExtendsServices.appex/embedded.mobileprovision</key>
@@ -226,7 +226,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Yk9am3e84wTYp/ly3SsjC3bFHAWHwgqaVadbaAE/lqA=
+			s93TJzU+IMfSLXWAu6sUz99YvpDsN6R1O4Ig/HCGWXQ=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>

@@ -659,7 +659,7 @@ exports:
                        '_$s12iZootoiOSSDK6iZootoC28notificationReceivedDelegateAA01ic19NotificationReceiveF0_pSgvpZ', 
                        '_$s12iZootoiOSSDK6iZootoC28notificationReceivedDelegateAA01ic19NotificationReceiveF0_pSgvsZ', 
                        '_$s12iZootoiOSSDK6iZootoC28registerForPushNotificationsyyFZ', 
-                       '_$s12iZootoiOSSDK6iZootoC38didReceiveNotificationExtensionRequest10bundleName05soundJ07request18bestAttemptContent14contentHandlerySS_SSSo014UNNotificationH0CSo09UNMutablefO0CySo0rO0CcSgtFZ', 
+                       '_$s12iZootoiOSSDK6iZootoC38didReceiveNotificationExtensionRequest10bundleName05soundJ07isBadge7request18bestAttemptContent14contentHandlerySS_SSSbSo014UNNotificationH0CSo09UNMutablefQ0CySo0tQ0CcSgtFZ', 
                        '_$s12iZootoiOSSDK6iZootoC5appIdSSSgvMZ', '_$s12iZootoiOSSDK6iZootoC5appIdSSSgvau', 
                        '_$s12iZootoiOSSDK6iZootoC5appIdSSSgvgZ', '_$s12iZootoiOSSDK6iZootoC5appIdSSSgvpZ', 
                        '_$s12iZootoiOSSDK6iZootoC5appIdSSSgvsZ', '_$s12iZootoiOSSDK6iZootoC8addEvent9eventName4dataySS_SDySSypGtFZ', 
