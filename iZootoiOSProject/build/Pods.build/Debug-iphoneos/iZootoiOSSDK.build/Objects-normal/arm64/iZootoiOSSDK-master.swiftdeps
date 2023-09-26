@@ -1,9 +1,9 @@
 version: "Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)"
 options: "0d5e53521692d49bc93f11fe86e596900a3bbf69da160c72d0302040642ca5ae"
-build_start_time: [1695722850, 75214000]
-build_end_time: [1695722854, 834293000]
+build_start_time: [1695731030, 988473000]
+build_end_time: [1695731031, 779315000]
 inputs:
-  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppConstant.swift": [1690531919, 549776267]
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppConstant.swift": [1695728222, 831596785]
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/NetworkClient.swift": [1669197707, 0]
   ? "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/PhoneConfiguration.swift"
   : [1669197707, 0]

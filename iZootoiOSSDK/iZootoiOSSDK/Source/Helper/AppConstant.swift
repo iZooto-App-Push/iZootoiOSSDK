@@ -94,7 +94,6 @@ class AppConstant : NSObject
     static let iZ_KEY_CHECK_VERSION = "check"
     static let iZ_KEY_PLUGIN_VERSION_VALUE = "pluginVersion"
     static let iZ_KEY_PLUGIN_VRSION_NAME = "pv"
-    
     //Ad Mediation constant
     static let iZ_LN_ID_ARRAY = "lnArray"
     static let iZ_BIDS_SERVED_ARRAY = "bidsArray"
@@ -111,14 +110,12 @@ class AppConstant : NSObject
     static let iZ_rcArray = "rcArray"
     static let iZ_CLICK_OFFLINE_DATA = "ClickOffData"
     static let iZ_MED_CLICK_OFFLINE_DATA = "MediationClickOffData"
-    //CT
     static let iZ_catId = "catId"
     static let iZ_b1Id = "b1Id"
     static let iZ_b1Name = "b1Name"
     static let iZ_b2Id = "b2Id"
     static let iZ_b2Name = "b2Name"
     static let iZ_CategoryArray = "categoryArray"
-    
     static let iZ_A_KEY = "a"
     static let iZ_B_KEY = "b"
     static let iZ_T_KEY = "t"
@@ -129,7 +126,6 @@ class AppConstant : NSObject
     static let IZ_LAST_CLICK = "LASTCLICK"
     static let IZ_LAST_CLICK_WEEKLY = "LASTCLICKWEEKLY"
     static let IZ_LAST_CLICK_WEEKDAYS = "LCWEEKDAYS"
-    
     static let iZ_M_KEY = "m"
     static let iZ_BI_KEY = "bi"
     static let iZ_CT_KEY = "ct"

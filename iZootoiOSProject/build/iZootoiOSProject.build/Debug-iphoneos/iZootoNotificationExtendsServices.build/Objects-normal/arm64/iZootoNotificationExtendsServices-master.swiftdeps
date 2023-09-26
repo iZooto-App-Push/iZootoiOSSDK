@@ -1,8 +1,8 @@
 version: "Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)"
 options: "c60d40ed34cfdca90fbad858119b0b0fc23a12ab2a7510fbcb5b2fb596fe5118"
-build_start_time: [1695723867, 837555000]
-build_end_time: [1695723868, 847859000]
+build_start_time: [1695731031, 819557000]
+build_end_time: [1695731032, 125350000]
 inputs:
   ? "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoNotificationExtendsServices/NotificationService.swift"
-  : [1695722965, 889790768]
+  : [1695728222, 835209948]
   "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject/AppDelegate.swift": [1695723843, 19189178]
