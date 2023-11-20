@@ -1,0 +1,28 @@
+{
+  "" : {
+    "diagnostics" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/iZootoNotificationExtendsServices-master.dia",
+    "emit-module-dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/iZootoNotificationExtendsServices-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/iZootoNotificationExtendsServices-master-emit-module.dia",
+    "swift-dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/iZootoNotificationExtendsServices-master.swiftdeps"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoiOSProject/AppDelegate.swift" : {
+    "const-values" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate.d",
+    "diagnostics" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate.dia",
+    "index-unit-output-path" : "/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate.o",
+    "swift-dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate.swiftdeps",
+    "swiftmodule" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/AppDelegate~partial.swiftmodule"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/iZootoNotificationExtendsServices/NotificationService.swift" : {
+    "const-values" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService.swiftconstvalues",
+    "dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService.d",
+    "diagnostics" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService.dia",
+    "index-unit-output-path" : "/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService.o",
+    "swift-dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService.swiftdeps",
+    "swiftmodule" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSProject/build/iZootoiOSProject.build/Debug-iphonesimulator/iZootoNotificationExtendsServices.build/Objects-normal/arm64/NotificationService~partial.swiftmodule"
+  }
+}

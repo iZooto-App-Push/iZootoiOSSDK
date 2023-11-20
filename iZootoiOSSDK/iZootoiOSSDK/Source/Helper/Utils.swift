@@ -156,33 +156,33 @@ public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> B
     return true
 }
 
-// handle the Encyption /Decrption functionality
-extension String {
-    /// Encode a String to Base64
-    func toBase64() -> String {
-        return Data(self.utf8).base64EncodedString()
-    }
-    
-    /// Decode a String from Base64. Returns nil if unsuccessful.
-    func fromBase64() -> String? {
-        guard let data = Data(base64Encoded: self) else { return nil }
-        return String(data: data, encoding: .utf8)
-    }
-}
-extension Double {
-    func getDigit(digit: Double) -> Int{
-        let power = Int(pow(10, (digit-1)))
-        return (Int(self) / power) % 10
-    }
-}
-extension Date {
-    func dayOfWeek() -> String? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        return dateFormatter.string(from: self).capitalized
-        // or use capitalized(with: locale) if you want
-    }
-}
+//// handle the Encyption /Decrption functionality
+//extension String {
+//    /// Encode a String to Base64
+//    func toBase64() -> String {
+//        return Data(self.utf8).base64EncodedString()
+//    }
+//    
+//    /// Decode a String from Base64. Returns nil if unsuccessful.
+//    func fromBase64() -> String? {
+//        guard let data = Data(base64Encoded: self) else { return nil }
+//        return String(data: data, encoding: .utf8)
+//    }
+//}
+//extension Double {
+//    func getDigit(digit: Double) -> Int{
+//        let power = Int(pow(10, (digit-1)))
+//        return (Int(self) / power) % 10
+//    }
+//}
+//extension Date {
+//    func dayOfWeek() -> String? {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "EEEE"
+//        return dateFormatter.string(from: self).capitalized
+//        // or use capitalized(with: locale) if you want
+//    }
+//}
 
 extension LosslessStringConvertible {
     var string: String { .init(self) }

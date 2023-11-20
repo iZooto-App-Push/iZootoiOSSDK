@@ -133,5 +133,7 @@ class AppConstant : NSObject
     static let IZ_TITLE_KEY = "title"
     static let IZ_INITIALISE_ERROR_MESSAGE = "iZooto is not initialized properly, Please verify again."
     static let IZ_NO_MORE_DATA = "No more data"
+    static let iZ_USERPROPERTIES_VALUE = "Your key-value pair is empty."
+
     
 }

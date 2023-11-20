@@ -36,7 +36,7 @@ public class RestAPI : NSObject
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
     static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
-    static let SDKVERSION = "2.1.8"
+    static let SDKVERSION = "2.1.9"
    
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
@@ -408,23 +408,48 @@ public class RestAPI : NSObject
         }
     }
     
+
     // track the notification click
-       static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String, userInfo:[AnyHashable : Any])
+       static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String, userInfo:[AnyHashable : Any], globalLn: String)
        {
+           var clickLn = ""
+           if globalLn == ""{
+               clickLn = notificationData.url ?? ""
+           }else{
+               clickLn = globalLn
+           }
+           
            if notificationData.ankey != nil{
                if(notificationData.global?.rid != nil && userid != 0 && token != "")
                {
                    let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
                    var requestBodyComponents = URLComponents()
-                   requestBodyComponents.queryItems = [
-                       URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                       URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                       URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id ?? ""))"),
-                       URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid ?? ""))"),
-                       URLQueryItem(name: "op", value: "click"),
-                       URLQueryItem(name: "ver", value: SDKVERSION),
-                       URLQueryItem(name: "btn", value: "\(type)")
-                   ]
+                   
+                   if type != "0"{
+                       requestBodyComponents.queryItems = [
+                           URLQueryItem(name: "btn", value: "\(type)"),
+                           URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                           URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                           URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id ?? ""))"),
+                           URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid ?? ""))"),
+                           URLQueryItem(name: "op", value: "click"),
+                           URLQueryItem(name: "ver", value: SDKVERSION),
+                           URLQueryItem(name: "ln", value: "\(clickLn)"),
+                           URLQueryItem(name: "ap", value: "")
+                       ]
+                   }else{
+                       requestBodyComponents.queryItems = [
+                           URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                           URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                           URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id ?? ""))"),
+                           URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid ?? ""))"),
+                           URLQueryItem(name: "op", value: "click"),
+                           URLQueryItem(name: "ver", value: SDKVERSION),
+                           URLQueryItem(name: "ln", value: "\(clickLn)"),
+                           URLQueryItem(name: "ap", value: "")
+                       ]
+                   }
+                   print("Mediation CLICK PARAMETERS", requestBodyComponents.queryItems as Any)
                    let dict = ["pid": "\(userid)", "bKey": token, "cid":"\(notificationData.global?.id ?? "")" , "rid":"\(notificationData.global?.rid ?? "")", "op":"click", "ver": SDKVERSION, "btn": "\(type)"]
                    var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
                    request.httpMethod = AppConstant.iZ_POST_REQUEST
@@ -439,8 +464,8 @@ public class RestAPI : NSObject
                            if let httpResponse = response as? HTTPURLResponse {
                                if httpResponse.statusCode == 200 {
                                    if let data = data {
-                                      // debugPrint("clk")
-                                       
+                                       print("clickTrack received:", data)
+                                       print("clickTrack Success")
                                    }
                                }else{
                                    if self.defaults.value(forKey: "clickTrack") == nil{
@@ -471,15 +496,33 @@ public class RestAPI : NSObject
                {
                    let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
                    var requestBodyComponents = URLComponents()
-                   requestBodyComponents.queryItems = [
-                       URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                       URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                       URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
-                       URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
-                       URLQueryItem(name: "op", value: "click"),
-                       URLQueryItem(name: "ver", value: SDKVERSION),
-                       URLQueryItem(name: "btn", value: "\(type)")
-                   ]
+                   
+                   if type != "0"{
+                       requestBodyComponents.queryItems = [
+                           URLQueryItem(name: "btn", value: "\(type)"),
+                           URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                           URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                           URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
+                           URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
+                           URLQueryItem(name: "op", value: "click"),
+                           URLQueryItem(name: "ver", value: SDKVERSION),
+                           URLQueryItem(name: "ln", value: "\(clickLn)"),
+                           URLQueryItem(name: "ap", value: "\(String(describing: notificationData.ap ?? ""))")
+                       ]
+                   }else{
+                       requestBodyComponents.queryItems = [
+                           URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                           URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                           URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
+                           URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
+                           URLQueryItem(name: "op", value: "click"),
+                           URLQueryItem(name: "ver", value: SDKVERSION),
+                           URLQueryItem(name: "ln", value: "\(clickLn)"),
+                           URLQueryItem(name: "ap", value: "\(String(describing: notificationData.ap ?? ""))")
+                       ]
+                   }
+                   print("Content & Fetcher CLICK PARAMETERS", requestBodyComponents.queryItems as Any)
+                   
                    let dict = ["pid": "\(userid)", "bKey": token, "cid":"\(notificationData.id ?? "")" , "rid":"\(notificationData.rid ?? "")", "op":"click", "ver": SDKVERSION, "btn": "\(type)"]
                    
                    var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
@@ -496,6 +539,8 @@ public class RestAPI : NSObject
                            if let httpResponse = response as? HTTPURLResponse {
                                if httpResponse.statusCode == 200 {
                                    if let data = data {
+                                       print("clickTrack received:", data)
+                                       print("clickTrack Success")
                                    }
                                }else{
                                    if self.defaults.value(forKey: "clickTrack") == nil{
@@ -523,7 +568,6 @@ public class RestAPI : NSObject
                }
            }
        }
-    
     static func offlineClickTrackCall(){
         
         if let dd = UserDefaults.standard.value(forKey: AppConstant.iZ_CLICK_OFFLINE_DATA) as? [[String : Any]]{
