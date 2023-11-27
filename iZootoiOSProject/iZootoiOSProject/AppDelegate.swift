@@ -30,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        and clicks the notification
         then called this method
      */
+        
     func onHandleLandingURL(url: String) {// setlandingURL
         print("ClickURL",url)
     }
@@ -37,13 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // Notification Received
     func onNotificationReceived(payload: Payload) {
         print("Payload",payload.alert?.title! as Any )
-        
-
     }
+        
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         UNUserNotificationCenter.current().delegate = self
-        iZooto.promptForPushNotifications()
+       // iZooto.promptForPushNotifications()
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
         iZooto.notificationReceivedDelegate = self

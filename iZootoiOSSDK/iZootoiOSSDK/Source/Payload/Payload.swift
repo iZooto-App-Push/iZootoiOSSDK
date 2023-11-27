@@ -6,14 +6,12 @@
 //  Copyright © 2020 Amit. All rights reserved.
 //
 
-
 import Foundation
 @objc
 public class Payload  : NSObject{
     public var alert : Alert?
     public var ankey : AnKey?
     public var global : Global?
-    
     public var key : Int?
     public var id : String? // int
     public var sound : String?
@@ -41,7 +39,6 @@ public class Payload  : NSObject{
     public var interrutipn_level : Int?
     public var furv : String?
     public var furc : String?
-    
     
     public class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
     {
@@ -93,14 +90,14 @@ public class Payload  : NSObject{
         
         if let rcDict = dictionary["rc"] as? NSArray{
             if rcDict.count > 0 {
-                let dictt = rcDict[0] as! String
+                let dictt = rcDict[0] as? String
                 if (dictt != "") { furc = dictt }
             }
         }
         
         if let rvDict = dictionary["rv"] as? NSArray{
             if rvDict.count > 0 {
-                let dictt = rvDict[0] as! String
+                let dictt = rvDict[0] as? String
                 if (dictt != "") {furv = dictt}
             }
         }
@@ -124,7 +121,6 @@ public class Payload  : NSObject{
         dictionary.setValue(self.reqInt, forKey: "ri")
         dictionary.setValue(self.mutablecontent, forKey: "mutable-content")
         dictionary.setValue(self.url, forKey: "ln")
-        //   dictionary.setValue(self.icon, forKey: "icon")
         dictionary.setValue(self.act1name, forKey: "b1")
         dictionary.setValue(self.act1link, forKey: "l1")
         dictionary.setValue(self.act2name, forKey: "b2")
@@ -137,14 +133,12 @@ public class Payload  : NSObject{
         dictionary.setValue(self.act2id, forKey: "d2")
         dictionary.setValue(self.relevence_score, forKey:"rs")
         dictionary.setValue(self.interrutipn_level, forKey: "il")
-        
         dictionary.setValue(self.furc, forKey: "rc")
         dictionary.setValue(self.furv, forKey: "rv")
         
         return dictionary
     }
 }
-
 
 public class Alert {
     public var title : String?
@@ -176,9 +170,7 @@ public class Alert {
         dictionary.setValue(self.attachment_url, forKey: "attachment_url") // attachment_url
         return dictionary
     }
-    
 }
-
 
 public class AnKey {
     public var bannerImageAd : String?
@@ -188,7 +180,6 @@ public class AnKey {
     public var landingUrlAd : String?
     public var messageAd : String?
     public var titleAd : String?
-   
     public var adrv : String?
     public var adrc : String?
     
@@ -213,14 +204,14 @@ public class AnKey {
         
         if let rcDict = dictionary["rc"] as? NSArray{
             if rcDict.count > 0 {
-                let dictt = rcDict[0] as! String
+                let dictt = rcDict[0] as? String
                 if (dictt != "") { adrc = dictt }
             }
         }
         
         if let rvDict = dictionary["rv"] as? NSArray{
             if rvDict.count > 0 {
-                let dictt = rvDict[0] as! String
+                let dictt = rvDict[0] as? String
                 if (dictt != "") {
                     adrv = dictt
                 }
@@ -333,6 +324,7 @@ public class iZootoBase {
     }
     
 }
+
 
 
 

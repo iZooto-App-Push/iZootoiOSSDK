@@ -23,7 +23,7 @@ class AppConstant : NSObject
     static let REQUEST_POST = "POST"
     static let REQUEST_GET = "GET"
     static let ADD_EVENT = "Add Event Sucessfully"
-    static let ADD_PROPERTIES = " Add Properties Successfully"
+    static let ADD_PROPERTIES = "Properties added Successfully"
     static let ERROR_EVENT = "User Event : Some error occured"
     static let ERROR_PROPERTIES = "User Properties : Some error occured"
     static let SECRET_KEY = "b07dfa9d56fc64df"
@@ -39,6 +39,7 @@ class AppConstant : NSObject
     static let REGISTERED_ERROR_MESSAGE = "iZooto App id can not be blank"
     static let APP_ID_ERROR = "iZooto App is not registered,please check on iZooto panel"
     static let iZ_USERPROPERTIES_KEY = "UserPropertiesData"
+    static let iZ_USERPROPERTIES_VALUE = "Your key-value pair is empty."
     static let KEY_EVENT = "AddEvents"
     static let KEY_EVENT_NAME = "EventName"
     static let iZ_KEY_WEBVIEW = "nativeWebview"
@@ -94,6 +95,7 @@ class AppConstant : NSObject
     static let iZ_KEY_CHECK_VERSION = "check"
     static let iZ_KEY_PLUGIN_VERSION_VALUE = "pluginVersion"
     static let iZ_KEY_PLUGIN_VRSION_NAME = "pv"
+    
     //Ad Mediation constant
     static let iZ_LN_ID_ARRAY = "lnArray"
     static let iZ_BIDS_SERVED_ARRAY = "bidsArray"
@@ -110,12 +112,14 @@ class AppConstant : NSObject
     static let iZ_rcArray = "rcArray"
     static let iZ_CLICK_OFFLINE_DATA = "ClickOffData"
     static let iZ_MED_CLICK_OFFLINE_DATA = "MediationClickOffData"
+    //CT
     static let iZ_catId = "catId"
     static let iZ_b1Id = "b1Id"
     static let iZ_b1Name = "b1Name"
     static let iZ_b2Id = "b2Id"
     static let iZ_b2Name = "b2Name"
     static let iZ_CategoryArray = "categoryArray"
+    
     static let iZ_A_KEY = "a"
     static let iZ_B_KEY = "b"
     static let iZ_T_KEY = "t"
@@ -126,14 +130,14 @@ class AppConstant : NSObject
     static let IZ_LAST_CLICK = "LASTCLICK"
     static let IZ_LAST_CLICK_WEEKLY = "LASTCLICKWEEKLY"
     static let IZ_LAST_CLICK_WEEKDAYS = "LCWEEKDAYS"
+
     static let iZ_M_KEY = "m"
     static let iZ_BI_KEY = "bi"
     static let iZ_CT_KEY = "ct"
     static let iZ_P_KEY = "p"
     static let IZ_TITLE_KEY = "title"
-    static let IZ_INITIALISE_ERROR_MESSAGE = "iZooto is not initialized properly, Please verify again."
-    static let IZ_NO_MORE_DATA = "No more data"
-    static let iZ_USERPROPERTIES_VALUE = "Your key-value pair is empty."
-
+    static let IZ_GRPS_TKN = "DEVICETOKEN"
+    static let iZ_PID = "PID"
+    
     
 }

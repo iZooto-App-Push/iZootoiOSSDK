@@ -40,6 +40,14 @@ public class Utils : NSObject
         }
     }
     
+    public static func getUserDeviceToken() -> String? {
+        return sharedUserDefault?.string(forKey: SharedUserDefault.Key.token) ?? ""
+    }
+    
+    public static func getUserPID() -> Int? {
+        return sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID) ?? 0
+    }
+    
     public static func initFireBaseInialise(isInitialise : Bool)
     {
         let preference = UserDefaults.standard

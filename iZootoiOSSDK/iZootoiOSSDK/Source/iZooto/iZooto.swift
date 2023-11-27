@@ -91,6 +91,7 @@ public class iZooto : NSObject
         izooto_uuid = izooto_id
         keySettingDetails = iZootoInitSettings
         RestAPI.getRequest(uuid: izooto_uuid) { (output) in
+            print(".dat output string:-",output)
             var finalOutPut = output.trimmingCharacters(in: .whitespaces)
             finalOutPut = finalOutPut.replacingOccurrences(of: "\n", with: "")
             guard let jsonString = finalOutPut.fromBase64() else {
@@ -100,25 +101,25 @@ public class iZooto : NSObject
                 }
                 return
             }
-            let data = jsonString.data(using: .utf8)!
-            let json = try? JSONSerialization.jsonObject(with: data)
-            if let dictionary = json as? [String: Any] {
-                sharedUserDefault?.set(dictionary[AppConstant.REGISTERED_ID]!, forKey: SharedUserDefault.Key.registerID)
-                mizooto_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
-            }
-            else{
-                debugPrint(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
-                if defaults.value(forKey: "initialisationId") == nil{
-                    defaults.setValue("true", forKey: "initialisationId")
-                    RestAPI.sendExceptionToServer(exceptionName: ".dat response error \(json ?? "")", className: "iZooto", methodName: "initialisation", pid: 0, token: "0", rid: "0", cid: "0")
+            if let data = jsonString.data(using: .utf8) {
+                let json = try? JSONSerialization.jsonObject(with: data)
+                if let dictionary = json as? [String: Any] {
+                    sharedUserDefault?.set(dictionary[AppConstant.REGISTERED_ID]!, forKey: SharedUserDefault.Key.registerID)
+                    mizooto_id = Utils.getUserPID() ?? 0
+                }
+                else{
+                    debugPrint(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
+                    if defaults.value(forKey: "initialisationId") == nil{
+                        defaults.setValue("true", forKey: "initialisationId")
+                        RestAPI.sendExceptionToServer(exceptionName: ".dat response error \(json ?? "")", className: "iZooto", methodName: "initialisation", pid: 0, token: "0", rid: "0", cid: "0")
+                    }
                 }
             }
         }
         if(!keySettingDetails.isEmpty)
         {
-            let nativeWebviewKey = keySettingDetails[AppConstant.iZ_KEY_WEBVIEW] != nil
-            if nativeWebviewKey{
-                sharedUserDefault?.set(keySettingDetails[AppConstant.iZ_KEY_WEBVIEW]!, forKey:AppConstant.ISWEBVIEW)
+            if let webViewSetting = keySettingDetails[AppConstant.iZ_KEY_WEBVIEW] {
+                sharedUserDefault?.set(webViewSetting, forKey: AppConstant.ISWEBVIEW)
             } else {
                 debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_WEBVIEW_ERROR)
                 if defaults.value(forKey: "initialisationWeb") == nil{
@@ -126,15 +127,9 @@ public class iZooto : NSObject
                     RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_WEBVIEW_ERROR, className: "iZooto", methodName: "initialisation", pid: mizooto_id, token: "0", rid: "0", cid: "0")
                 }
             }
-            let provisionalKey = keySettingDetails[AppConstant.iZ_KEY_PROVISIONAL] != nil
-            if(provisionalKey)
-            {
-                if(keySettingDetails[AppConstant.iZ_KEY_PROVISIONAL]!) as! Bool
-                {
-                    registerForPushNotificationsProvisional() // check for provisional
-                }
-                else{
-                    registerForPushNotifications() // check for prompt
+            if let isProvisional = keySettingDetails[AppConstant.iZ_KEY_PROVISIONAL] as? Bool{
+                if isProvisional {
+                    registerForPushNotificationsProvisional()
                 }
             }
             else
@@ -145,19 +140,9 @@ public class iZooto : NSObject
                     RestAPI.sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_PROVISIONAL_NOT_FOUND, className: "iZooto", methodName: "initialisation", pid: mizooto_id, token: "0", rid: "0", cid: "0")
                 }
             }
-            let autoPromptkey = keySettingDetails[AppConstant.iZ_KEY_AUTO_PROMPT] != nil
-            if autoPromptkey{
-                
-                if(keySettingDetails[AppConstant.iZ_KEY_AUTO_PROMPT]!) as! Bool
-                {
-                    let provisionalKey = keySettingDetails[AppConstant.iZ_KEY_PROVISIONAL] != nil
-                    if(provisionalKey)
-                    {
-                        registerForPushNotificationsProvisional() // check for provisional
-                    }
-                    else{
-                        registerForPushNotifications() // check for prompt
-                    }
+            if let autoPromptEnabled = keySettingDetails[AppConstant.iZ_KEY_AUTO_PROMPT] as? Bool{
+                if autoPromptEnabled {
+                    registerForPushNotifications()
                 }
             }
             else {
@@ -227,9 +212,7 @@ public class iZooto : NSObject
     @objc  private static func getNotificationSettings() {
         if #available(iOS 11.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
-                
                 guard settings.authorizationStatus == .authorized else { return }
-                
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
@@ -254,7 +237,6 @@ public class iZooto : NSObject
     /* Getting APNS Token from this methods */
     @objc public static func getToken(deviceToken : Data)
     {
-        
         let tokenParts = deviceToken.map { data -> String in
             return String(format: "%02.2hhx", data)
         }
@@ -266,7 +248,7 @@ public class iZooto : NSObject
         let formattedDate = format.string(from: date)
         if UserDefaults.getRegistered()
         {
-            guard let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
+            guard let token = Utils.getUserDeviceToken()
             else
             {return}
             debugPrint(AppConstant.DEVICE_TOKEN," \(token)")
@@ -276,7 +258,7 @@ public class iZooto : NSObject
                 sharedUserDefault?.set(formattedDate, forKey: AppConstant.iZ_KEY_LAST_VISIT)
             }
             if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-                userDefaults.set(token, forKey: "DEVICETOKEN")
+                userDefaults.set(token, forKey: AppConstant.IZ_GRPS_TKN)
                 userDefaults.set(mizooto_id, forKey: AppConstant.REGISTERED_ID)
                 userDefaults.synchronize()
             }
@@ -299,8 +281,8 @@ public class iZooto : NSObject
                     sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: AppConstant.iZ_SDK_VERSION)
                     sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
                     if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-                        userDefaults.set(token, forKey: "DEVICETOKEN")
-                        userDefaults.set(mizooto_id, forKey: "PID")
+                        userDefaults.set(token, forKey: AppConstant.IZ_GRPS_TKN)
+                        userDefaults.set(mizooto_id, forKey: AppConstant.iZ_PID)
                         userDefaults.synchronize()
                     }
                 }
@@ -315,7 +297,6 @@ public class iZooto : NSObject
             }
         }
     }
-    
     
     // handle the badge count
     @objc public static func setBadgeCount(badgeNumber : NSInteger)
@@ -338,26 +319,25 @@ public class iZooto : NSObject
     }
     
     // getAdvertisement ID
-    @objc public static func getAdvertisementID(adid : NSString)
-    {
-        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? ""
-        if (adid != "" && token != "" && userID != 0 )
-        {
-            let dicData = sharedUserDefault?.bool(forKey:AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-            if(dicData == false)
-            {
-                RestAPI.registerToken(token: token, izootoid: userID, adid: adid)
-            }
-        }
-        else{
-            sharedUserDefault?.set(adid, forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
+    
+    @objc public static func getAdvertisementID(adid: NSString) {
+        guard
+            let token = Utils.getUserDeviceToken(), !token.isEmpty,
+              let userID = Utils.getUserPID(), userID != 0, adid != "" else {
+                  sharedUserDefault?.set(adid, forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
+                  return
+              }
+
+        if !(sharedUserDefault?.bool(forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID) ?? true) {
+            RestAPI.registerToken(token: token, izootoid: userID, adid: adid)
         }
     }
+    
+    
     //All Notification Data
     @objc public static func getNotificationFeed(isPagination: Bool,completion: @escaping (String?, Error?) -> Void){
         
-        if let userID = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.registerID)), let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)){
+        if let userID = sharedUserDefault?.string(forKey: SharedUserDefault.Key.registerID), let token = Utils.getUserDeviceToken(){
             debugPrint(token)
             RestAPI.fetchDataFromAPI(isPagination: isPagination,iZPID: userID) { (jsonString, error) in
                 if let error = error {
@@ -377,8 +357,8 @@ public class iZooto : NSObject
     @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String, notiRid: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
         
         let str = RestAPI.FALLBACK_URL
-        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-        if let url = URL(string: izUrlString) {
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        if let url = URL(string: izUrlString ?? "") {
             URLSession.shared.dataTask(with: url) { data, response, error in
                 if let data = data {
                     do {
@@ -417,15 +397,15 @@ public class iZooto : NSObject
                             self.ad_mediationImpressionCall(notiRid: notiRid, adTitle: bestAttemptContent.title, adLn: (notificationData?.url!)!, bundleName: bundleName)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 autoreleasepool {
-                                    if let urlString = (notificationData?.url!),
+                                    if let urlString = (notificationData?.url),
                                        let fileUrl = URL(string: urlString ) {
                                         
                                         guard let imageData = NSData(contentsOf: fileUrl) else {
                                             contentHandler!(bestAttemptContent)
                                             return
                                         }
-                                        let string = notificationData?.url!
-                                        let url: URL? = URL(string: string!)
+                                        let string = notificationData?.url ?? ""
+                                        let url: URL? = URL(string: string)
                                         let urlExtension: String? = url?.pathExtension
                                         guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
                                             debugPrint(AppConstant.IMAGE_ERROR)
@@ -472,19 +452,19 @@ public class iZooto : NSObject
                     tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
                     let groupName = "group."+bundleName+".iZooto"
                     if let userDefaults = UserDefaults(suiteName: groupName) {
-                        if let pid = userDefaults.string(forKey: "PID"){
+                        if let pid = userDefaults.string(forKey: AppConstant.iZ_PID){
                             finalDataValue.setValue(pid, forKey: "pid")
                         }else{
-                            finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_IDKEY))! as! String, forKey: "pid")
+                            finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_IDKEY)) as? String, forKey: "pid")
                         }
                     }
-                    finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_RKEY))! as! String, forKey: "rid")
-                    finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_TPKEY))! as! String, forKey: "type")
+                    finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_RKEY)) as? String, forKey: "rid")
+                    finalDataValue.setValue((gt.value(forKey: AppConstant.iZ_TPKEY)) as? String, forKey: "type")
                     finalDataValue.setValue("0", forKey: "result")
                     finalDataValue.setValue(RestAPI.SDKVERSION, forKey: "av")
                     
                     //tp = 4
-                    if (gt.value(forKey: AppConstant.iZ_TPKEY))! as! String == "4" {
+                    if (gt.value(forKey: AppConstant.iZ_TPKEY)) as? String == "4" {
                         if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
                             let startDate = Date()
                             bidsData.removeAll()
@@ -503,7 +483,7 @@ public class iZooto : NSObject
                                         cpcFinalValue = cpmValue
                                     }
                                     
-                                    let izUrlString = (fuValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                                    let izUrlString = (fuValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
                                     
                                     let session: URLSession = {
                                         let configuration = URLSessionConfiguration.default
@@ -511,7 +491,7 @@ public class iZooto : NSObject
                                         return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
                                     }()
                                     
-                                    if let url = URL(string: izUrlString) {
+                                    if let url = URL(string: izUrlString ?? "") {
                                         session.dataTask(with: url) { data, response, error in
                                             if(error != nil)
                                             {
@@ -890,7 +870,7 @@ public class iZooto : NSObject
                                 if let jsonDictionary = json as? [String:Any] {
                                     if cpmValue != ""{
                                         let cpc =  "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
-                                        finalCPCValue = String(Double(cpc)!/(10  * Double(ctrValue)!))
+                                        finalCPCValue = String(Double(cpc) ?? 0.0/(10  * Double(ctrValue)!))
                                     }else{
                                         finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
                                     }
@@ -1028,8 +1008,8 @@ public class iZooto : NSObject
                                             bestAttemptContent.badge = -1
                                         }
                                         isEnabled = userDefaults.bool(forKey: AppConstant.iZ_LOG_ENABLED)
-                                        self.iZTkn = userDefaults.string(forKey: "DEVICETOKEN") ?? ""
-                                        self.iZPid = userDefaults.integer(forKey: "PID")
+                                        self.iZTkn = userDefaults.string(forKey: AppConstant.IZ_GRPS_TKN) ?? ""
+                                        self.iZPid = userDefaults.integer(forKey: AppConstant.iZ_PID)
                                         //To call izooto Impression API
                                         if (notificationData?.global?.cfg != nil)
                                         {
@@ -1119,8 +1099,8 @@ public class iZooto : NSObject
                                     bestAttemptContent.badge = -1
                                 }
                                 isEnabled = userDefaults.bool(forKey: AppConstant.iZ_LOG_ENABLED)
-                                self.iZTkn = userDefaults.string(forKey: "DEVICETOKEN") ?? ""
-                                self.iZPid = userDefaults.integer(forKey: "PID")
+                                self.iZTkn = userDefaults.string(forKey: AppConstant.IZ_GRPS_TKN) ?? ""
+                                self.iZPid = userDefaults.integer(forKey: AppConstant.iZ_PID)
                                 if (notificationData?.cfg != nil)
                                 {
                                     let str = String((notificationData?.cfg)!)
@@ -1556,7 +1536,6 @@ public class iZooto : NSObject
         }
         
         if !catArray.isEmpty{
-            
             for item in catArray{
                 let dict = item as? NSDictionary
                 let categoryId = dict?.value(forKey: AppConstant.iZ_catId) as? String
@@ -1566,7 +1545,6 @@ public class iZooto : NSObject
                 let name2Id = AppConstant.SECOND_BUTTON
                 
                 if name1 != "" && name2 != ""{
-                    
                     if name1.count > 17{
                         let mySubstring = name1.prefix(17)
                         name1 = "\(mySubstring)..."
@@ -1754,7 +1732,7 @@ public class iZooto : NSObject
         
         var tempArray = [String]()
         if let annKey = totalData.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
-            if  let rvValue = annKey.value(forKey: "rv") as? NSArray {
+            if let rvValue = annKey.value(forKey: "rv") as? NSArray {
                 let finalValue = rvValue[0] as! NSArray
                 for value in finalValue{
                     let finalRV = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
@@ -2020,14 +1998,14 @@ public class iZooto : NSObject
     
     
     // Parsing the jsonObject
-    @objc  private static func convertToDictionary(text: String) -> [String: Any]? {
+    @objc private static func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
                 debugPrint(error.localizedDescription)
-                let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-                let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+                let userID = Utils.getUserPID() ?? 0
+                let token = Utils.getUserDeviceToken() ?? "No token here"
                 RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "convertToDictionary", pid: userID, token: token, rid: "0", cid: "0")
             }
         }
@@ -2049,7 +2027,6 @@ public class iZooto : NSObject
             if (notificationData?.act1name != nil && notificationData?.act1name != ""){
                 alert.addAction(UIAlertAction(title: notificationData?.act1name, style: .default, handler: { (action: UIAlertAction!) in
                     // UIApplication.shared.openURL(NSURL(string: notificationData!.act1link!)! as URL)
-                    
                 }))
             }
             if (notificationData?.act2name != nil && notificationData?.act2name != "")
@@ -2107,7 +2084,7 @@ public class iZooto : NSObject
                                     
                                     if defaults.value(forKey: "handleForeGroundNotification") == nil{
                                         defaults.setValue("true", forKey: "handleForeGroundNotification")
-                                        RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                                        RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: Utils.getUserPID() ?? 0, token: Utils.getUserDeviceToken() ?? "", rid: "",cid : "")
                                     }
                                 }
                             }
@@ -2142,7 +2119,7 @@ public class iZooto : NSObject
                                 }
                                 if defaults.value(forKey: "handleForeGroundNotification") == nil{
                                     defaults.setValue("true", forKey: "handleForeGroundNotification")
-                                    RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:"iZooto", methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                                    RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:"iZooto", methodName: "handleForeGroundNotification", pid: Utils.getUserPID() ?? 0, token: Utils.getUserDeviceToken() ?? "", rid: "",cid : "")
                                 }
                             }
                         }
@@ -2294,8 +2271,8 @@ public class iZooto : NSObject
                                 print("")
                             }
                         }else{
-                            let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-                            let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? ""
+                            let userID = Utils.getUserPID() ?? 0
+                            let token = Utils.getUserDeviceToken() ?? ""
                             let defaults = UserDefaults.standard
                             if defaults.value(forKey: "NotificationHandlerrr") == nil{
                                 defaults.setValue("true", forKey: "NotificationHandlerrr")
@@ -2394,8 +2371,8 @@ public class iZooto : NSObject
                                         
                                         //FallBack_Click Handler method.....
                                         self.fallbackClickHandler()
-                                        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-                                        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? ""
+                                        let userID = Utils.getUserPID() ?? 0
+                                        let token = Utils.getUserDeviceToken() ?? ""
                                         let rid = (notificationData?.rid) ?? ""
                                         let defaults = UserDefaults.standard
                                         if defaults.value(forKey: "NotificationHandlerr") == nil{
@@ -2610,7 +2587,7 @@ public class iZooto : NSObject
                 let convertBinaryToDecimal = Int(domainURL, radix: 2)!
                 if(firstDigit == 1)
                 {
-                    RestAPI.callImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, userInfo: userInfo)
+                    RestAPI.callImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo)
                 }
                 
                 if(seventhDigit == 1)
@@ -2628,11 +2605,11 @@ public class iZooto : NSObject
                             if convertBinaryToDecimal != 0{
                                 
                                 let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo)
                             }
                             else
                             {
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
                             }
                         }
                     }
@@ -2644,11 +2621,11 @@ public class iZooto : NSObject
                             if convertBinaryToDecimal != 0{
                                 
                                 let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo)
                             }
                             else
                             {
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
                             }
                         }
                     }
@@ -2669,7 +2646,7 @@ public class iZooto : NSObject
                 let convertBinaryToDecimal = Int(domainURL, radix: 2)!
                 if(firstDigit == 1)
                 {
-                    RestAPI.callImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, userInfo: userInfo)
+                    RestAPI.callImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo)
                 }
                 
                 if(seventhDigit == 1)
@@ -2687,12 +2664,12 @@ public class iZooto : NSObject
                             if convertBinaryToDecimal != 0{
                                 
                                 let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo)
                             }
                             else
                             {
                                 
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
                             }
                         }
                     }
@@ -2705,11 +2682,11 @@ public class iZooto : NSObject
                             if convertBinaryToDecimal != 0{
                                 
                                 let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo)
                             }
                             else
                             {
-                                RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
+                                RestAPI.lastImpression(notificationData: notificationData,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONVIEWURL, userInfo: userInfo)
                             }
                         }
                     }
@@ -2745,7 +2722,7 @@ public class iZooto : NSObject
                 
                 if(secondDigit == 1)
                 {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, userInfo: userInfo, globalLn: globalLn)
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn)
                 }
                 if eighthDigit == 1
                 {
@@ -2763,11 +2740,11 @@ public class iZooto : NSObject
                             sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
                             if convertBinaryToDecimal != 0{
                                 let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo )
+                                RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo )
                             }
                             else
                             {
-                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                                RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
                             }
                         }
                     }
@@ -2778,11 +2755,11 @@ public class iZooto : NSObject
                             sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
                             if convertBinaryToDecimal != 0{
                                 let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo )
+                                RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo )
                             }
                             else
                             {
-                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                                RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
                             }
                         }
                     }
@@ -2800,7 +2777,7 @@ public class iZooto : NSObject
                 let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
                 if(secondDigit == 1)
                 {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, userInfo: userInfo, globalLn: globalLn)
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn)
                 }
                 if eighthDigit == 1
                 {
@@ -2818,7 +2795,7 @@ public class iZooto : NSObject
                     
                     if(secondDigit == 1)
                     {
-                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, userInfo: userInfo, globalLn: globalLn)
+                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn)
                     }
                     if eighthDigit == 1
                     {
@@ -2842,11 +2819,11 @@ public class iZooto : NSObject
                                     
                                     if convertBinaryToDecimal != 0{
                                         let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                        RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo )
+                                        RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo )
                                     }
                                     else
                                     {
-                                        RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                                        RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
                                     }
                                 }
                             }
@@ -2857,11 +2834,11 @@ public class iZooto : NSObject
                                     sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
                                     if convertBinaryToDecimal != 0{
                                         let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                        RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo)
+                                        RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo)
                                     }
                                     else
                                     {
-                                        RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                                        RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
                                     }
                                 }
                             }
@@ -2873,11 +2850,11 @@ public class iZooto : NSObject
                             if convertBinaryToDecimal != 0{
                                 let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
                                 print("URL",url)
-                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url, userInfo: userInfo )
+                                RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: url, userInfo: userInfo )
                             }
                             else
                             {
-                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                                RestAPI.lastClick(notificationData: notificationData, userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "",url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
                             }
                         }
                     }
@@ -2942,9 +2919,9 @@ public class iZooto : NSObject
         {
             value = 2
         }
-       if let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token),
-          let _ = sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID){
-           RestAPI.callSubscription(isSubscribe : value,token : token,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!)
+       if let token = Utils.getUserDeviceToken(),
+          let userID = Utils.getUserPID(){
+           RestAPI.callSubscription(isSubscribe : value, token : token, userid: userID)
        }
         else{
             debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_SUBSCRIPTION_ERROR_MESSAGE)
@@ -2980,25 +2957,21 @@ public class iZooto : NSObject
         guard let url = URLComponents(string: url) else { return nil }
         return url.queryItems?.first(where: { $0.name == param })?.value
     }
+    
     // Add Event Functionality
-    @objc  public static func addEvent(eventName : String , data : Dictionary<String,Any>)
-    {
-        if  eventName != ""{
-            let returnData = Utils.dataValidate(data: data)
-            if let theJSONData = try?  JSONSerialization.data(
-                withJSONObject: returnData,
-                options: .fragmentsAllowed),
-               let validateData = NSString(data: theJSONData,
-                                           encoding: String.Encoding.utf8.rawValue) {
-                let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
-                if (token != nil && !token!.isEmpty)
-                {
-                    RestAPI.callEvents(eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: token!)
-                }
-                else{
-                    sharedUserDefault?.set(data, forKey:AppConstant.KEY_EVENT)
-                    sharedUserDefault?.set(eventName, forKey: AppConstant.KEY_EVENT_NAME)
-                }
+    @objc public static func addEvent(eventName: String, data: Dictionary<String, Any>) {
+        guard !eventName.isEmpty else { return }
+
+        let returnData = Utils.dataValidate(data: data)
+        
+        if let theJSONData = try? JSONSerialization.data(withJSONObject: returnData, options: .fragmentsAllowed),
+           let validateData = String(data: theJSONData, encoding: .utf8) {
+            
+            if let token = Utils.getUserDeviceToken(), !token.isEmpty {
+                RestAPI.callEvents(eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, userid: Utils.getUserPID() ?? 0, token: token)
+            } else {
+                sharedUserDefault?.set(data, forKey: AppConstant.KEY_EVENT)
+                sharedUserDefault?.set(eventName, forKey: AppConstant.KEY_EVENT_NAME)
             }
         }
     }
@@ -3024,10 +2997,10 @@ public class iZooto : NSObject
                     return
                 }
                 if let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue),
-                   let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token){
+                   let token = Utils.getUserDeviceToken(){
                     if (!token.isEmpty)
                     {
-                          RestAPI.callUserProperties(data: validationData as NSString, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: token)
+                        RestAPI.callUserProperties(data: validationData as NSString, userid: Utils.getUserPID() ?? 0, token: token)
                     }
                     else
                     {
@@ -3037,12 +3010,12 @@ public class iZooto : NSObject
             }
             else
             {
-                let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-                let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+                let userID = Utils.getUserPID() ?? 0
+                let token = Utils.getUserDeviceToken()
                 let defaults = UserDefaults.standard
                 if defaults.value(forKey: "addUserPropertiess") == nil{
                     defaults.setValue("true", forKey: "addUserPropertiess")
-                    RestAPI.sendExceptionToServer(exceptionName: "No data found in userProperties dictionary \(data)", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY, pid: userID, token: token, rid: "0", cid: "0")
+                    RestAPI.sendExceptionToServer(exceptionName: "No data found in userProperties dictionary \(data)", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY, pid: userID, token: token ?? "", rid: "0", cid: "0")
                 }
             }
         }
@@ -3094,8 +3067,8 @@ extension UNNotificationAttachment {
             
             
         } catch let error {
-            let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-            let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? ""
+            let userID = Utils.getUserPID() ?? 0
+            let token = Utils.getUserDeviceToken() ?? ""
             let defaults = UserDefaults.standard
             if defaults.value(forKey: "saveImageToDisk") == nil{
                 defaults.setValue("true", forKey: "saveImageToDisk")
@@ -3123,7 +3096,6 @@ extension UNNotificationAttachment {
 fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
     return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(string: key), value)})
 }
-
 
 // handle the Encyption /Decrption functionality
 extension String {
