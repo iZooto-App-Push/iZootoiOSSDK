@@ -91,7 +91,6 @@ public class iZooto : NSObject
         izooto_uuid = izooto_id
         keySettingDetails = iZootoInitSettings
         RestAPI.getRequest(uuid: izooto_uuid) { (output) in
-            print(".dat output string:-",output)
             var finalOutPut = output.trimmingCharacters(in: .whitespaces)
             finalOutPut = finalOutPut.replacingOccurrences(of: "\n", with: "")
             guard let jsonString = finalOutPut.fromBase64() else {
@@ -104,7 +103,6 @@ public class iZooto : NSObject
             if let data = jsonString.data(using: .utf8) {
                 let json = try? JSONSerialization.jsonObject(with: data)
                 if let dictionary = json as? [String: Any] {
-                    print(dictionary)
                     sharedUserDefault?.set(dictionary[AppConstant.REGISTERED_ID]!, forKey: SharedUserDefault.Key.registerID)
                     mizooto_id = Utils.getUserPID() ?? 0
                 }
