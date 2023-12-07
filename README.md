@@ -1,8 +1,10 @@
 <p align = "center">
-	<img src="https://user-images.githubusercontent.com/60651012/129727793-bc8b8f01-b317-4f1c-bace-c6882b86bff7.png">
+  <img src="https://user-images.githubusercontent.com/60651012/129727793-bc8b8f01-b317-4f1c-bace-c6882b86bff7.png">
 </p>
 
-## iZooto Native iOS Push Notification Plugin
+### iZooto iOS SDK
+[![CocoaPods](https://img.shields.io/cocoapods/v/iZootoiOSSDK.svg)](https://cocoapods.org/pods/iZootoiOSSDK)[![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://goo.gl/E01ufX)
+
 
 [iZooto](https://www.izooto.com) provides push notification service for mobile apps. This plugin makes it easy to implement push notifications on your iOS app built on the Native framework.
 
