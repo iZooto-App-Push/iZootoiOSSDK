@@ -104,6 +104,7 @@ public class iZooto : NSObject
             if let data = jsonString.data(using: .utf8) {
                 let json = try? JSONSerialization.jsonObject(with: data)
                 if let dictionary = json as? [String: Any] {
+                    print(dictionary)
                     sharedUserDefault?.set(dictionary[AppConstant.REGISTERED_ID]!, forKey: SharedUserDefault.Key.registerID)
                     mizooto_id = Utils.getUserPID() ?? 0
                 }
@@ -323,11 +324,11 @@ public class iZooto : NSObject
     @objc public static func getAdvertisementID(adid: NSString) {
         guard
             let token = Utils.getUserDeviceToken(), !token.isEmpty,
-              let userID = Utils.getUserPID(), userID != 0, adid != "" else {
-                  sharedUserDefault?.set(adid, forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
-                  return
-              }
-
+            let userID = Utils.getUserPID(), userID != 0, adid != "" else {
+            sharedUserDefault?.set(adid, forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
+            return
+        }
+        
         if !(sharedUserDefault?.bool(forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID) ?? true) {
             RestAPI.registerToken(token: token, izootoid: userID, adid: adid)
         }
@@ -986,25 +987,12 @@ public class iZooto : NSObject
                                 {
                                     let groupName = "group."+bundleName+".iZooto"
                                     if let userDefaults = UserDefaults(suiteName: groupName) {
-                                        if(isBadge){
-                                            badgeCount = userDefaults.integer(forKey:"Badge")
-                                            if badgeCount > 0 {
-                                                if(badgeNumber > 0)
-                                                {
-                                                    bestAttemptContent.badge = 1 as NSNumber
-                                                }
-                                                else
-                                                {
-                                                    userDefaults.set(badgeCount + 1, forKey: "Badge")
-                                                    bestAttemptContent.badge = badgeCount + 1 as NSNumber
-                                                }
-                                            } else {
-                                                userDefaults.set(1, forKey: "Badge")
-                                                bestAttemptContent.badge = 1
-                                            }
-                                        }
-                                        else
-                                        {
+                                        userDefaults.set(isBadge, forKey: "isBadge")
+                                        if isBadge {
+                                            let badgeCount = userDefaults.integer(forKey: "Badge")
+                                            bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
+                                            userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                        } else {
                                             bestAttemptContent.badge = -1
                                         }
                                         isEnabled = userDefaults.bool(forKey: AppConstant.iZ_LOG_ENABLED)
@@ -1077,25 +1065,12 @@ public class iZooto : NSObject
                         {
                             let groupName = "group."+bundleName+".iZooto"
                             if let userDefaults = UserDefaults(suiteName: groupName) {
-                                if(isBadge){
-                                    badgeCount = userDefaults.integer(forKey:"Badge")
-                                    if badgeCount > 0 {
-                                        if(badgeNumber > 0)
-                                        {
-                                            bestAttemptContent.badge = 1 as NSNumber
-                                        }
-                                        else
-                                        {
-                                            userDefaults.set(badgeCount + 1, forKey: "Badge")
-                                            bestAttemptContent.badge = badgeCount + 1 as NSNumber
-                                        }
-                                    } else {
-                                        userDefaults.set(1, forKey: "Badge")
-                                        bestAttemptContent.badge = 1
-                                    }
-                                }
-                                else
-                                {
+                                userDefaults.set(isBadge, forKey: "isBadge")
+                                if isBadge {
+                                    let badgeCount = userDefaults.integer(forKey: "Badge")
+                                    bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
+                                    userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                } else {
                                     bestAttemptContent.badge = -1
                                 }
                                 isEnabled = userDefaults.bool(forKey: AppConstant.iZ_LOG_ENABLED)
@@ -1370,9 +1345,7 @@ public class iZooto : NSObject
                         fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                         return
                     }
-                    if response == nil{
-                        debugPrint("RESPONSE ======+++++++++++++++")
-                    }
+                    
                     if let data = data {
                         do {
                             let json = try JSONSerialization.jsonObject(with: data)
@@ -1576,11 +1549,13 @@ public class iZooto : NSObject
             }
         }
         
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {(granted, error) in
-            if !granted {
-                print("Notification access denied.")
+        if #available(iOS 12.0, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .provisional]) {(granted, error) in
+                if !granted {
+                    print("Notification access denied.")
+                }
+                center.setNotificationCategories(notificationCategories)
             }
-            center.setNotificationCategories(notificationCategories)
         }
     }
     
@@ -2188,8 +2163,14 @@ public class iZooto : NSObject
         
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
             let badgeC = userDefaults.integer(forKey:"Badge")
-            self.badgeCount = badgeC
-            userDefaults.set(badgeC - 1, forKey: "Badge")
+            let isBadge = userDefaults.bool(forKey: "isBadge")
+            if isBadge{
+                self.badgeCount = badgeC
+                userDefaults.set(badgeC - 1, forKey:"Badge")
+            }else{
+                self.badgeCount = 0
+                userDefaults.set(0, forKey:"Badge")
+            }
             RestAPI.fallBackLandingUrl = userDefaults.value(forKey: "fallBackLandingUrl") as? String ?? ""
             RestAPI.fallBackTitle = userDefaults.value(forKey: "fallBackTitle") as? String ?? ""
             userDefaults.synchronize()
@@ -2255,7 +2236,7 @@ public class iZooto : NSObject
                                 type = "1"
                             }
                         }
-                        clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo,globalLn: adlandingURL)
+                        clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: adlandingURL, title: adTitle)
                         if adlandingURL != ""
                         {
                             if let unencodedURLString = adlandingURL.removingPercentEncoding {
@@ -2314,12 +2295,12 @@ public class iZooto : NSObject
                                                 self.fallbackClickHandler()
                                             }else{
                                                 if let jsonDictionary = json as? [String:Any] {
-                                                    
+                                                    let adTitle = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert?.title)!))"
                                                     if notificationData?.url != "" {
                                                         notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
                                                         
                                                         var iZfetchUrl = notificationData?.url
-                                                        clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: iZfetchUrl ?? "")
+                                                        clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: iZfetchUrl ?? "", title: adTitle)
                                                         if let unencodedURLString = iZfetchUrl?.removingPercentEncoding {
                                                             iZfetchUrl = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
                                                         } else {
@@ -2353,10 +2334,11 @@ public class iZooto : NSObject
                                         {
                                             if let jsonArray = json as? [[String:Any]] {
                                                 if notificationData?.url != "" {
+                                                    let adTitle = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert?.title)!))"
                                                     
                                                     notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
                                                     let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                                    clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: izUrlStr ?? "")
+                                                    clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: izUrlStr ?? "",title: adTitle)
                                                     
                                                     if let url = URL(string: izUrlStr ?? "") {
                                                         DispatchQueue.main.async {
@@ -2393,7 +2375,7 @@ public class iZooto : NSObject
                             if response.actionIdentifier == AppConstant.FIRST_BUTTON{
                                 
                                 type = "1"
-                                clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: "")
+                                clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: "", title: notificationData?.alert?.title ?? "")
                                 
                                 if notificationData?.ap != "" && notificationData?.ap != nil
                                 {
@@ -2450,7 +2432,7 @@ public class iZooto : NSObject
                             }
                             else if response.actionIdentifier == AppConstant.SECOND_BUTTON{
                                 type = "2"
-                                clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: "")
+                                clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: "", title: notificationData?.alert?.title ?? "")
                                 
                                 if notificationData?.ap != "" && notificationData?.ap != nil
                                 {
@@ -2498,7 +2480,7 @@ public class iZooto : NSObject
                                 }
                             }else{
                                 type = "0"
-                                clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: "")
+                                clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo, globalLn: "", title: notificationData?.alert?.title ?? "")
                                 if notificationData?.ap != "" && notificationData?.ap != nil
                                 {
                                     handleClicks(response: response, actionType: type)
@@ -2531,7 +2513,7 @@ public class iZooto : NSObject
                             }
                         }else{
                             type = "0"
-                            clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo,globalLn: "")
+                            clickTrack(notificationData: notificationData!, actionType: type, userInfo: userInfo,globalLn: "", title: notificationData?.alert?.title ?? "")
                             if notificationData?.ap != "" && notificationData?.ap != nil
                             {
                                 handleClicks(response: response, actionType: type)
@@ -2702,7 +2684,7 @@ public class iZooto : NSObject
         }
     }
     
-    @objc static func clickTrack(notificationData : Payload,actionType : String, userInfo: [AnyHashable: Any], globalLn : String)
+    @objc static func clickTrack(notificationData : Payload,actionType : String, userInfo: [AnyHashable: Any], globalLn : String,title : String)
     {
         
         if(notificationData.cfg != nil || notificationData.global?.cfg != nil)
@@ -2722,7 +2704,7 @@ public class iZooto : NSObject
                 
                 if(secondDigit == 1)
                 {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn)
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn, title: title)
                 }
                 if eighthDigit == 1
                 {
@@ -2777,7 +2759,7 @@ public class iZooto : NSObject
                 let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
                 if(secondDigit == 1)
                 {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn)
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn, title: title)
                 }
                 if eighthDigit == 1
                 {
@@ -2795,7 +2777,7 @@ public class iZooto : NSObject
                     
                     if(secondDigit == 1)
                     {
-                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn)
+                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: Utils.getUserPID() ?? 0,token: Utils.getUserDeviceToken() ?? "", userInfo: userInfo, globalLn: globalLn, title: title)
                     }
                     if eighthDigit == 1
                     {
@@ -2919,10 +2901,10 @@ public class iZooto : NSObject
         {
             value = 2
         }
-       if let token = Utils.getUserDeviceToken(),
-          let userID = Utils.getUserPID(){
-           RestAPI.callSubscription(isSubscribe : value, token : token, userid: userID)
-       }
+        if let token = Utils.getUserDeviceToken(),
+           let userID = Utils.getUserPID(){
+            RestAPI.callSubscription(isSubscribe : value, token : token, userid: userID)
+        }
         else{
             debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_SUBSCRIPTION_ERROR_MESSAGE)
             let defaults = UserDefaults.standard
@@ -2961,7 +2943,7 @@ public class iZooto : NSObject
     // Add Event Functionality
     @objc public static func addEvent(eventName: String, data: Dictionary<String, Any>) {
         guard !eventName.isEmpty else { return }
-
+        
         let returnData = Utils.dataValidate(data: data)
         
         if let theJSONData = try? JSONSerialization.data(withJSONObject: returnData, options: .fragmentsAllowed),
@@ -2975,7 +2957,7 @@ public class iZooto : NSObject
             }
         }
     }
- 
+    
     // Add User Properties
     @objc public static func addUserProperties( data : Dictionary<String,Any>)
     {
