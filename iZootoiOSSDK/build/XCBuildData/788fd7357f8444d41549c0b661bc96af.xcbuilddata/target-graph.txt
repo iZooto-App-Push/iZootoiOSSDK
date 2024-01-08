@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'iZootoiOSSDK' in project 'iZootoiOSSDK' (no dependencies)

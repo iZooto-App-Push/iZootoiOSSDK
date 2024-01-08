@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
   spec.homepage     = "https://www.izooto.com"
   spec.license      = { :type => 'MIT', :file => 'LICENSE' }
   spec.author       = { "AmitKumarGupta" => "amit@datability.co" }
-  spec.platform     = :ios,"11"
+  spec.platform     = :ios,"12"
   spec.swift_version = '4.0'
   spec.source       = { :git =>"https://github.com/izooto-mobile-sdk/iZootoiOSSDK.git", :tag => "2.2.2" }
   spec.source_files  = 'iZootoiOSSDK/**/*.{h,swift}'
