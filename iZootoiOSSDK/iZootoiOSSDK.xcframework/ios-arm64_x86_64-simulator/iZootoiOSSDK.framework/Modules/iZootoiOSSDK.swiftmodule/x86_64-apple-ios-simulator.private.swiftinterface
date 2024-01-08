@@ -1,0 +1,173 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.9 effective-4.1.50 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
+// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 4 -enforce-exclusivity=checked -Onone -module-name iZootoiOSSDK
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AVFoundation
+import AdSupport
+import AppTrackingTransparency
+import CommonCrypto
+import Darwin
+import Foundation
+import Swift
+import UIKit
+import UserNotifications
+import WebKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_exported import iZootoiOSSDK
+@_inheritsConvenienceInitializers @objc public class Utils : ObjectiveC.NSObject {
+  public static let TOKEN: Swift.String
+  public static func getDeviceName() -> Swift.String
+  public static func getSystemVersion() -> Swift.String
+  public static func saveAccessToken(access_token: Swift.String)
+  public static func getAccessToken() -> Swift.String
+  public static func getUserDeviceToken() -> Swift.String?
+  public static func getUserPID() -> Swift.Int?
+  public static func initFireBaseInialise(isInitialise: Swift.Bool)
+  public static func didSave(preferences: Foundation.UserDefaults)
+  public static func eventValidate(eventName: Swift.String) -> Swift.String
+  public static func dataValidate(data: Swift.Dictionary<Swift.String, Any>) -> Swift.Dictionary<Swift.String, Any>
+  public static func getBundleName() -> Swift.String
+  @objc override dynamic public init()
+  @objc deinit
+}
+public func checkTopicNameValidation(topicName: Swift.Dictionary<Swift.String, Swift.String>) -> Swift.Bool
+extension Foundation.UserDefaults {
+  public static func saveUserID(userID: Swift.Int)
+  public static func getUserID() -> Swift.Int
+  public static func saveUserToken(token: Foundation.NSString)
+  public static func getUserToken() -> Foundation.NSString
+  public static func isRegistered(isRegister: Swift.Bool)
+  public static func getRegistered() -> Swift.Bool
+}
+@_inheritsConvenienceInitializers @objc public class RestAPI : ObjectiveC.NSObject {
+  public static func getRequest(uuid: Swift.String, completionBlock: @escaping (Swift.String) -> Swift.Void)
+  @objc public static func identifierForAdvertising() -> Swift.String?
+  public static func getBundleName() -> Swift.String
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public class Payload : ObjectiveC.NSObject {
+  public var alert: iZootoiOSSDK.Alert?
+  public var ankey: iZootoiOSSDK.AnKey?
+  public var global: iZootoiOSSDK.Global?
+  public var key: Swift.Int?
+  public var id: Swift.String?
+  public var sound: Swift.String?
+  public var category: Swift.String?
+  public var badge: Swift.Int?
+  public var rid: Swift.String?
+  public var ttl: Swift.Int?
+  public var tag: Swift.String?
+  public var created_on: Swift.Int?
+  public var reqInt: Swift.Int?
+  public var mutablecontent: Swift.Int?
+  public var url: Swift.String?
+  public var icon: Swift.String?
+  public var act1id: Swift.String?
+  public var act1name: Swift.String?
+  public var act1link: Swift.String?
+  public var act2id: Swift.String?
+  public var act2name: Swift.String?
+  public var act2link: Swift.String?
+  public var ap: Swift.String?
+  public var fetchurl: Swift.String?
+  public var cfg: Swift.String?
+  public var inApp: Swift.String?
+  public var relevence_score: Swift.Double?
+  public var interrutipn_level: Swift.Int?
+  public var furv: Swift.String?
+  public var furc: Swift.String?
+  public class func modelsFromDictionaryArray(array: Foundation.NSArray) -> [iZootoiOSSDK.Payload]
+  required public init?(dictionary: Foundation.NSDictionary)
+  public func dictionaryRepresentation() -> Foundation.NSDictionary
+  @objc deinit
+}
+public class Alert {
+  public var title: Swift.String?
+  public var subtitle: Swift.String?
+  public var body: Swift.String?
+  public var attachment_url: Swift.String?
+  public class func modelsFromDictionaryArray(array: Foundation.NSArray) -> [iZootoiOSSDK.Alert]
+  required public init?(dictionary: Foundation.NSDictionary)
+  public func dictionaryRepresentation() -> Foundation.NSDictionary
+  @objc deinit
+}
+public class AnKey {
+  public var bannerImageAd: Swift.String?
+  public var cpmAd: Swift.String?
+  public var fetchUrlAd: Swift.String?
+  public var idAd: Swift.String?
+  public var landingUrlAd: Swift.String?
+  public var messageAd: Swift.String?
+  public var titleAd: Swift.String?
+  public var adrv: Swift.String?
+  public var adrc: Swift.String?
+  public class func modelsFromDictionaryArray(array: Foundation.NSArray) -> [iZootoiOSSDK.AnKey]
+  required public init?(dictionary: Foundation.NSDictionary)
+  public func dictionaryRepresentation() -> Foundation.NSDictionary
+  @objc deinit
+}
+public class Global {
+  public var act1name: Swift.String?
+  public var act1Id: Swift.String?
+  public var cfg: Swift.String?
+  public var created_on: Swift.Int?
+  public var inApp: Swift.String?
+  public var id: Swift.String?
+  public var key: Swift.Int?
+  public var rid: Swift.String?
+  public var reqInt: Swift.Int?
+  public var tag: Swift.String?
+  public var ttl: Swift.Int?
+  public var type: Swift.String?
+  public var adCategory: Swift.String?
+  public class func modelsFromDictionaryArray(array: Foundation.NSArray) -> [iZootoiOSSDK.Global]
+  required public init?(dictionary: Foundation.NSDictionary)
+  public func dictionaryRepresentation() -> Foundation.NSDictionary
+  @objc deinit
+}
+public class iZootoBase {
+  public var aps: iZootoiOSSDK.Payload?
+  public class func modelsFromDictionaryArray(array: Foundation.NSArray) -> [iZootoiOSSDK.iZootoBase]
+  required public init?(dictionary: Foundation.NSDictionary)
+  public func dictionaryRepresentation() -> Foundation.NSDictionary
+  @objc deinit
+}
+@objc public class iZooto : ObjectiveC.NSObject {
+  @objc public static var landingURLDelegate: (any iZootoiOSSDK.iZootoLandingURLDelegate)?
+  @objc public static var notificationReceivedDelegate: (any iZootoiOSSDK.iZootoNotificationReceiveDelegate)?
+  @objc public static var notificationOpenDelegate: (any iZootoiOSSDK.iZootoNotificationOpenDelegate)?
+  @objc public init(application: UIKit.UIApplication)
+  @objc public static func initialisation(izooto_id: Swift.String, application: UIKit.UIApplication, iZootoInitSettings: Swift.Dictionary<Swift.String, Any>)
+  @objc public static func setLogLevel(isEnable: Swift.Bool)
+  @objc public static func registerForPushNotifications()
+  @objc public static func getToken(deviceToken: Foundation.Data)
+  @objc public static func setBadgeCount(badgeNumber: ObjectiveC.NSInteger)
+  @objc public static func getAdvertisementID(adid: Foundation.NSString)
+  @objc public static func getNotificationFeed(isPagination: Swift.Bool, completion: @escaping (Swift.String?, (any Swift.Error)?) -> Swift.Void)
+  @available(iOS 11.0, *)
+  @objc public static func didReceiveNotificationExtensionRequest(bundleName: Swift.String, soundName: Swift.String, isBadge: Swift.Bool, request: UserNotifications.UNNotificationRequest, bestAttemptContent: UserNotifications.UNMutableNotificationContent, contentHandler: ((UserNotifications.UNNotificationContent) -> Swift.Void)?)
+  @objc public static func navigateToSettings()
+  @objc public static func setPluginVersion(pluginVersion: Swift.String)
+  @objc public static func handleForeGroundNotification(notification: UserNotifications.UNNotification, displayNotification: Swift.String, completionHandler: @escaping (UserNotifications.UNNotificationPresentationOptions) -> Swift.Void)
+  @objc public static func fallbackClickHandler()
+  @objc public static func notificationHandler(response: UserNotifications.UNNotificationResponse)
+  @objc public static func setSubscription(isSubscribe: Swift.Bool)
+  @objc public static func handleClicks(response: UserNotifications.UNNotificationResponse, actionType: Swift.String)
+  @objc public static func getQueryStringParameter(url: Swift.String, param: Swift.String) -> Swift.String?
+  @objc public static func addEvent(eventName: Swift.String, data: Swift.Dictionary<Swift.String, Any>)
+  @objc public static func addUserProperties(data: Swift.Dictionary<Swift.String, Any>)
+  @objc public static func promptForPushNotifications()
+  @objc deinit
+}
+@objc public protocol iZootoLandingURLDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func onHandleLandingURL(url: Swift.String)
+}
+@objc public protocol iZootoNotificationReceiveDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func onNotificationReceived(payload: iZootoiOSSDK.Payload)
+}
+@objc public protocol iZootoNotificationOpenDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func onNotificationOpen(action: Swift.Dictionary<Swift.String, Any>)
+}

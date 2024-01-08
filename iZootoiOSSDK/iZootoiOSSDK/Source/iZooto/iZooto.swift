@@ -1108,7 +1108,29 @@ public class iZooto : NSObject
                         else{
                             if notificationData != nil
                             {
-                                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                               
+                                
+                                guard let rid = notificationData?.rid, let firstIndex = rid.prefix(1).first else {
+                                                                      
+                                        print("notificationData, rid, or the first character is nil or empty")
+                                                                      
+                                    return
+                                       
+                                }
+                                if firstIndex == "6" || firstIndex == "7" {
+                                                                     
+                                    print("not call back working3")
+                                                                 
+                                } else {
+                                    if let unwrappedNotificationData = notificationData {
+                                        notificationReceivedDelegate?.onNotificationReceived(payload: unwrappedNotificationData)
+                                   
+                                    }
+                               
+                                }
+                                
+                                
+                                
                                 if notificationData!.category != "" && notificationData!.category != nil
                                 {
                                     //to store categories
@@ -1793,27 +1815,34 @@ public class iZooto : NSObject
     }
     
     // for json aaray
-    @objc  private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
-    {
-        if(sourceString.contains("~"))
+        @objc  private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
         {
-            return sourceString.replacingOccurrences(of: "~", with: "")
-        }
-        else
-        {
-            if(sourceString.contains("."))//[0].title -? [0].title // ads .[0].title
+            if(sourceString.contains("~"))
             {
-                let array = sourceString.split(separator: ".")
-                let value = "\(array[0])".replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
-                let data = Int(value)
-                let data1 = jsonData[data!]
-                let lastData = array.last
-                let res = String(lastData!)
-                return   data1[res]! as! String
+                return sourceString.replacingOccurrences(of: "~", with: "")
             }
+            else
+            {
+                if(sourceString.contains("."))//[0].title -? [0].title // ads .[0].title
+                {
+
+                    let array = sourceString.split(separator: ".")
+                    let value = "\(array[0])".replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
+                    let data = Int(value)
+                    if let unwrappedData = data {
+                        let data1 = jsonData[unwrappedData]
+                        let lastData = array.last
+                        let res = String(lastData!)
+                        return   data1[res]! as! String
+                    } else {
+                        return sourceString
+                    }
+                  
+                }
+            }
+            return sourceString
         }
-        return sourceString
-    }
+        
     
     
     //To check notification enabled
@@ -2064,38 +2093,67 @@ public class iZooto : NSObject
                         }
                     }
                     else{
-                        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                        if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
-                        {
-                            if (notificationData?.cfg != nil)
+                        
+                        if let apsDictionary = userInfo["aps"] as? NSDictionary {
+                            let notificationData = Payload(dictionary: apsDictionary)
+                            if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
                             {
-                                impressionTrack(notificationData: notificationData!, userInfo: userInfo)
-                            }
-                            completionHandler([.badge, .alert, .sound])
-                        }
-                        else
-                        {
-                            if(notificationData?.inApp != nil)
-                            {
-                                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
                                 if (notificationData?.cfg != nil)
                                 {
+                                    
                                     impressionTrack(notificationData: notificationData!, userInfo: userInfo)
                                 }
                                 completionHandler([.badge, .alert, .sound])
                             }
                             else
                             {
-                                let isEnabled = UserDefaults.standard.bool(forKey: AppConstant.iZ_LOG_ENABLED)
-                                if isEnabled {
-                                    debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                if(notificationData?.inApp != nil)
+                                {
+                                    completionHandler([.badge, .alert, .sound])
+                                    if (notificationData?.cfg != nil)
+                                    {
+                                        impressionTrack(notificationData: notificationData!, userInfo: userInfo)
+                                    }
+
+                                    guard let rid = notificationData?.rid, let firstIndex = rid.prefix(1).first else {
+                                                                          
+                                            print("notificationData, rid, or the first character is nil or empty")
+                                                                          
+                                        return
+                                           
+                                    }
+                                    if firstIndex == "6" || firstIndex == "7" {
+                                                                         
+                                        print("not call back working3")
+                                                                     
+                                    } else {
+                                        if let unwrappedNotificationData = notificationData {
+                                            notificationReceivedDelegate?.onNotificationReceived(payload: unwrappedNotificationData)
+                                       
+                                        }
+                                   
+                                    }
+                                    
+                                    
                                 }
-                                if defaults.value(forKey: "handleForeGroundNotification") == nil{
-                                    defaults.setValue("true", forKey: "handleForeGroundNotification")
-                                    RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:"iZooto", methodName: "handleForeGroundNotification", pid: Utils.getUserPID() ?? 0, token: Utils.getUserDeviceToken() ?? "", rid: "",cid : "")
+                                else
+                                {
+                                    let isEnabled = UserDefaults.standard.bool(forKey: AppConstant.iZ_LOG_ENABLED)
+                                    if isEnabled {
+                                        debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                    }
+                                    if defaults.value(forKey: "handleForeGroundNotification") == nil{
+                                        defaults.setValue("true", forKey: "handleForeGroundNotification")
+                                        RestAPI.sendExceptionToServer(exceptionName: "iZooto Payload is not exits\(userInfo)", className:"iZooto", methodName: "handleForeGroundNotification", pid: Utils.getUserPID() ?? 0, token: Utils.getUserDeviceToken() ?? "", rid: "",cid : "")
+                                    }
                                 }
                             }
+                            
+                        } else {
+                            // Handle the case where "aps" key is not present or its value is not an NSDictionary
+                            print("Failed to create Payload from userInfo.")
                         }
+                       
                     }
                 }
             }
@@ -2366,7 +2424,29 @@ public class iZooto : NSObject
                     }
                     else
                     {
-                        notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                       
+                        
+                        guard let rid = notificationData?.rid, let firstIndex = rid.prefix(1).first else {
+                                                              
+                                debugPrint("notificationData, rid, or the first character is nil or empty")
+                                                              
+                            return
+                               
+                        }
+                        if firstIndex == "6" || firstIndex == "7" {
+                                                             
+                            debugPrint("not call back working3")
+                                                         
+                        } else {
+                            if let unwrappedNotificationData = notificationData {
+                                notificationReceivedDelegate?.onNotificationReceived(payload: unwrappedNotificationData)
+                           
+                            }
+                       
+                        }
+                        
+                        
+                        
                         
                         if notificationData?.category != nil && notificationData?.category != ""
                         {

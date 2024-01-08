@@ -1481,7 +1481,7 @@
     ],
     "target_info": [
       {
-        "min_deployment": "11",
+        "min_deployment": "12",
         "target": "arm64-ios"
       }
     ]

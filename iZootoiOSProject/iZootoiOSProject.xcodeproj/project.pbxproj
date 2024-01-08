@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -514,7 +514,7 @@
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,7 +544,7 @@
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = iZootoiOSProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -570,7 +570,7 @@
 				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoNotificationExtendsServices/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -598,7 +598,7 @@
 				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = iZootoNotificationExtendsServices/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

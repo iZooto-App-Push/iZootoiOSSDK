@@ -1,0 +1,23 @@
+{
+  'version': 0,
+  'use-external-names': 'false',
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/Release-iphonesimulator/iZootoiOSSDK.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/unextended-module.modulemap",
+    }]
+    },
+    {
+    'type': 'directory',
+    'name': "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/Release-iphonesimulator/iZootoiOSSDK.framework/Headers"
+    'contents': [{
+      'type': 'file',
+      'name': "iZootoiOSSDK-Swift.h",
+      'external-contents': "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/unextended-interface-header.h",
+    }]
+    }]
+}

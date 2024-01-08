@@ -1,0 +1,50 @@
+{
+  "" : {
+    "const-values" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZootoiOSSDK-master.swiftconstvalues",
+    "dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZootoiOSSDK-master.d",
+    "diagnostics" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZootoiOSSDK-master.dia",
+    "emit-module-dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZootoiOSSDK-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZootoiOSSDK-master-emit-module.dia",
+    "swift-dependencies" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZootoiOSSDK-master.swiftdeps"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppConstant.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/AppConstant.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/AppConstant.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/AppConstant.o"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/ShareUserDefault.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/ShareUserDefault.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/ShareUserDefault.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/ShareUserDefault.o"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/UserDefaults.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/UserDefaults.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/UserDefaults.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/UserDefaults.o"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Helper/Utils.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/Utils.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/Utils.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/Utils.o"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/iZooto.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZooto.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZooto.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/iZooto.o"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/iZooto/ViewController.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/ViewController.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/ViewController.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/ViewController.o"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/Payload/Payload.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/Payload.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/Payload.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/Payload.o"
+  },
+  "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/iZootoiOSSDK/Source/RestAPI/RestAPI.swift" : {
+    "index-unit-output-path" : "/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/RestAPI.o",
+    "llvm-bc" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/RestAPI.bc",
+    "object" : "/Users/amit_sdk_develoer/Documents/iOSSDK/mastercode/iZootoiOSSDK/iZootoiOSSDK/build/iZootoiOSSDK.build/Release-iphonesimulator/iZootoiOSSDK.build/Objects-normal/arm64/RestAPI.o"
+  }
+}
