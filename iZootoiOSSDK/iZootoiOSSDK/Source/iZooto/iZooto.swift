@@ -247,9 +247,6 @@ public class iZooto : NSObject
         let formattedDate = format.string(from: date)
         let userDefaults1 = UserDefaults(suiteName: Utils.getBundleName())
         let storedToken = userDefaults1?.value(forKey: AppConstant.IZ_GRPS_TKN) as? String
-        
-        
-        
         if UserDefaults.getRegistered() && (token == storedToken)
         {
             guard let token = Utils.getUserDeviceToken()

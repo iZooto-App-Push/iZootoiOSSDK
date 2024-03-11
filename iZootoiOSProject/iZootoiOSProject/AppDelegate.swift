@@ -139,7 +139,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     //@available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         iZooto.notificationHandler(response: response)//iZooto.notificationHandler
-    
         print(response.notification.request.content.userInfo)
         completionHandler()
 

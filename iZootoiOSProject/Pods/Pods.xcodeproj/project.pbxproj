@@ -19,12 +19,12 @@
 		4E3D5D768FCF67B543636E40F498C297 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1FDA4EF5B265FA76186CAC96F579E8 /* Utils.swift */; };
 		5E35BB7A7D65F3AD52500C4FC8C06069 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FA1E335C2FE4F85A61C0211B6E5D1245 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6B915D46A203239B4BA1D19613AC01A2 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */; };
+		6C9B874F2B9B10EE002E0C63 /* iZootoiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 36034E759035B3E6D69A6D002413DF79 /* iZootoiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7056F600695AA7B016F3821229A6E82F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		74C4195CF647EA979387BE55D496AC96 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		8E7F321051A3A36B98D7A7762ED3828B /* iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CDF8363B463D296E8FCEC918D2A50D /* iZootoiOSSDK-dummy.m */; };
 		9AB7BC14290EFE00272F1148B75DDFB3 /* ShareUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1711A8A3FF58DE2D6E0B51ED849AE79E /* ShareUserDefault.swift */; };
 		C8552764CAD5388E48E1B28BDB74750A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		D4055F5FBEBBA99058AA501DE558749F /* iZootoiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 36034E759035B3E6D69A6D002413DF79 /* iZootoiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E20EAF8247860DD78A75C11F8B88710B /* Pods-iZootoiOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B201C4F280ABED4678173B09385B7B0 /* Pods-iZootoiOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8C476BD8A204AFE7578AA2CF02CF3D8 /* iZooto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29EB3FC86EE2F6F74AEA8EAE92C9D85 /* iZooto.swift */; };
 		F47ACB075ADC2B28B2F653109A8698B0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315598A1BCB052051061900C6145DAA3 /* UserDefaults.swift */; };
@@ -301,8 +301,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4055F5FBEBBA99058AA501DE558749F /* iZootoiOSSDK-umbrella.h in Headers */,
 				118954B6204B43AD4E7A3B4D69C58891 /* iZootoiOSSDK.h in Headers */,
+				6C9B874F2B9B10EE002E0C63 /* iZootoiOSSDK-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
