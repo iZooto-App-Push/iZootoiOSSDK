@@ -1888,9 +1888,9 @@ public class iZooto : NSObject
     // Hybrid Plugin Version
     @objc public static func setPluginVersion(pluginVersion : String){
         if pluginVersion != ""{
-            sharedUserDefault?.set(pluginVersion, forKey: "Plugin_Version")
+            sharedUserDefault?.set(pluginVersion, forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
         }else{
-            sharedUserDefault?.set("", forKey: "Plugin_Version")
+            sharedUserDefault?.set("", forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE)
         }
     }
     

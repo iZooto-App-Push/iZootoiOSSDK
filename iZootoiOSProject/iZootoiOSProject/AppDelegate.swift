@@ -38,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // Notification Received
     func onNotificationReceived(payload: Payload) {
         print("Payload",payload.alert?.title! as Any )
-        
     }
         
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -47,11 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
        // iZooto.promptForPushNotifications()
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
         iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
-       
         iZooto.notificationReceivedDelegate = self
-        iZooto.landingURLDelegate  = self
+        iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
         iZooto.setLogLevel(isEnable: false)
+    
         return true
     }
         
@@ -63,6 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         // Tracking authorization dialog was shown
                         // and we are authorized
                         print("Authorized")
+                        
+                        
                         // Now that we are authorized we can get the IDFA
                         print(ASIdentifierManager.shared().advertisingIdentifier)
                     case .denied:
@@ -130,16 +131,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
    // @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         iZooto.handleForeGroundNotification(notification: notification, displayNotification: "None", completionHandler: completionHandler)
-        
 
         
     }
-        
 
     //@available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         iZooto.notificationHandler(response: response)//iZooto.notificationHandler
-        print(response.notification.request.content.userInfo)
         completionHandler()
 
     }

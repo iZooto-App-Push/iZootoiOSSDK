@@ -20,9 +20,9 @@ class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
     override func loadView() {
         super.loadView()
               let webConfiguration = WKWebViewConfiguration()
-               webView = WKWebView(frame: .zero, configuration: webConfiguration)
-               webView.uiDelegate = self
-              webView.navigationDelegate = self
+              webView = WKWebView(frame: .zero, configuration: webConfiguration)
+              webView.uiDelegate = self
+             webView.navigationDelegate = self
               webView.frame=self.view.bounds
               view.addSubview(webView)
         
