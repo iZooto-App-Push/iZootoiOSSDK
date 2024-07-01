@@ -33,8 +33,10 @@ public class Utils : NSObject
     public static func getAccessToken() -> String{
         let preferences = UserDefaults.standard
         if preferences.string(forKey: TOKEN) != nil{
-            let access_token = preferences.string(forKey: TOKEN)
-            return access_token!
+            if let access_token = preferences.string(forKey: TOKEN) {
+                return access_token
+            }
+            return "Token not found."
         } else {
             return ""
         }
@@ -44,10 +46,10 @@ public class Utils : NSObject
         return sharedUserDefault?.string(forKey: SharedUserDefault.Key.token) ?? ""
     }
     
-    public static func getUserPID() -> Int? {
-        return sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID) ?? 0
+    public static func getUserId() -> String? {
+        let userDefault = UserDefaults.standard
+        return userDefault.string(forKey: AppConstant.REGISTERED_ID)
     }
-    
     public static func initFireBaseInialise(isInitialise : Bool)
     {
         let preference = UserDefaults.standard
@@ -73,7 +75,6 @@ public class Utils : NSObject
     
     public static func dataValidate( data : Dictionary<String,Any>)->Dictionary<String,Any>
     {
-        
         var updatedData = Dictionary<String,Any>()
         for key in data.keys {
             
@@ -88,14 +89,17 @@ public class Utils : NSObject
             }
             if value is String
             {
-                let newValue = SimpleSubstring(string: value as! String, length: 64)
-                updatedData[keyName.lowercased()] = newValue
+                
+                if let value = value as? String{
+                    let newValue = SimpleSubstring(string: value, length: 64)
+                    updatedData[keyName.lowercased()] = newValue
+                }
+                
             }
         }
         return updatedData
     }
-    
-    private static func SimpleSubstring(string : String, length : Int) -> String {
+    public static func SimpleSubstring(string : String, length : Int) -> String {
         var returnString = string
         if (string.count > length) {
             returnString = String(string[...string.index(string.startIndex, offsetBy: length - 1)])
@@ -105,21 +109,26 @@ public class Utils : NSObject
     
     public static func getBundleName()->String
     {
-        let bundleID = Bundle.main.bundleIdentifier
-        return "group."+bundleID! + ".iZooto"
+        if let bundleID = Bundle.main.bundleIdentifier{
+            return "group."+bundleID + ".iZooto"
+        }
+        return "Not found"
     }
     
     // get Bundle ID
     static func getAppInfo()->String {
-        let dictionary = Bundle.main.infoDictionary!
-        let version = dictionary["CFBundleShortVersionString"] as! String
-        return version
+        if let dictionary = Bundle.main.infoDictionary {
+            if let version = dictionary["CFBundleShortVersionString"] as? String {
+                return version
+            }
+        }
+        return "0.0"
     }
     
     // get App Name
     static func getAppName()->String {
-        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
-        return appName
+        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+        return appName ?? ""
     }
     
     // getOS Information
@@ -130,10 +139,12 @@ public class Utils : NSObject
     
     // get App version
     static func getAppVersion() -> String {
-        let dictionary = Bundle.main.infoDictionary!
-        let version = dictionary["CFBundleShortVersionString"] as! String
-        // print(version)
-        return "\(version)"
+        if let dictionary = Bundle.main.infoDictionary{
+            if let version = dictionary["CFBundleShortVersionString"] as? String{
+                return version
+            }
+        }
+        return "0.0"
     }
     
     // current timestamp
@@ -147,50 +158,39 @@ public class Utils : NSObject
     // get device id
     static func getUUID()->String
     {
-        let device_id = UIDevice.current.identifierForVendor!.uuidString
-        return device_id
+        let device_id = UIDevice.current.identifierForVendor?.uuidString
+        return device_id ?? ""
     }
     
     //get add version
     static func  getVersion() -> String {
         return UIDevice.current.systemVersion
     }
+    
+//    static func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
+//    {
+//        let pattern = "[a-zA-Z0-9-_.~%]+"
+//        return true
+//    }
+    static func handleOnceException(exceptionName: String, className: String, methodName: String,  rid: String, cid: String)
+    {
+        
+        
+        let userDefaults = UserDefaults.standard
+        guard let appid = (UserDefaults.standard.value(forKey: "appID") as? String) else {
+            print("App ID not found to send exception.")
+            return
+        }
+        if userDefaults.object(forKey: methodName) == nil && (appid != nil || appid != ""){
+               userDefaults.set("isPresent", forKey: methodName)
+            RestAPI.sendExceptionToServer(exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid)
+               
+           }
+    }
+
 }
 
-public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
-{
-    let pattern = "[a-zA-Z0-9-_.~%]+"
-    print(pattern)
-    return true
-}
 
-//// handle the Encyption /Decrption functionality
-//extension String {
-//    /// Encode a String to Base64
-//    func toBase64() -> String {
-//        return Data(self.utf8).base64EncodedString()
-//    }
-//    
-//    /// Decode a String from Base64. Returns nil if unsuccessful.
-//    func fromBase64() -> String? {
-//        guard let data = Data(base64Encoded: self) else { return nil }
-//        return String(data: data, encoding: .utf8)
-//    }
-//}
-//extension Double {
-//    func getDigit(digit: Double) -> Int{
-//        let power = Int(pow(10, (digit-1)))
-//        return (Int(self) / power) % 10
-//    }
-//}
-//extension Date {
-//    func dayOfWeek() -> String? {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "EEEE"
-//        return dateFormatter.string(from: self).capitalized
-//        // or use capitalized(with: locale) if you want
-//    }
-//}
 
 extension LosslessStringConvertible {
     var string: String { .init(self) }
@@ -201,3 +201,7 @@ extension String {
         return NumberFormatter().number(from: self)?.doubleValue
     }
 }
+
+
+
+

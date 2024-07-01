@@ -139,5 +139,9 @@ class AppConstant : NSObject
     static let IZ_GRPS_TKN = "DEVICETOKEN"
     static let iZ_PID = "PID"
     
+    static let IZ_BTYPE = "8"
+    static let IZ_DTYPE = "3"
+    static let IZ_OS_TYPE = "5"
+    
     
 }

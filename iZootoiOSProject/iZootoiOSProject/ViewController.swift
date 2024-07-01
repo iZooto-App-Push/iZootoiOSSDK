@@ -15,6 +15,9 @@ class ViewController: UIViewController {
    
     
     @IBAction func addProperties(_ sender: Any) {
+        print("clicked")
+        getNotificationFeedData(isPagination: false) // o index called
+
         //let data = ["language": "bangla"] as [String : Any]
            //iZooto.addUserProperties(data: data)
       //  iZooto.registerForPushNotifications()
@@ -67,7 +70,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBlue
-       // getNotificationFeedData(isPagination: false) // o index called
 
        
        

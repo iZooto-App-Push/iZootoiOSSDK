@@ -43,24 +43,28 @@ public class Payload  : NSObject{
     public class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
     {
         var models:[Payload] = []
-        for item in array
-        {
-            models.append(Payload(dictionary: item as! NSDictionary)!)
+        for item in array {
+            if let dictionary = item as? NSDictionary {
+                if let payload = Payload(dictionary: dictionary) {
+                    models.append(payload)
+                }
+            }
         }
         return models
     }
     
     required public init?(dictionary: NSDictionary) {
         
-        if let dicti = dictionary["an"] as? NSArray{
-            if dicti.count > 0 {
-                let dictt = dicti[0] as! NSDictionary
-                if (dictt != nil) { ankey = AnKey(dictionary: dictt) }
-            }
+        if let dicti = dictionary["an"] as? NSArray, dicti.count > 0, let dictt = dicti[0] as? NSDictionary {
+            ankey = AnKey(dictionary: dictt)
         }
         
-        if (dictionary["alert"] != nil) { alert = Alert(dictionary: dictionary["alert"] as! NSDictionary) }
-        if (dictionary["g"] != nil) { global = Global(dictionary: dictionary["g"] as! NSDictionary) }
+        if let dictionary = dictionary["alert"] as? NSDictionary {
+            alert = Alert(dictionary: dictionary)
+        }
+        if let gData = dictionary["g"] as? NSDictionary {
+            global = Global(dictionary: gData)
+        }
         
         key = dictionary["k"] as? Int    // key
         id = dictionary["id"] as? String   // id
@@ -151,7 +155,11 @@ public class Alert {
         var models:[Alert] = []
         for item in array
         {
-            models.append(Alert(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary {
+                if let alert = Alert(dictionary: dictionary) {
+                    models.append(alert)
+                }
+            }
         }
         return models
     }
@@ -188,7 +196,11 @@ public class AnKey {
         var models:[AnKey] = []
         for item in array
         {
-            models.append(AnKey(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary {
+                if let anKey = AnKey(dictionary: dictionary) {
+                    models.append(anKey)
+                }
+            }
         }
         return models
     }
@@ -257,7 +269,11 @@ public class Global {
         var models:[Global] = []
         for item in array
         {
-            models.append(Global(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary{
+                if let global = Global(dictionary: dictionary){
+                    models.append(global)
+                }
+            }
         }
         return models
     }
@@ -306,13 +322,21 @@ public class iZootoBase {
         var models:[iZootoBase] = []
         for item in array
         {
-            models.append(iZootoBase(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary{
+                if let izootoBase = iZootoBase(dictionary: dictionary) {
+                    models.append(izootoBase)
+                }
+            }
         }
         return models
     }
     required public init?(dictionary: NSDictionary) {
         
-        if (dictionary["aps"] != nil) { aps = Payload(dictionary: dictionary["aps"] as! NSDictionary) }
+        if (dictionary["aps"] != nil) {
+            if let dictionary = dictionary["aps"] as? NSDictionary {
+                aps = Payload(dictionary: dictionary)
+            }
+        }
     }
     public func dictionaryRepresentation() -> NSDictionary {
         
