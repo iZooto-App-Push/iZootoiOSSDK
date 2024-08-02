@@ -18,6 +18,7 @@ import AppTrackingTransparency
 import AdSupport
 
 
+
 let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 @objc
 public class iZooto : NSObject
@@ -70,8 +71,7 @@ public class iZooto : NSObject
     @objc public static func initialisation(izooto_id : String, application : UIApplication,iZootoInitSettings : Dictionary<String,Any>)
     {
         
-        if(izooto_id == nil || izooto_id == "")
-        {
+        guard !izooto_id.isEmpty else {
             Utils.handleOnceException(exceptionName: "iZooto app id is not found\(izooto_id)", className: "iZooto", methodName: "initialisation", rid: "", cid: "")
             return
         }
@@ -289,24 +289,31 @@ public class iZooto : NSObject
     }
     
     // handle the badge count
-    @objc public static func setBadgeCount(badgeNumber : NSInteger)
-    {
-        if(badgeNumber == -1)
-        {
-            sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
-        }
-        if(badgeNumber == 1)
-        {
-            sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
-        }
-        else
-        {
-            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-                userDefaults.set(0, forKey: "Badge")
-                userDefaults.synchronize()
-            }
-        }
-    }
+    // handle the badge count
+       @objc public static func setBadgeCount(badgeNumber : NSInteger)
+       {
+           if(badgeNumber == -1)
+           {
+
+               sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
+           }
+           if(badgeNumber == 1)
+           {
+               
+               if let sharedUserDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+                   sharedUserDefaults.setValue(badgeNumber, forKey: "BADGECOUNT")
+                   sharedUserDefaults.synchronize()
+               }
+            
+           }
+           else
+           {
+               if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+                   userDefaults.set(0, forKey: "Badge")
+                   userDefaults.synchronize()
+               }
+           }
+       }
     
     @objc public static func  syncUserDetailsEmail(email:String,fName:String,lName : String)
     {
@@ -365,7 +372,7 @@ public class iZooto : NSObject
     //All Notification Data
     @objc public static func getNotificationFeed(isPagination: Bool,completion: @escaping (String?, Error?) -> Void){
         
-        if let userID = Utils.getUserId(), let token = Utils.getUserDeviceToken(){
+        if let userID = Utils.getUserId(),let _ = Utils.getUserDeviceToken(){
             RestAPI.fetchDataFromAPI(isPagination: isPagination,iZPID: userID) { (jsonString, error) in
                 if let error = error {
                     debugPrint(error)
@@ -1050,9 +1057,7 @@ public class iZooto : NSObject
                                         if notificationData.ankey != nil {
                                             if(notificationData.global?.inApp != nil)
                                             {
-                                                if let bNum = sharedUserDefault?.integer(forKey: "BADGECOUNT") {
-                                                    badgeNumber = bNum
-                                                }
+                                                
                                                 // custom notification sound
                                                 if (soundName != "")
                                                 {
@@ -1068,9 +1073,24 @@ public class iZooto : NSObject
                                                     if let userDefaults = UserDefaults(suiteName: groupName) {
                                                         userDefaults.set(isBadge, forKey: "isBadge")
                                                         if isBadge {
-                                                            let badgeCount = userDefaults.integer(forKey: "Badge")
-                                                            bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
-                                                            userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                                            
+                                                            if let sharedUserDefaults = UserDefaults(suiteName:groupName) {
+                                                                let badgeCount = sharedUserDefaults.integer(forKey: "BADGECOUNT")
+                                                                if badgeCount == 1 {
+                                                                    bestAttemptContent.badge = 1
+                                                                }
+                                                                else{
+                                                                    let badgeCount = userDefaults.integer(forKey: "Badge")
+                                                                    bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
+                                                                    userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                                                    
+                                                                }
+                                                            }else{
+                                                                
+                                                                let badgeCount = userDefaults.integer(forKey: "Badge")
+                                                                bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
+                                                                userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                                            }
                                                         } else {
                                                             bestAttemptContent.badge = -1
                                                         }
@@ -1124,9 +1144,7 @@ public class iZooto : NSObject
                                     
                                 }
                                 
-                                if let badgeCount = sharedUserDefault?.integer(forKey: "BADGECOUNT"){
-                                    badgeNumber = badgeCount
-                                }
+                               
                                 // custom notification sound
                                 if (soundName != "")
                                 {
@@ -1140,12 +1158,28 @@ public class iZooto : NSObject
                                 if(bundleName != "")
                                 {
                                     let groupName = "group."+bundleName+".iZooto"
+                                    print(groupName)
                                     if let userDefaults = UserDefaults(suiteName: groupName) {
                                         userDefaults.set(isBadge, forKey: "isBadge")
                                         if isBadge {
-                                            let badgeCount = userDefaults.integer(forKey: "Badge")
-                                            bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
-                                            userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                            
+                                            if let sharedUserDefaults = UserDefaults(suiteName:groupName) {
+                                                let badgeCount = sharedUserDefaults.integer(forKey: "BADGECOUNT")
+                                                if badgeCount == 1 {
+                                                    bestAttemptContent.badge = 1
+                                                }
+                                                else{
+                                                    let badgeCount = userDefaults.integer(forKey: "Badge")
+                                                    bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
+                                                    userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                                    
+                                                }
+                                            }else{
+                                                
+                                                let badgeCount = userDefaults.integer(forKey: "Badge")
+                                                bestAttemptContent.badge = (max(badgeNumber, badgeCount + 1)) as NSNumber
+                                                userDefaults.set(bestAttemptContent.badge, forKey: "Badge")
+                                            }
                                         } else {
                                             bestAttemptContent.badge = -1
                                         }
@@ -2897,8 +2931,8 @@ public class iZooto : NSObject
                 }
                 let binaryString = String(number, radix: 2)
                 let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
-                let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
-                let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+               // let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+               // let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
                 let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
                 if(secondDigit == 1)
                 {
@@ -3064,19 +3098,23 @@ public class iZooto : NSObject
         @objc public static func addEvent(eventName: String, data: Dictionary<String, Any>) {
             guard !eventName.isEmpty else { return }
             
-            let returnData = Utils.dataValidate(data: data)
             do {
-                if let theJSONData = try? JSONSerialization.data(withJSONObject: returnData, options: .fragmentsAllowed),
-                   let validateData = String(data: theJSONData, encoding: .utf8) {
-                    
+                let returnData = Utils.dataValidate(data: data)
+
+                // Using try to handle potential errors
+                let theJSONData = try JSONSerialization.data(withJSONObject: returnData, options: .fragmentsAllowed)
+
+                if let validateData = String(data: theJSONData, encoding: .utf8) {
                     if let token = Utils.getUserDeviceToken(), !token.isEmpty {
                         RestAPI.callEvents(eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, pid: Utils.getUserId() ?? "", token: token)
                     } else {
                         sharedUserDefault?.set(data, forKey: AppConstant.KEY_EVENT)
                         sharedUserDefault?.set(eventName, forKey: AppConstant.KEY_EVENT_NAME)
                     }
+                } else {
+                    print("Error: Unable to convert JSON data to string.")
                 }
-            }catch let error {
+            } catch let error {
                 print("Error: \(error.localizedDescription)")
             }
         }

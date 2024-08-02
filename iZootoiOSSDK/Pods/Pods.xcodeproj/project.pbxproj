@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		80B74049931220CDDF9E3F6F40B4ABEB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		8C29F109146260A3B2709DB89A33DE96 /* Pods-iZootoiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AE41655DB48744220688B4B32DB94A9 /* Pods-iZootoiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E25BA50C0C51B12D9F47ED857B19A793 /* Pods-iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34279EDEDE1A3D517F5CE80CC79E11B9 /* Pods-iZootoiOSSDK-dummy.m */; };
+		4D00A2A54AD34BDCAFBA1569FC0FC351 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		58EF95FE2CF429B73FB035B1D4896667 /* Pods-iZootoiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AE41655DB48744220688B4B32DB94A9 /* Pods-iZootoiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9FBE22FC449A59986A2A775B18779D62 /* Pods-iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34279EDEDE1A3D517F5CE80CC79E11B9 /* Pods-iZootoiOSSDK-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0CFADDDEB4C133DA992423123371F88F /* Pods-iZootoiOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iZootoiOSSDK.debug.xcconfig"; sourceTree = "<group>"; };
-		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		34279EDEDE1A3D517F5CE80CC79E11B9 /* Pods-iZootoiOSSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iZootoiOSSDK-dummy.m"; sourceTree = "<group>"; };
 		4AE41655DB48744220688B4B32DB94A9 /* Pods-iZootoiOSSDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iZootoiOSSDK-umbrella.h"; sourceTree = "<group>"; };
-		50F2F2879FD65D9D1381455ED8A95B40 /* Pods_iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_iZootoiOSSDK.framework; path = "Pods-iZootoiOSSDK.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		50F2F2879FD65D9D1381455ED8A95B40 /* Pods-iZootoiOSSDK */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-iZootoiOSSDK"; path = Pods_iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		7A27E242D0816B8CBA566B9655A240E7 /* Pods-iZootoiOSSDK-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iZootoiOSSDK-acknowledgements.markdown"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		DF167C126CC8831161462E0059929082 /* Pods-iZootoiOSSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-iZootoiOSSDK.modulemap"; sourceTree = "<group>"; };
@@ -27,11 +27,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2EDA05CCFB350508E0DAAE4093D5FA59 /* Frameworks */ = {
+		E712BC77B65406C20B70501CE8D84F6E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80B74049931220CDDF9E3F6F40B4ABEB /* Foundation.framework in Frameworks */,
+				4D00A2A54AD34BDCAFBA1569FC0FC351 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +54,14 @@
 			path = "Target Support Files/Pods-iZootoiOSSDK";
 			sourceTree = "<group>";
 		};
+		3A8BAE719AB6DFEC744D5B29AADE8A7B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				50F2F2879FD65D9D1381455ED8A95B40 /* Pods-iZootoiOSSDK */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4B2E2FC661C5FC63948DAB909D9FAA18 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,18 +70,10 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		7423A61BE1CA09BA1A179A83259F7696 /* Products */ = {
+		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				50F2F2879FD65D9D1381455ED8A95B40 /* Pods_iZootoiOSSDK.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */,
+				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -83,7 +83,7 @@
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				7423A61BE1CA09BA1A179A83259F7696 /* Products */,
+				3A8BAE719AB6DFEC744D5B29AADE8A7B /* Products */,
 				4B2E2FC661C5FC63948DAB909D9FAA18 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
@@ -91,7 +91,7 @@
 		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C0834CEBB1379A84116EF29F93051C60 /* iOS */,
+				578452D2E740E91742655AC8F1636D1F /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -99,11 +99,11 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		94DC2508548D8BA4706F9AD8D9247DF9 /* Headers */ = {
+		0A8235B086E181BEDD1449C176BA50F6 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C29F109146260A3B2709DB89A33DE96 /* Pods-iZootoiOSSDK-umbrella.h in Headers */,
+				58EF95FE2CF429B73FB035B1D4896667 /* Pods-iZootoiOSSDK-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,20 +112,20 @@
 /* Begin PBXNativeTarget section */
 		821E9301EBF1FA7AEFE232A505FCAE24 /* Pods-iZootoiOSSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8123FFF6E5F1DB1125E97A4EA1D84058 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSSDK" */;
+			buildConfigurationList = 41728D2AE5540299EE2800ECE627A2F4 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSSDK" */;
 			buildPhases = (
-				94DC2508548D8BA4706F9AD8D9247DF9 /* Headers */,
-				CD90AED50E6B3AD81C38FFD3330D320B /* Sources */,
-				2EDA05CCFB350508E0DAAE4093D5FA59 /* Frameworks */,
-				617616EF11C02476F36E91FAE44F9310 /* Resources */,
+				0A8235B086E181BEDD1449C176BA50F6 /* Headers */,
+				1D21023B5A2446183895A4460E67BA0F /* Sources */,
+				E712BC77B65406C20B70501CE8D84F6E /* Frameworks */,
+				42E17D818E7BD011EC3F8D6A12E77B7D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Pods-iZootoiOSSDK";
-			productName = "Pods-iZootoiOSSDK";
-			productReference = 50F2F2879FD65D9D1381455ED8A95B40 /* Pods_iZootoiOSSDK.framework */;
+			productName = Pods_iZootoiOSSDK;
+			productReference = 50F2F2879FD65D9D1381455ED8A95B40 /* Pods-iZootoiOSSDK */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -134,19 +134,19 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = 7423A61BE1CA09BA1A179A83259F7696 /* Products */;
+			productRefGroup = 3A8BAE719AB6DFEC744D5B29AADE8A7B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -156,7 +156,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		617616EF11C02476F36E91FAE44F9310 /* Resources */ = {
+		42E17D818E7BD011EC3F8D6A12E77B7D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -166,21 +166,59 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CD90AED50E6B3AD81C38FFD3330D320B /* Sources */ = {
+		1D21023B5A2446183895A4460E67BA0F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E25BA50C0C51B12D9F47ED857B19A793 /* Pods-iZootoiOSSDK-dummy.m in Sources */,
+				9FBE22FC449A59986A2A775B18779D62 /* Pods-iZootoiOSSDK-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		196DFA3E4A09A28224918543529A1885 /* Debug */ = {
+		047463E1A160BCD2163F02DA6034597F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CFADDDEB4C133DA992423123371F88F /* Pods-iZootoiOSSDK.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		2B9E26EAE2CD392AD762421F663075A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -203,6 +241,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -228,7 +267,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -241,10 +280,11 @@
 			};
 			name = Debug;
 		};
-		B01D14FDC83DCF9D4BE53066BEA96D05 /* Release */ = {
+		63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -267,6 +307,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -289,7 +330,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -301,51 +342,12 @@
 			};
 			name = Release;
 		};
-		D654492D890E9F8396CD96D7446777C9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0CFADDDEB4C133DA992423123371F88F /* Pods-iZootoiOSSDK.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		ED334EFFD66078A074A346086E66FECA /* Release */ = {
+		DB17F73A58551D304C04CF8ED37F8178 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E982084885A57A9E308D8FC07F1EC076 /* Pods-iZootoiOSSDK.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -356,7 +358,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSSDK/Pods-iZootoiOSSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -381,20 +383,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+		41728D2AE5540299EE2800ECE627A2F4 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				196DFA3E4A09A28224918543529A1885 /* Debug */,
-				B01D14FDC83DCF9D4BE53066BEA96D05 /* Release */,
+				047463E1A160BCD2163F02DA6034597F /* Debug */,
+				DB17F73A58551D304C04CF8ED37F8178 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8123FFF6E5F1DB1125E97A4EA1D84058 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSSDK" */ = {
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D654492D890E9F8396CD96D7446777C9 /* Debug */,
-				ED334EFFD66078A074A346086E66FECA /* Release */,
+				2B9E26EAE2CD392AD762421F663075A1 /* Debug */,
+				63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

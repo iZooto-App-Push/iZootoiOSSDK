@@ -53,7 +53,7 @@ class AppConstant : NSObject
     static let iZ_KEY_LAST_VISIT = "LastVisit"
     static let iZ_KEY_REGISTERED_ID_ERROR = "Token and pid is not generated,some issues ocuured"
     static let iZ_KEY_DEVICE_TOKEN_ERROR = "Device Token is not generating from this device"
-    static let iZ_KEY_ADVERTISEMENT_ID = "AdvertisementID" //AdvertisementID
+    static let iZ_KEY_ADVERTISEMENT_ID = "AdvertisementID"
     static let iZ_KEY_ADVERTISEMENT_ID_ = "ADID"
     static let iZ_POST_REQUEST = "POST"
     static let iZ_APP_GROUP_ERROR_ = "App group name is not added,please check and verify"
@@ -74,7 +74,6 @@ class AppConstant : NSObject
     static let iZ_SDK_VERSION = "SDKVERSION"
     static let iZ_APP_VERSION = "AppVersion"
     static let iZ_NOTIFCATION_KEY_NAME = "aps"
-    // Rest API changes
     static let iZ_CONTENT_TYPE = "Content-Type"
     static let iZ_CONTENT_TYPE_VALUE = "application/x-www-form-urlencoded"
     static let iZ_APPLICATION_JSON = "application/json"
@@ -95,8 +94,6 @@ class AppConstant : NSObject
     static let iZ_KEY_CHECK_VERSION = "check"
     static let iZ_KEY_PLUGIN_VERSION_VALUE = "pluginVersion"
     static let iZ_KEY_PLUGIN_VRSION_NAME = "pv"
-    
-    //Ad Mediation constant
     static let iZ_LN_ID_ARRAY = "lnArray"
     static let iZ_BIDS_SERVED_ARRAY = "bidsArray"
     static let iZ_ANKEY = "an"
@@ -112,14 +109,12 @@ class AppConstant : NSObject
     static let iZ_rcArray = "rcArray"
     static let iZ_CLICK_OFFLINE_DATA = "ClickOffData"
     static let iZ_MED_CLICK_OFFLINE_DATA = "MediationClickOffData"
-    //CT
     static let iZ_catId = "catId"
     static let iZ_b1Id = "b1Id"
     static let iZ_b1Name = "b1Name"
     static let iZ_b2Id = "b2Id"
     static let iZ_b2Name = "b2Name"
     static let iZ_CategoryArray = "categoryArray"
-    
     static let iZ_A_KEY = "a"
     static let iZ_B_KEY = "b"
     static let iZ_T_KEY = "t"
@@ -130,7 +125,6 @@ class AppConstant : NSObject
     static let IZ_LAST_CLICK = "LASTCLICK"
     static let IZ_LAST_CLICK_WEEKLY = "LASTCLICKWEEKLY"
     static let IZ_LAST_CLICK_WEEKDAYS = "LCWEEKDAYS"
-
     static let iZ_M_KEY = "m"
     static let iZ_BI_KEY = "bi"
     static let iZ_CT_KEY = "ct"
@@ -138,7 +132,6 @@ class AppConstant : NSObject
     static let IZ_TITLE_KEY = "title"
     static let IZ_GRPS_TKN = "DEVICETOKEN"
     static let iZ_PID = "PID"
-    
     static let IZ_BTYPE = "8"
     static let IZ_DTYPE = "3"
     static let IZ_OS_TYPE = "5"
