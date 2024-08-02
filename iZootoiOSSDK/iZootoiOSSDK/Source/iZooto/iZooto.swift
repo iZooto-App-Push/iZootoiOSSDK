@@ -1154,7 +1154,7 @@ public class iZooto : NSObject
                                 {
                                     bestAttemptContent.sound = .default()
                                 }
-                                
+                                // add group name
                                 if(bundleName != "")
                                 {
                                     let groupName = "group."+bundleName+".iZooto"

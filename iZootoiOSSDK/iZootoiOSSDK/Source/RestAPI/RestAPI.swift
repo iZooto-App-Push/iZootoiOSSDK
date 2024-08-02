@@ -49,7 +49,7 @@ public class RestAPI : NSObject
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
     
-    // email capture api
+    // email capture api handling
     static var EMAIL_CAPTURE_API = "https://eenp.izooto.com/eenp"
     //All notification Data
     static let ALL_NOTIFICATION_DATA = "https://nh.iz.do/nh/"
