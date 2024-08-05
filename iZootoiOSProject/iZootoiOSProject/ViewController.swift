@@ -53,13 +53,13 @@ class ViewController: UIViewController {
     @IBAction func clickAction(_ sender: Any) {
         print("clicks")
         
-        if #available(iOS 13.0, *) {
-            let svc = (storyboard?.instantiateViewController(identifier: "green_vc")) as! SecondViewController
-            present(svc, animated: true)
-
-        } else {
-            // Fallback on earlier versions
-        }
+//        if #available(iOS 13.0, *) {
+//            let svc = (storyboard?.instantiateViewController(identifier: "green_vc")) as! SecondViewController
+//            present(svc, animated: true)
+//
+//        } else {
+//            // Fallback on earlier versions
+//        }
 //        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
 //        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "newsview") as! NewsController//
 //        self.navigationController?.pushViewController(nextViewController, animated: true)
