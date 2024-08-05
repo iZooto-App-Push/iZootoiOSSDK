@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
   spec.swift_version = '4.0'
   spec.source       = { :git =>"https://github.com/izooto-mobile-sdk/iZootoiOSSDK.git", :tag => "2.3.1" }
   spec.source_files  = 'iZootoiOSSDK/**/*.{h,swift}'
-  spec.public_header_files = 'iZootoiOSSDK/**/*.h'
+  
   spec.exclude_files = 'iZootoiOSSDK/**/*.plist'
   spec.pod_target_xcconfig = { 'APPLICATION_EXTENSION_API_ONLY' => 'No' }
   spec.requires_arc  = true
