@@ -181,7 +181,7 @@ public class Utils : NSObject
             print("App ID not found to send exception.")
             return
         }
-        if userDefaults.object(forKey: methodName) == nil {
+        if userDefaults.object(forKey: methodName) == nil && (appid != nil || appid != ""){
                userDefaults.set("isPresent", forKey: methodName)
             RestAPI.sendExceptionToServer(exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid)
                

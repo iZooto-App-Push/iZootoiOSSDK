@@ -44,12 +44,12 @@ public class RestAPI : NSObject
     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
-    static let SDKVERSION = "2.3.1"
+    static let SDKVERSION = "2.3.2"
     //fallback url
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
     
-    // email capture api handling
+    // email capture api
     static var EMAIL_CAPTURE_API = "https://eenp.izooto.com/eenp"
     //All notification Data
     static let ALL_NOTIFICATION_DATA = "https://nh.iz.do/nh/"
@@ -512,18 +512,9 @@ public class RestAPI : NSObject
             var tempArray: [[String:Any]] = []
             for dict in dd{
                 tempArray = dd
-                let data = dict as? [String: Any]
-
-                self.clickOfflineTrack(
-                    pid: data?["pid"] as? String ?? "",
-                    cid: data?["cid"] as? String ?? "",
-                    rid: data?["rid"] as? String ?? "",
-                    ver: data?["ver"] as? String ?? "",
-                    btn: data?["btn"] as? String ?? "",
-                    token: data?["bKey"] as? String ?? "",
-                    title: data?["ti"] as? String ?? "",
-                    ln: data?["ln"] as? String ?? ""
-                )
+                let data = dict as? NSDictionary
+                
+                self.clickOfflineTrack(pid: data?.value(forKey: "pid") as? String ?? "", cid: data?.value(forKey: "cid") as? String ?? "", rid: data?.value(forKey: "rid") as? String ?? "", ver: data?.value(forKey: "ver") as? String ?? "", btn: data?.value(forKey: "btn") as? String ?? "", token: data?.value(forKey: "bKey") as? String ?? "", title: data?.value(forKey: "ti") as? String ?? "",ln: data?.value(forKey: "ln") as? String ?? "")
             }
             tempArray.removeAll()
             UserDefaults.standard.set(tempArray, forKey: AppConstant.iZ_CLICK_OFFLINE_DATA)
@@ -1028,64 +1019,58 @@ public class RestAPI : NSObject
     //Ad-Mediation Impression
     @objc static func callAdMediationImpressionApi(finalDict: NSDictionary){
         
+        let defaults = UserDefaults.standard
         
         if (finalDict.count != 0) {
             let rid = finalDict.value(forKey: "rid") as? String
+            let jsonData = try? JSONSerialization.data(withJSONObject: finalDict as? [String: Any])
             
-            if let finalDict = finalDict as? [String: Any], let jsonData = try? JSONSerialization.data(withJSONObject: finalDict) {
-                
-                guard let url = URL(string: RestAPI.MEDIATION_IMPRESSION_URL) else {
-                    // Handle the case where the URL is nil
-                    print("Error: Invalid URL")
-                    return
-                }
-                var request = URLRequest(url: url)
-                request.httpMethod = "POST"
-                request.httpBody = jsonData
-                request.addValue("application/json", forHTTPHeaderField: "\(AppConstant.iZ_CONTENT_TYPE)")
-                request.addValue("application/json", forHTTPHeaderField: "Accept")
-                let config = URLSessionConfiguration.default
-                if #available(iOS 11.0, *) {
-                    config.waitsForConnectivity = true
-                } else {
-                    // Fallback on earlier versions
-                }
-                URLSession(configuration: config).dataTask(with: request) {data,response,error in
-                    
-                    do {
-                        if let error = error {
-                            throw error
-                        }
-                        // Check the HTTP response status code
-                        if let httpResponse = response as? HTTPURLResponse {
-                            if httpResponse.statusCode == 200 {
-                                print("Mediation Impression Success")
-                                
-                            }else{
-                                Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Impression API",  rid: rid ?? "" , cid: "")
-                            }
-                        }
-                    } catch {
-                        
-                        Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "CallAdMediationImpressionApi", rid: rid ?? "", cid: "")
-                        
-                    }
-                }.resume()
-            }else{
-                Utils.handleOnceException(exceptionName: "key's are blank in request parameter,\(finalDict) ", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Impression API",  rid: "", cid: "")
+            guard let url = URL(string: RestAPI.MEDIATION_IMPRESSION_URL) else {
+                // Handle the case where the URL is nil
+                print("Error: Invalid URL")
+                return
             }
-
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = jsonData
+            request.addValue("application/json", forHTTPHeaderField: "\(AppConstant.iZ_CONTENT_TYPE)")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            let config = URLSessionConfiguration.default
+            if #available(iOS 11.0, *) {
+                config.waitsForConnectivity = true
             } else {
-                // Handle case where finalDict is nil or cast failed
-                print("Error: Unable to convert finalDict to [String: Any] or serialize JSON data.")
+                // Fallback on earlier versions
             }
-            
-           
+            URLSession(configuration: config).dataTask(with: request) {data,response,error in
+                
+                do {
+                    if let error = error {
+                        throw error
+                    }
+                    // Check the HTTP response status code
+                    if let httpResponse = response as? HTTPURLResponse {
+                        if httpResponse.statusCode == 200 {
+                            print("Mediation Impression Success")
+                            
+                        }else{
+                            Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Impression API",  rid: rid ?? "" , cid: "")
+                        }
+                    }
+                } catch {
+                    
+                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "CallAdMediationImpressionApi", rid: rid ?? "", cid: "")
+                    
+                }
+            }.resume()
+        }else{
+            Utils.handleOnceException(exceptionName: "key's are blank in request parameter,\(finalDict) ", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Impression API",  rid: "", cid: "")
+        }
     }
     
     //Ad-Mediation ClickAPI
     @objc static func callAdMediationClickApi(finalDict: NSDictionary){
         
+        let defaults = UserDefaults.standard
         if (finalDict.count != 0) {
             let rid = finalDict.value(forKey: "rid") as? String
             let jsonData = try? JSONSerialization.data(withJSONObject: finalDict)
