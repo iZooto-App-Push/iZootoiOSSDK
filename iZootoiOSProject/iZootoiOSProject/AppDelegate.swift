@@ -50,7 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
         iZooto.setLogLevel(isEnable: false)
-        iZooto.setBadgeCount(badgeNumber: 1)
     
         return true
     }
