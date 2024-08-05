@@ -4,21 +4,23 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-iZootoiOSProject-iZootoNotificationExtendsServices.xcscheme_^#shared#^_</key>
+		<key>Pods-iZootoiOSProject-iZootoNotificationExtendsServices.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>3</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
-		<key>Pods-iZootoiOSProject.xcscheme_^#shared#^_</key>
+		<key>Pods-iZootoiOSProject.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>4</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
-		<key>iZootoiOSSDK.xcscheme_^#shared#^_</key>
+		<key>iZootoiOSSDK.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>2</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict/>
 </dict>
 </plist>
