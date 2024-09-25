@@ -44,7 +44,7 @@ public class RestAPI : NSObject
     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
-    static let SDKVERSION = "2.3.4"
+    static let SDKVERSION = "2.3.5"
     //fallback url
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var fallBackLandingUrl = ""
@@ -52,7 +52,7 @@ public class RestAPI : NSObject
     // email capture api
     static var EMAIL_CAPTURE_API = "https://eenp.izooto.com/eenp"
     //All notification Data
-    static let ALL_NOTIFICATION_DATA = "https://nh.iz.do/nh/"
+    static let ALL_NOTIFICATION_DATA = "https://nh.izooto.com/nh/"
     static var index = 0
     static var stopCalling = false
     static var lessData = 0
