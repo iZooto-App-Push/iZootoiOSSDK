@@ -110,7 +110,7 @@ public class Utils : NSObject
     public static func getBundleName()->String
     {
         if let bundleID = Bundle.main.bundleIdentifier{
-            return "group."+bundleID + ".iZooto"
+            return "group."+bundleID+".iZooto"
         }
         return "Not found"
     }
@@ -181,11 +181,86 @@ public class Utils : NSObject
             print("App ID not found to send exception.")
             return
         }
-        if userDefaults.object(forKey: methodName) == nil && (appid != nil || appid != ""){
+        if userDefaults.object(forKey: methodName) == nil{
                userDefaults.set("isPresent", forKey: methodName)
             RestAPI.sendExceptionToServer(exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid)
                
+           } else {
+               print("Key \(methodName) already exists. Data not stored.")
            }
+    }
+    
+    static func addMacros(url: String) -> String {
+        var finalUrl = url.trimmingCharacters(in: .whitespacesAndNewlines)
+        if finalUrl != "" && !finalUrl.isEmpty{
+            var registerTime: TimeInterval = 0
+            let token = Utils.getUserDeviceToken() ?? ""
+            let pid = Utils.getUserId() ?? ""
+            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+                registerTime = userDefaults.value(forKey: "unixTS") as? TimeInterval ?? 0
+            }
+            let time = Utils.unixTimeDifference(unixTimestamp: registerTime )
+            
+            if finalUrl.contains("{~UUID~}") {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~UUID~}", with: token)
+            }
+            if finalUrl.contains("{~ADID~}") {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~ADID~}", with: RestAPI.identifierForAdvertising() ?? "")
+            }
+            if finalUrl.contains("{~PID~}") {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~PID~}", with: pid)
+            }
+            if finalUrl.contains("{~DEVICEID~}") {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~DEVICEID~}", with: token)
+            }
+            if finalUrl.contains("{~DEVICETOKEN~}")
+            {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~DEVICETOKEN~}", with: token)
+            }
+            if finalUrl.contains("{~SUBAGED~}")
+            {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~SUBAGED~}", with: String(time.days))
+            }
+            if finalUrl.contains("{~SUBAGEM~}")
+            {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~SUBAGEM~}", with: String(time.months))
+            }
+            if finalUrl.contains("{~SUBAGEY~}")
+            {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~SUBAGEY~}", with: String(time.years))
+            }
+            if finalUrl.contains("{~SUBUTS~}")
+            {
+                finalUrl = finalUrl.replacingOccurrences(of: "{~SUBUTS~}", with: String(Int64(registerTime)))
+            }
+            
+        }
+        return finalUrl
+    }
+    
+   
+    static func unixTimeDifference(unixTimestamp: TimeInterval) -> (years: Int, months: Int, days: Int) {
+        
+        let registeredTimestampMillis: TimeInterval = unixTimestamp// Add your registered timestamp in milliseconds here
+        let currentTimestampMillis: TimeInterval = TimeInterval(Int(Date().timeIntervalSince1970 * 1000))
+        
+//        let registeredTimestampMillis: TimeInterval = 1754718397000
+//        let currentTimestampMillis: TimeInterval = 1838368000000
+        
+        let currentDate = Date(timeIntervalSince1970: currentTimestampMillis / 1000)
+        let registeredDate = Date(timeIntervalSince1970: registeredTimestampMillis / 1000)
+        
+        var calendar = Calendar.current
+        calendar.timeZone = .current
+        let components = calendar.dateComponents([.year, .month, .day], from: registeredDate, to: currentDate)
+        
+        let years = components.year ?? 0
+        let months = components.month ?? 0
+        let days = components.day ?? 0
+        let totalDays = calendar.dateComponents([.day], from: registeredDate, to: currentDate).day!
+        let totalMonths = months + years * 12
+        
+        return (years: years, months: totalMonths, days: totalDays)
     }
 
 }

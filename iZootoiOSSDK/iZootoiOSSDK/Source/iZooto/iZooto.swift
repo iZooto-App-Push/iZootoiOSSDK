@@ -8,6 +8,7 @@
 
 import Foundation
 import UserNotifications
+
 import UIKit
 import Darwin
 import AdSupport
@@ -59,7 +60,7 @@ public class iZooto : NSObject
     @objc private static var bidsData = [NSMutableDictionary()]
     //to store category details
     private static var categoryArray: [[String:Any]] = []
-    
+    @objc static var groupName = Utils.getBundleName()
     
     @objc public init(application : UIApplication)
     {
@@ -82,7 +83,7 @@ public class iZooto : NSObject
             
             var finalOutPut = output.trimmingCharacters(in: .whitespaces)
             finalOutPut = finalOutPut.replacingOccurrences(of: "\n", with: "")
-
+            
             guard let jsonString = finalOutPut.fromBase64() else {//if wrong json format
                 Utils.handleOnceException(exceptionName: ".dat base64 == \(output)", className: "iZooto", methodName: "initialisation", rid: "0", cid: "0")
                 return
@@ -102,7 +103,6 @@ public class iZooto : NSObject
                     Utils.handleOnceException(exceptionName: ".dat response error \(jsonString)", className: "iZooto", methodName: "initialisation", rid: "0", cid: "0")
                 }
             } catch let error {
-                print("Error: \(error)")
                 Utils.handleOnceException(exceptionName: ".dat parsing error \(error)", className: "iZooto", methodName: "initialisation", rid: "0", cid: "0")
             }
             
@@ -152,6 +152,7 @@ public class iZooto : NSObject
            let eventName = sharedUserDefault?.string(forKey: AppConstant.KEY_EVENT_NAME){
             addEvent(eventName: eventName, data: eventData)
         }
+        
     }
     @objc public static func setLogLevel(isEnable: Bool){
         UserDefaults.standard.set(isEnable, forKey: AppConstant.iZ_LOG_ENABLED)
@@ -280,10 +281,7 @@ public class iZooto : NSObject
                         }
                     }
                 }
-                else
-                {
-                    Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.IZ_TAG, methodName: "GetToken",  rid: "", cid: "")
-                }
+                
             }
         }
     }
@@ -293,7 +291,7 @@ public class iZooto : NSObject
     {
         if(badgeNumber == -1)
         {
-
+            
             sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
         }
         if(badgeNumber == 1)
@@ -303,7 +301,7 @@ public class iZooto : NSObject
                 sharedUserDefaults.setValue(badgeNumber, forKey: "BADGECOUNT")
                 sharedUserDefaults.synchronize()
             }
-         
+            
         }
         else
         {
@@ -387,84 +385,87 @@ public class iZooto : NSObject
     
     // Ad's Fallback Url Call
     @available(iOS 11.0, *)
-     @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String, notiRid: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
-         let str = RestAPI.FALLBACK_URL
-         let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
-         if let url = URL(string: izUrlString ?? "") {
-             URLSession.shared.dataTask(with: url) { data, response, error in
-                 if let data = data {
-                     do {
-                         let json = try JSONSerialization.jsonObject(with: data)
-                         if let jsonDictionary = json as? [String:Any] {
-                             if let apsDictionary = jsonDictionary as? NSDictionary {
-                                 if let notificationData = Payload(dictionary: apsDictionary) {
-                                     if let title = jsonDictionary[AppConstant.iZ_T_KEY] as? String {
-                                         bestAttemptContent.title = title
-                                     }
-                                     if let body = jsonDictionary["m"] as? String {
-                                         bestAttemptContent.body = body
-                                     }
-                                     if let url = notificationData.url, !url.isEmpty {
-                                         let groupName = "group.\(bundleName).iZooto"
-                                         if let userDefaults = UserDefaults(suiteName: groupName) {
-                                             userDefaults.set(url, forKey: "fallBackLandingUrl")
-                                             userDefaults.set(bestAttemptContent.title, forKey: "fallBackTitle")
-                                         }
-                                         if let newUrl = jsonDictionary["bi"] as? String {
-                                             notificationData.url = newUrl
-                                             if newUrl.contains(".webp") {
-                                                 notificationData.url = newUrl.replacingOccurrences(of: ".webp", with: ".jpeg")
-                                             }
-                                             if newUrl.contains("http:") {
-                                                 notificationData.url = newUrl.replacingOccurrences(of: "http:", with: "https:")
-                                             }
-                                         }
-                                     }
-                                     if fallCategory != ""{
-                                         storeCategories(notificationData: notificationData, category: fallCategory)
-                                         if notificationData.act1name != "" && notificationData.act1name != nil{
-                                             addCTAButtons()
-                                         }
-                                     }
-                                     //call impression
-                                     if let url = notificationData.url {
-                                         self.ad_mediationImpressionCall(notiRid: notiRid, adTitle: bestAttemptContent.title, adLn: url, bundleName: bundleName)
-                                     }
-                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                         autoreleasepool {
-                                             if let urlString = (notificationData.url),
-                                                let fileUrl = URL(string: urlString ) {
-                                                 
-                                                 guard let imageData = NSData(contentsOf: fileUrl) else {
-                                                     contentHandler!(bestAttemptContent)
-                                                     return
-                                                 }
-                                                 let string = notificationData.url ?? ""
-                                                 let url: URL? = URL(string: string)
-                                                 let urlExtension: String? = url?.pathExtension
-                                                 guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+(urlExtension ?? ".jpeg"), data: imageData, options: nil) else {
-                                                     debugPrint(AppConstant.IMAGE_ERROR)
-                                                     contentHandler!(bestAttemptContent)
-                                                     return
-                                                 }
-                                                 bestAttemptContent.attachments = [ attachment ]
-                                             }
-                                         }
-                                         contentHandler!(bestAttemptContent)
-                                     }
-                                 }
-                             }
-                         }
-                     } catch let error {
-                         
-                         Utils.handleOnceException(exceptionName: "Fallback ad Api error\(error.localizedDescription)", className: "iZooto", methodName: "fallBackAdsApi", rid: notiRid , cid: "0")
-                     }
-                 }
-                 
-             }.resume()
-         }
-     }
-     
+    @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String,flbk : [String] ,notiRid: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
+        //         let str = RestAPI.FALLBACK_URL
+        let str = "https://\(flbk[0]).izooto.com/\(flbk[1])"
+        //        print("Final Fallback URL : \(str)")
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        if let url = URL(string: izUrlString ?? "") {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        if let jsonDictionary = json as? [String:Any] {
+                            if let apsDictionary = jsonDictionary as? NSDictionary {
+                                if let notificationData = Payload(dictionary: apsDictionary) {
+                                    if let title = jsonDictionary[AppConstant.iZ_T_KEY] as? String {
+                                        bestAttemptContent.title = title
+                                    }
+                                    if let body = jsonDictionary["m"] as? String {
+                                        bestAttemptContent.body = body
+                                    }
+                                    if let url = notificationData.url, !url.isEmpty {
+                                        let groupName = "group.\(bundleName).iZooto"
+                                        if let userDefaults = UserDefaults(suiteName: groupName) {
+                                            userDefaults.set(url, forKey: "fallBackLandingUrl")
+                                            userDefaults.set(bestAttemptContent.title, forKey: "fallBackTitle")
+                                        }
+                                        if let newUrl = jsonDictionary["bi"] as? String {
+                                            notificationData.url = newUrl
+                                            if newUrl.contains(".webp") {
+                                                notificationData.url = newUrl.replacingOccurrences(of: ".webp", with: ".jpeg")
+                                            }
+                                            if newUrl.contains("http:") {
+                                                notificationData.url = newUrl.replacingOccurrences(of: "http:", with: "https:")
+                                            }
+                                        }
+                                    }
+                                    if fallCategory != ""{
+                                        storeCategories(notificationData: notificationData, category: fallCategory)
+                                        if notificationData.act1name != "" && notificationData.act1name != nil{
+                                            addCTAButtons()
+                                        }
+                                    }
+                                    //call impression
+                                    if let url = notificationData.url {
+                                        self.ad_mediationImpressionCall(notiRid: notiRid, adTitle: bestAttemptContent.title, adLn: url, bundleName: bundleName)
+                                    }
+                                    RestAPI.fetcherAdMediationClickApi(url: jsonDictionary["ln"] as? String ?? "", title: jsonDictionary["t"] as? String ?? "", rid: notificationData.rid ?? "", callForMedc: false)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        autoreleasepool {
+                                            if let urlString = (notificationData.url),
+                                               let fileUrl = URL(string: urlString ) {
+                                                
+                                                guard let imageData = NSData(contentsOf: fileUrl) else {
+                                                    contentHandler!(bestAttemptContent)
+                                                    return
+                                                }
+                                                let string = notificationData.url ?? ""
+                                                let url: URL? = URL(string: string)
+                                                let urlExtension: String? = url?.pathExtension
+                                                guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+(urlExtension ?? ".jpeg"), data: imageData, options: nil) else {
+                                                    debugPrint(AppConstant.IMAGE_ERROR)
+                                                    contentHandler!(bestAttemptContent)
+                                                    return
+                                                }
+                                                bestAttemptContent.attachments = [ attachment ]
+                                            }
+                                        }
+                                        contentHandler!(bestAttemptContent)
+                                    }
+                                }
+                            }
+                        }
+                    } catch let error {
+                        
+                        Utils.handleOnceException(exceptionName: "Fallback ad Api error\(error.localizedDescription)", className: "iZooto", methodName: "fallBackAdsApi", rid: notiRid , cid: "0")
+                    }
+                }
+                
+            }.resume()
+        }
+    }
+    
     /* Handling the payload data */
     @objc private static func payLoadDataChange(payload: [String:Any],bundleName: String, completion: @escaping ([String:Any]) -> Void) {
         
@@ -647,7 +648,7 @@ public class iZooto : NSObject
                         }
                     }
                     //tp = 5
-                      else if let value = gt.value(forKey: AppConstant.iZ_TPKEY) as? String, value == "5" {
+                    else if let value = gt.value(forKey: AppConstant.iZ_TPKEY) as? String, value == "5" {
                         if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
                             self.succ = "false"
                             bidsData.removeAll()
@@ -765,7 +766,7 @@ public class iZooto : NSObject
                                                                         let t = Int(Date().timeIntervalSince(startDate) * 1000)
                                                                         if let finalCPCValueDouble = Double(finalCPCValue) {
                                                                             servedData = [AppConstant.iZ_A_KEY: index + 1,AppConstant.iZ_B_KEY: finalCPCValueDouble,AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCValueDouble]
-//                                                                            servedArray.append(servedData as! [String : Any])
+                                                                            //                                                                            servedArray.append(servedData as! [String : Any])
                                                                             if let servedDataDict = servedData as? [String: Any] {
                                                                                 servedArray.append(servedDataDict)
                                                                             }
@@ -1043,20 +1044,30 @@ public class iZooto : NSObject
     @objc public static func didReceiveNotificationExtensionRequest(bundleName : String,soundName :String,isBadge : Bool,
                                                                     request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
     {
+        var bundleNameID = ""
+        var myBundleName = Bundle.main.bundleIdentifier
+        if ((myBundleName?.contains(".iZootoNotificationExtendsServices")) != nil){
+            myBundleName = myBundleName?.replacingOccurrences(of: ".iZootoNotificationExtendsServices", with: "")
+            bundleNameID = myBundleName ?? ""
+        }
+        else{
+            bundleNameID = bundleName
+        }
+        self.groupName = "group."+bundleNameID+".iZooto"
         let userInfo = request.content.userInfo
         var isEnabled = false
         if let jsonDictionary = userInfo as? [String:Any] {
             if let aps = jsonDictionary["aps"] as? NSDictionary{
                 if aps.value(forKey: AppConstant.iZ_ANKEY) != nil {
                     if let userInfoData = userInfo as? [String: Any] {
-                        self.payLoadDataChange(payload: userInfoData, bundleName: bundleName) { data in
+                        self.payLoadDataChange(payload: userInfoData, bundleName: bundleNameID) { data in
                             if let totalData = data["aps"] as? NSDictionary{
                                 if let apsDictionary = data["aps"] as? NSDictionary {
                                     if let notificationData = Payload(dictionary: apsDictionary){
                                         if notificationData.ankey != nil {
                                             if(notificationData.global?.inApp != nil)
                                             {
-                                               
+                                                
                                                 // custom notification sound
                                                 if (soundName != "")
                                                 {
@@ -1066,9 +1077,9 @@ public class iZooto : NSObject
                                                 {
                                                     bestAttemptContent.sound = .default()
                                                 }
-                                                if(bundleName != "")
+                                                if(bundleNameID != "")
                                                 {
-                                                    let groupName = "group."+bundleName+".iZooto"
+                                                    let groupName = "group."+bundleNameID+".iZooto"
                                                     if let userDefaults = UserDefaults(suiteName: groupName) {
                                                         userDefaults.set(isBadge, forKey: "isBadge")
                                                         if isBadge {
@@ -1099,7 +1110,7 @@ public class iZooto : NSObject
                                                         if (notificationData.global?.cfg != nil)
                                                         {
                                                             if let number = Int(notificationData.global?.cfg ?? "0"){
-                                                                handleImpresseionCfgValue(cfgNumber: number, notificationData: notificationData)
+                                                                handleImpresseionCfgValue(cfgNumber: number, notificationData: notificationData, bundleName: bundleNameID)
                                                             }
                                                         }
                                                         userDefaults.synchronize()
@@ -1117,7 +1128,7 @@ public class iZooto : NSObject
                                                 
                                                 if notificationData.ankey?.fetchUrlAd != nil && notificationData.ankey?.fetchUrlAd != ""
                                                 {
-                                                    self.commonFuUrlFetcher(bestAttemptContent: bestAttemptContent, bundleName: bundleName, notificationData: notificationData,totalData: totalData, contentHandler: contentHandler)
+                                                    self.commonFuUrlFetcher(bestAttemptContent: bestAttemptContent, bundleName: bundleNameID, notificationData: notificationData,totalData: totalData, contentHandler: contentHandler)
                                                 }
                                             }
                                             else
@@ -1154,9 +1165,9 @@ public class iZooto : NSObject
                                     bestAttemptContent.sound = .default()
                                 }
                                 
-                                if(bundleName != "")
+                                if(bundleNameID != "")
                                 {
-                                    let groupName = "group."+bundleName+".iZooto"
+                                    let groupName = "group."+bundleNameID+".iZooto"
                                     if let userDefaults = UserDefaults(suiteName: groupName) {
                                         userDefaults.set(isBadge, forKey: "isBadge")
                                         if isBadge {
@@ -1184,7 +1195,7 @@ public class iZooto : NSObject
                                         if (notificationData.cfg != nil)
                                         {
                                             if let number = Int(notificationData.cfg ?? "0"){
-                                                handleImpresseionCfgValue(cfgNumber: number, notificationData: notificationData)
+                                                handleImpresseionCfgValue(cfgNumber: number, notificationData: notificationData, bundleName: bundleNameID)
                                             }
                                         }
                                         userDefaults.synchronize()
@@ -1201,15 +1212,13 @@ public class iZooto : NSObject
                                 self.setRelevanceScore(notificationData: notificationData, bestAttemptContent: bestAttemptContent)
                                 if notificationData.fetchurl != nil && notificationData.fetchurl != ""
                                 {
-                                    self.commonFuUrlFetcher(bestAttemptContent: bestAttemptContent, bundleName: bundleName, notificationData: notificationData, totalData: totalData, contentHandler: contentHandler)
+                                    self.commonFuUrlFetcher(bestAttemptContent: bestAttemptContent, bundleName: bundleNameID, notificationData: notificationData, totalData: totalData, contentHandler: contentHandler)
                                 }
                                 else{
                                     if notificationData != nil
                                     {
                                         let firstIndex = notificationData.rid?.prefix(1).first
-                                        if firstIndex == "6" || firstIndex == "7" {
-                                            print("not call back working3")
-                                        } else {
+                                        if firstIndex != "6" && firstIndex != "7" {
                                             notificationReceivedDelegate?.onNotificationReceived(payload: notificationData)
                                         }
                                         
@@ -1278,6 +1287,12 @@ public class iZooto : NSObject
     @objc private static func commonFuUrlFetcher(bestAttemptContent :UNMutableNotificationContent,bundleName: String,notificationData : Payload,totalData: NSDictionary,contentHandler:((UNNotificationContent) -> Void)?){
         
         if notificationData.ankey != nil {
+            var flbk : [String] = []
+            if let gArray = totalData["g"] as? [String: Any] {
+                let fsd = (gArray["fsd"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "flbk"
+                let fbu = (gArray["fbu"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "default.json"
+                flbk = [fsd.isEmpty ? "flbk" : fsd, fbu.isEmpty ? "default.json" : fbu]
+            }
             var adId = ""
             var adLn = ""
             var adTitle = ""
@@ -1295,10 +1310,10 @@ public class iZooto : NSObject
                     if(error != nil)
                     {
                         if let notificationRid = notificationData.global?.rid {
-                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: notificationRid, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk, notiRid: notificationRid, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                             return
                         }
-                       
+                        
                     }
                     if let data = data {
                         do {
@@ -1309,7 +1324,7 @@ public class iZooto : NSObject
                                 if let value = jsonDictionary["msgCode"] as? String {
                                     debugPrint(value)
                                     if let notificationRid = notificationData.global?.rid {
-                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: notificationRid, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk, notiRid: notificationRid, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                         return
                                     }
                                 }else{
@@ -1361,7 +1376,7 @@ public class iZooto : NSObject
                                 if let jsonArray = json as? [[String:Any]] {
                                     if jsonArray[0]["msgCode"] is String {
                                         if let notiRid = notificationData.global?.rid {
-                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: notiRid, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk, notiRid: notiRid, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                         }
                                         return
                                     }else{
@@ -1424,7 +1439,7 @@ public class iZooto : NSObject
                                 // Need to review
                                 if bestAttemptContent.title == notificationData.ankey?.titleAd{
                                     if let rID = notificationData.global?.rid {
-                                        self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "",notiRid: rID, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk,notiRid: rID, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                     }
                                 }else{
                                     contentHandler!(bestAttemptContent)
@@ -1432,7 +1447,7 @@ public class iZooto : NSObject
                             }
                         } catch {
                             if let rID = notificationData.global?.rid {
-                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "",notiRid: rID, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk,notiRid: rID, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                             }
                         }
                     }
@@ -1441,6 +1456,11 @@ public class iZooto : NSObject
                 Utils.handleOnceException(exceptionName: "Mediation fetch url is not in correct format\(izUrlString)", className: "iZooto", methodName: "commonFetchUrl", rid: notificationData.global?.rid ?? "" , cid: notificationData.global?.id ?? "")
             }
         }else{
+            
+            let fsd = (totalData["fsd"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "flbk"
+            let fbu = (totalData["fbu"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "default.json"
+            let flbk = [fsd.isEmpty ? "flbk" : fsd, fbu.isEmpty ? "default.json" : fbu]
+            
             let izUrlString = (notificationData.fetchurl?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
             let session: URLSession = {
                 let configuration = URLSessionConfiguration.default
@@ -1452,7 +1472,7 @@ public class iZooto : NSObject
                 session.dataTask(with: url) { data, response, error in
                     if(error != nil)
                     {
-                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk, notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                         return
                     }
                     if let data = data {
@@ -1462,7 +1482,7 @@ public class iZooto : NSObject
                             if let jsonDictionary = json as? [String:Any] {
                                 if let _ = jsonDictionary["msgCode"] as? String {
                                     fallBackAdsApi(bundleName: bundleName,
-                                                   fallCategory: notificationData.category ?? "",
+                                                   fallCategory: notificationData.category ?? "", flbk: flbk,
                                                    notiRid: "",
                                                    bestAttemptContent: bestAttemptContent,
                                                    contentHandler: contentHandler)
@@ -1486,6 +1506,7 @@ public class iZooto : NSObject
                                                 notificationData.alert?.attachment_url = notificationData.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
                                             }
                                         }
+                                        RestAPI.fetcherAdMediationClickApi(url: notificationData.url ?? "", title: bestAttemptContent.title, rid: notificationData.rid ?? "", callForMedc: false)
                                         if notificationData.furv != nil {
                                             adMediationRVApiCall(totalData: totalData, jsonDictionary: jsonDictionary)
                                         }
@@ -1495,7 +1516,7 @@ public class iZooto : NSObject
                                 
                                 if let jsonArray = json as? [[String:Any]] {
                                     if jsonArray[0]["msgCode"] is String {
-                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk, notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                         return
                                     }else{
                                         if let title = notificationData.alert?.title, let bodyData = notificationData.alert?.body {
@@ -1511,6 +1532,7 @@ public class iZooto : NSObject
                                                 notificationData.alert?.attachment_url = notificationData.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
                                             }
                                         }
+                                        RestAPI.fetcherAdMediationClickApi(url: notificationData.url ?? "", title: bestAttemptContent.title, rid: notificationData.rid ?? "", callForMedc: false)
                                     }
                                 }
                             }
@@ -1543,14 +1565,14 @@ public class iZooto : NSObject
                                     }
                                 }
                                 if bestAttemptContent.title == notificationData.ankey?.titleAd{
-                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk, notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                 }else{
                                     contentHandler!(bestAttemptContent)
                                 }
                             }
                             
                         } catch {
-                            self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "",notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", flbk: flbk,notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                         }
                     }
                 }.resume()
@@ -1681,7 +1703,7 @@ public class iZooto : NSObject
                                     finalServed.setValue(adTitle, forKey: "ti")
                                     finalServed.setValue(adLn, forKey: "ln")
                                     finalData.setValue(finalServed, forKey: "served")
-                                    RestAPI.callAdMediationImpressionApi(finalDict: finalData)
+                                    RestAPI.callAdMediationImpressionApi(finalDict: finalData, bundleName: bundleName)
                                     userDefaults.setValue(tempIdArray, forKey: AppConstant.iZ_BIDS_SERVED_ARRAY)
                                     userDefaults.synchronize()
                                 }
@@ -1714,6 +1736,7 @@ public class iZooto : NSObject
                                     }
                                     userDefaults.setValue(tempIdArray, forKey: AppConstant.iZ_BIDS_SERVED_ARRAY)
                                     userDefaults.synchronize()
+                                    //                                    break
                                 }
                             }
                         }
@@ -1963,7 +1986,7 @@ public class iZooto : NSObject
         
         return sourceString
     }
-
+    
     //To check notification enabled
     @objc public static func navigateToSettings()
     {
@@ -2177,25 +2200,12 @@ public class iZooto : NSObject
                             {
                                 if(notificationData?.global?.inApp != nil)
                                 {
-                                    
-                                    if (notificationData?.global?.cfg != nil)
-                                    {
-                                        if let notificationData = notificationData {
-                                            impressionTrack(notificationData: notificationData, userInfo: userInfo)
-                                        }
-                                    }
                                     completionHandler([.badge, .alert, .sound])
                                 }
                                 else
                                 {
                                     if(notificationData?.global?.inApp != nil)
                                     {
-                                        if (notificationData?.global?.cfg != nil)
-                                        {
-                                            if let notificationData = notificationData {
-                                                impressionTrack(notificationData: notificationData, userInfo: userInfo)
-                                            }
-                                        }
                                         completionHandler([.badge, .alert, .sound])
                                     }
                                     else
@@ -2215,19 +2225,11 @@ public class iZooto : NSObject
                         let notificationData = Payload(dictionary: aps)
                         if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
                         {
-                            if (notificationData?.cfg != nil)
-                            {
-                                if let notificationData = notificationData {
-                                    impressionTrack(notificationData: notificationData, userInfo: userInfo)
-                                }
-                            }
                             guard let rid = notificationData?.rid, let firstIndex = rid.prefix(1).first else {
                                 print("notificationData, rid, or the first character is nil or empty")
                                 return
                             }
-                            if firstIndex == "6" || firstIndex == "7" {
-                                print("not call back working3")
-                            } else {
+                            if firstIndex != "6" && firstIndex != "7" {
                                 if let unwrappedNotificationData = notificationData {
                                     notificationReceivedDelegate?.onNotificationReceived(payload: unwrappedNotificationData)
                                 }
@@ -2239,20 +2241,13 @@ public class iZooto : NSObject
                             if(notificationData?.inApp != nil)
                             {
                                 completionHandler([.badge, .alert, .sound])
-                                if (notificationData?.cfg != nil)
-                                {
-                                    if let notificationData = notificationData {
-                                        impressionTrack(notificationData: notificationData, userInfo: userInfo)
-                                    }
-                                }
+                                
                                 guard let rid = notificationData?.rid, let firstIndex = rid.prefix(1).first else {
                                     
                                     print("notificationData, rid, or the first character is nil or empty")
                                     return
                                 }
-                                if firstIndex == "6" || firstIndex == "7" {
-                                    print("not call back working3")
-                                } else {
+                                if firstIndex != "6" && firstIndex != "7" {
                                     if let unwrappedNotificationData = notificationData {
                                         notificationReceivedDelegate?.onNotificationReceived(payload: unwrappedNotificationData)
                                     }
@@ -2270,9 +2265,13 @@ public class iZooto : NSObject
     }
     
     // handel the fallback url
-    @objc public static func fallbackClickHandler() {
+    @objc public static func fallbackClickHandler(flbk : [String]) {
         
-        let str = RestAPI.FALLBACK_URL
+        //        let str = RestAPI.FALLBACK_URL
+        
+        let str = "https://\(flbk[0]).izooto.com/\(flbk[1])"
+        print("Final flbk click url : \(str)")
+        
         guard let izUrlString = str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             Utils.handleOnceException(exceptionName: "Error in URL encoding", className: "iZooto", methodName: "FallbackClickHandler",rid: "", cid: "")
             return
@@ -2294,23 +2293,31 @@ public class iZooto : NSObject
             }
             do {
                 let json = try JSONSerialization.jsonObject(with: data)
-                if let jsonDictionary = json as? [String: Any] {
-                    let notificationData = Payload(dictionary: jsonDictionary as NSDictionary)
-                    guard let urlString = notificationData?.url, !urlString.isEmpty else {
-                        return
-                    }
+                if let jsonDictionary = json as? [String: Any],
+                   let notificationData = Payload(dictionary: jsonDictionary as NSDictionary),
+                   let urlString = notificationData.url, !urlString.isEmpty,
+                   let encodedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                   let url = URL(string: encodedUrlString) {
                     
-                    notificationData?.url = jsonDictionary[AppConstant.iZ_LNKEY] as? String
-                    guard let encodedUrlString = notificationData?.url?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                    let title = jsonDictionary["t"] as? String ?? ""
+                    
+                    notificationData.url = jsonDictionary[AppConstant.iZ_LNKEY] as? String
+                    
+                    RestAPI.fetcherAdMediationClickApi(url: notificationData.url ?? "", title: jsonDictionary["t"] as? String ?? "", rid: notificationData.rid ?? "", callForMedc: true)
+                    guard let encodedUrlString = notificationData.url?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
                           let url = URL(string: encodedUrlString) else {
                         return
                     }
+                    
+                    
                     DispatchQueue.main.async {
                         UIApplication.shared.open(url)
                     }
+                } else {
+                    Utils.handleOnceException(exceptionName: "Invalid JSON structure or empty URL", className: "iZooto", methodName: "FallbackClickHandler", rid: "", cid: "")
                 }
             } catch let error {
-                Utils.handleOnceException(exceptionName: "Error in parsing JSON: \(error.localizedDescription)", className: "iZooto", methodName: "FallbackClickHandler",rid: "", cid: "")
+                Utils.handleOnceException(exceptionName: "Error in parsing JSON: \(error.localizedDescription)", className: "iZooto", methodName: "FallbackClickHandler", rid: "", cid: "")
             }
         }.resume()
     }
@@ -2443,10 +2450,15 @@ public class iZooto : NSObject
                         
                         if notificationData.fetchurl != nil && notificationData.fetchurl != ""
                         {
+                            let fsd = (aps["fsd"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "flbk"
+                            let fbu = (aps["fbu"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "default.json"
+                            let flbk = [fsd.isEmpty ? "flbk" : fsd, fbu.isEmpty ? "default.json" : fbu]
+                            
                             if notificationData.category != nil && notificationData.category != ""
                             {
                                 if response.actionIdentifier == AppConstant.FIRST_BUTTON{
                                     type = "1"
+                                    
                                 }
                             }
                             guard let fetchUrl = notificationData.fetchurl,
@@ -2464,7 +2476,13 @@ public class iZooto : NSObject
                             {
                                 session.dataTask(with: url) { data, response, error in
                                     if error != nil{
-                                        self.fallbackClickHandler()
+                                        self.fallbackClickHandler(flbk: flbk)
+                                    }
+                                    if let httpResponse = response as? HTTPURLResponse {
+                                        if httpResponse.statusCode != 200 {
+                                            self.fallbackClickHandler(flbk: flbk)
+                                            return
+                                        }
                                     }
                                     if let data = data {
                                         do {
@@ -2472,8 +2490,7 @@ public class iZooto : NSObject
                                             //To Check FallBack
                                             if let jsonDictionary = json as? [String:Any] {
                                                 if let value = jsonDictionary["msgCode"] as? String {
-                                                    debugPrint(value)
-                                                    self.fallbackClickHandler()
+                                                    self.fallbackClickHandler(flbk: flbk)
                                                 }else{
                                                     if let jsonDictionary = json as? [String:Any] {
                                                         if let title = notificationData.alert?.title {
@@ -2483,6 +2500,7 @@ public class iZooto : NSObject
                                                                 
                                                                 var iZfetchUrl = notificationData.url
                                                                 clickTrack(notificationData: notificationData, actionType: type, userInfo: userInfo, globalLn: iZfetchUrl ?? "", title: adTitle)
+                                                                RestAPI.fetcherAdMediationClickApi(url: iZfetchUrl ?? "", title: adTitle, rid: notificationData.rid ?? "", callForMedc: true)
                                                                 if let unencodedURLString = iZfetchUrl?.removingPercentEncoding {
                                                                     iZfetchUrl = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
                                                                 } else {
@@ -2518,18 +2536,19 @@ public class iZooto : NSObject
                                             {
                                                 if let jsonArray = json as? [[String:Any]] {
                                                     if jsonArray[0]["msgCode"] is String {
-                                                        self.fallbackClickHandler()
+                                                        self.fallbackClickHandler(flbk: flbk)
                                                         return
                                                     }else{
                                                         
                                                         if notificationData.url != "" {
                                                             
                                                             if let title = notificationData.alert?.title {
-                                                                notificationData.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: title))"
-                                                                
+                                                                notificationData.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: notificationData.url ?? ""))"
+                                                                adTitle = "\(getParseArrayValue(jsonData: jsonArray, sourceString: title))"
                                                                 let izUrlStr = notificationData.url?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
                                                                 clickTrack(notificationData: notificationData, actionType: type, userInfo: userInfo, globalLn: izUrlStr ?? "",title: adTitle)
                                                                 
+                                                                RestAPI.fetcherAdMediationClickApi(url: izUrlStr ?? "", title: adTitle, rid: notificationData.rid ?? "", callForMedc: true)
                                                                 if let url = URL(string: izUrlStr ?? "") {
                                                                     DispatchQueue.main.async {
                                                                         UIApplication.shared.open(url)
@@ -2543,7 +2562,7 @@ public class iZooto : NSObject
                                         } catch let error {
                                             debugPrint(AppConstant.TAG,error)
                                             //FallBack_Click Handler method.....
-                                            self.fallbackClickHandler()
+                                            self.fallbackClickHandler(flbk: flbk)
                                             let rid = (notificationData.rid) ?? ""
                                             Utils.handleOnceException(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler",rid: rid, cid: notificationData.rid ?? "")
                                         }
@@ -2555,9 +2574,7 @@ public class iZooto : NSObject
                         {
                             
                             let firstIndex = notificationData.rid?.prefix(1).first
-                            if firstIndex == "6" || firstIndex == "7" {
-                                print("not call back working3")
-                            } else {
+                            if firstIndex != "6" && firstIndex != "7" {
                                 notificationReceivedDelegate?.onNotificationReceived(payload: notificationData)
                             }
                             
@@ -2590,7 +2607,7 @@ public class iZooto : NSObject
                                                     // Your code here
                                                     if let checkWebview = sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW),
                                                        let act1link = notificationData.act1link {
-
+                                                        
                                                         if checkWebview {
                                                             landingURLDelegate?.onHandleLandingURL(url: act1link)
                                                         } else {
@@ -2650,7 +2667,7 @@ public class iZooto : NSObject
                                             {
                                                 if let inApp = notificationData.inApp, inApp.contains("1"), !inApp.isEmpty,
                                                    let act2link = notificationData.act2link, !act2link.isEmpty {
-                                                   
+                                                    
                                                     if let checkWebview = sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW) {
                                                         if checkWebview {
                                                             landingURLDelegate?.onHandleLandingURL(url: act2link)
@@ -2721,7 +2738,7 @@ public class iZooto : NSObject
                                 }
                                 else{
                                     if let inApp = notificationData.inApp, inApp.contains("1"), !inApp.isEmpty,
-                                           let url = notificationData.url,!url.isEmpty
+                                       let url = notificationData.url,!url.isEmpty
                                     {
                                         if let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW)){
                                             if checkWebview
@@ -2762,36 +2779,14 @@ public class iZooto : NSObject
         }
     }
     
-    @objc static func impressionTrack(notificationData : Payload, userInfo : [AnyHashable : Any])
+    private  static func handleImpresseionCfgValue(cfgNumber: Int , notificationData : Payload,bundleName : String)
     {
-        if(notificationData.cfg != nil || notificationData.global?.cfg != nil)
-        {
-            if(notificationData.cfg != nil)
-            {
-                if let number = Int(notificationData.cfg ?? "0"){
-                    handleImpresseionCfgValue(cfgNumber: number, notificationData: notificationData)
-                }
-            }
-            else{
-                if(notificationData.global?.cfg != nil)
-                {
-                    if let number = Int(notificationData.global?.cfg ?? "0"){
-                        handleImpresseionCfgValue(cfgNumber: number, notificationData: notificationData)
-                    }
-                }
-            }
-        }else
-        {
-            Utils.handleOnceException(exceptionName: "No CFG Key defined \(userInfo)", className: "iZooto", methodName: "ImpressionTrack",rid: ((notificationData.rid) ?? (notificationData.global?.rid)) ?? "", cid: ((notificationData.id) ?? (notificationData.global?.id)) ?? "")
+        var pid = ""
+        var token = ""
+        if let userDefault = UserDefaults(suiteName: self.groupName){
+            pid = userDefault.value(forKey: AppConstant.iZ_PID) as? String ?? ""
+            token = userDefault.value(forKey: AppConstant.IZ_GRPS_TKN) as? String ?? ""
         }
-    }
-    
-    
-    
-    private  static func handleImpresseionCfgValue(cfgNumber: Int , notificationData : Payload)
-    {
-        let pid = Utils.getUserId() ?? ""
-        let token = Utils.getUserDeviceToken() ?? ""
         
         let binaryString = String(cfgNumber, radix: 2)
         let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
@@ -2806,7 +2801,7 @@ public class iZooto : NSObject
         }
         if(firstDigit == 1)
         {
-            RestAPI.callImpression(notificationData: notificationData,pid: pid,token: token)
+            RestAPI.callImpression(notificationData: notificationData,pid: pid,token: token, bundleName: bundleName)
         }
         
         if(seventhDigit == 1)
@@ -2824,12 +2819,12 @@ public class iZooto : NSObject
                     if convertBinaryToDecimal != 0{
                         
                         let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
-                        RestAPI.lastImpression(notificationData: notificationData,pid:pid,token: token,url: url)
+                        RestAPI.lastImpression(notificationData: notificationData,pid:pid,token: token,url: url, bundleName: bundleName)
                         
                     }
                     else
                     {
-                        RestAPI.lastImpression(notificationData: notificationData,pid: pid,token:token,url: RestAPI.LASTNOTIFICATIONVIEWURL)
+                        RestAPI.lastImpression(notificationData: notificationData,pid: pid,token:token,url: RestAPI.LASTNOTIFICATIONVIEWURL,bundleName:bundleName)
                     }
                 }
             }
@@ -2841,28 +2836,103 @@ public class iZooto : NSObject
                     if convertBinaryToDecimal != 0{
                         
                         let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
-                        RestAPI.lastImpression(notificationData: notificationData,pid:pid,token: token,url: url)
+                        RestAPI.lastImpression(notificationData: notificationData,pid:pid,token: token,url: url,bundleName:bundleName)
                     }
                     else
                     {
-                        RestAPI.lastImpression(notificationData: notificationData,pid: pid,token:token,url: RestAPI.LASTNOTIFICATIONVIEWURL)
+                        RestAPI.lastImpression(notificationData: notificationData,pid: pid,token:token,url: RestAPI.LASTNOTIFICATIONVIEWURL,bundleName:bundleName)
                     }
                 }
             }
         }
     }
-        @objc static func clickTrack(notificationData : Payload,actionType : String, userInfo: [AnyHashable: Any], globalLn : String,title : String)
-        {
-            
-            let pid = Utils.getUserId() ?? ""
-            let token = Utils.getUserDeviceToken() ?? ""
-            guard notificationData.cfg != nil || notificationData.global?.cfg != nil else {
-                Utils.handleOnceException(exceptionName: "Both cfg values are nil.", className: "iZooto", methodName: "ClickTrack",rid: ((notificationData.rid) ?? (notificationData.global?.rid)) ?? "", cid: ((notificationData.id) ?? (notificationData.global?.id)) ?? "")
+    @objc static func clickTrack(notificationData : Payload,actionType : String, userInfo: [AnyHashable: Any], globalLn : String,title : String)
+    {
+        
+        let pid = Utils.getUserId() ?? ""
+        let token = Utils.getUserDeviceToken() ?? ""
+        guard notificationData.cfg != nil || notificationData.global?.cfg != nil else {
+            Utils.handleOnceException(exceptionName: "Both cfg values are nil.", className: "iZooto", methodName: "ClickTrack",rid: ((notificationData.rid) ?? (notificationData.global?.rid)) ?? "", cid: ((notificationData.id) ?? (notificationData.global?.id)) ?? "")
+            return
+        }
+        if(notificationData.cfg != nil){
+            guard let number = Int(notificationData.cfg ?? "0") else {
+                print("Failed to convert cfg to Int.")
                 return
             }
-            if(notificationData.cfg != nil){
-                guard let number = Int(notificationData.cfg ?? "0") else {
-                    print("Failed to convert cfg to Int.")
+            let binaryString = String(number, radix: 2)
+            let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+            let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
+            let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+            let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+            let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+            let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+            let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
+            guard let convertBinaryToDecimal = Int(domainURL, radix: 2) else { return }
+            if(secondDigit == 1)
+            {
+                RestAPI.clickTrack(notificationData: notificationData, type: actionType,pid: pid,token:token, userInfo: userInfo, globalLn: globalLn, title: title)
+            }
+            if eighthDigit == 1
+            {
+                let date = Date()
+                let format = DateFormatter()
+                format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                let formattedDate = format.string(from: date)
+                if(tenthDigit == 1 && eighthDigit == 1){
+                    let date = Date()
+                    let format = DateFormatter()
+                    format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                    let formattedDate = format.string(from: date)
+                    if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
+                    {
+                        sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
+                        if convertBinaryToDecimal != 0{
+                            let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                            RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: url, userInfo: userInfo )
+                        }
+                        else
+                        {
+                            RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                        }
+                    }
+                }
+                if(tenthDigit == 0 && eighthDigit == 1)
+                {
+                    if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
+                        sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
+                        sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
+                        if convertBinaryToDecimal != 0{
+                            let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                            RestAPI.lastClick(notificationData: notificationData, pid:pid,token:token,url: url, userInfo: userInfo )
+                        }
+                        else
+                        {
+                            RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                        }
+                    }
+                }
+            }
+        }else if(notificationData.global?.cfg != nil ){
+            guard let number = Int(notificationData.global?.cfg ?? "0") else {
+                // Handle the case where the conversion to Int fails
+                // For example, you can print an error message, log, or return
+                print("Failed to convert global.cfg to Int.")
+                return
+            }
+            let binaryString = String(number, radix: 2)
+            let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+            let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+            let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+            let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+            if(secondDigit == 1)
+            {
+                RestAPI.clickTrack(notificationData: notificationData, type: actionType,pid:pid,token: token, userInfo: userInfo, globalLn: globalLn, title: title)
+            }
+            if eighthDigit == 1
+            {
+                guard let cfg = notificationData.cfg, let number = Int(cfg) else {
+                    print("Invalid cfg value")
                     return
                 }
                 let binaryString = String(number, radix: 2)
@@ -2872,11 +2942,12 @@ public class iZooto : NSObject
                 let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
                 let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
                 let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+                
                 let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
                 guard let convertBinaryToDecimal = Int(domainURL, radix: 2) else { return }
                 if(secondDigit == 1)
                 {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,pid: pid,token:token, userInfo: userInfo, globalLn: globalLn, title: title)
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,pid: pid,token: token, userInfo: userInfo, globalLn: globalLn, title: title)
                 }
                 if eighthDigit == 1
                 {
@@ -2889,314 +2960,271 @@ public class iZooto : NSObject
                         let format = DateFormatter()
                         format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
                         let formattedDate = format.string(from: date)
-                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
-                        {
-                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
-                            if convertBinaryToDecimal != 0{
-                                let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: url, userInfo: userInfo )
-                            }
-                            else
-                            {
-                                RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
-                            }
-                        }
-                    }
-                    if(tenthDigit == 0 && eighthDigit == 1)
-                    {
-                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
-                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
-                            sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
-                            if convertBinaryToDecimal != 0{
-                                let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastClick(notificationData: notificationData, pid:pid,token:token,url: url, userInfo: userInfo )
-                            }
-                            else
-                            {
-                                RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
-                            }
-                        }
-                    }
-                }
-            }else if(notificationData.global?.cfg != nil ){
-                guard let number = Int(notificationData.global?.cfg ?? "0") else {
-                    // Handle the case where the conversion to Int fails
-                    // For example, you can print an error message, log, or return
-                    print("Failed to convert global.cfg to Int.")
-                    return
-                }
-                let binaryString = String(number, radix: 2)
-                let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
-                let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
-                let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
-                let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
-                if(secondDigit == 1)
-                {
-                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,pid:pid,token: token, userInfo: userInfo, globalLn: globalLn, title: title)
-                }
-                if eighthDigit == 1
-                {
-                    guard let cfg = notificationData.cfg, let number = Int(cfg) else {
-                        print("Invalid cfg value")
-                        return
-                    }
-                    let binaryString = String(number, radix: 2)
-                    let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
-                    let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
-                    let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
-                    let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
-                    let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
-                    let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
-                    
-                    let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
-                    guard let convertBinaryToDecimal = Int(domainURL, radix: 2) else { return }
-                    if(secondDigit == 1)
-                    {
-                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,pid: pid,token: token, userInfo: userInfo, globalLn: globalLn, title: title)
-                    }
-                    if eighthDigit == 1
-                    {
-                        let date = Date()
-                        let format = DateFormatter()
-                        format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
-                        let formattedDate = format.string(from: date)
                         if(tenthDigit == 1 && eighthDigit == 1){
                             let date = Date()
                             let format = DateFormatter()
                             format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
                             let formattedDate = format.string(from: date)
-                            if(tenthDigit == 1 && eighthDigit == 1){
-                                let date = Date()
-                                let format = DateFormatter()
-                                format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
-                                let formattedDate = format.string(from: date)
-                                if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
-                                {
-                                    sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
-                                    
-                                    if convertBinaryToDecimal != 0{
-                                        let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                        RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: url, userInfo: userInfo )
-                                    }
-                                    else
-                                    {
-                                        RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
-                                    }
-                                }
-                            }
-                            if(tenthDigit == 0 && eighthDigit == 1)
+                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
                             {
-                                if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
-                                    sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
-                                    sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
-                                    if convertBinaryToDecimal != 0{
-                                        let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                        RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: url, userInfo: userInfo)
-                                    }
-                                    else
-                                    {
-                                        RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
-                                    }
+                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
+                                
+                                if convertBinaryToDecimal != 0{
+                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                    RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: url, userInfo: userInfo )
+                                }
+                                else
+                                {
+                                    RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
                                 }
                             }
                         }
-                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
+                        if(tenthDigit == 0 && eighthDigit == 1)
                         {
-                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
-                            
-                            if convertBinaryToDecimal != 0{
-                                let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: url, userInfo: userInfo )
+                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
+                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
+                                sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
+                                if convertBinaryToDecimal != 0{
+                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                    RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: url, userInfo: userInfo)
+                                }
+                                else
+                                {
+                                    RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
+                                }
                             }
-                            else
-                            {
-                                RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
-                            }
+                        }
+                    }
+                    if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
+                    {
+                        sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
+                        
+                        if convertBinaryToDecimal != 0{
+                            let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                            RestAPI.lastClick(notificationData: notificationData, pid: pid,token: token,url: url, userInfo: userInfo )
+                        }
+                        else
+                        {
+                            RestAPI.lastClick(notificationData: notificationData, pid:pid,token: token,url: RestAPI.LASTNOTIFICATIONCLICKURL, userInfo: userInfo )
                         }
                     }
                 }
             }
-            else
-            {
-                
-                Utils.handleOnceException(exceptionName: "No CFG Key defined \(userInfo)", className: "iZooto", methodName: "ClickTrack", rid: ((notificationData.rid) ?? (notificationData.global?.rid)) ?? "", cid: ((notificationData.id) ?? (notificationData.global?.id)) ?? "")
-            }
         }
-        
-        
-        
-        // Handle the InApp/Webview// and landing url listener
-        @objc static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
+        else
         {
-            let userInfo = response.notification.request.content.userInfo
-            if let apsDict = userInfo["aps"] as? NSDictionary {
-                let notifcationData = Payload(dictionary: apsDict)
-                
-                if let inApp = notifcationData?.inApp, inApp.contains("1"), !inApp.isEmpty {
-                    ViewController.seriveURL = notifcationData?.url
-                    if let keyWindow = UIApplication.shared.keyWindow, let rootViewController = keyWindow.rootViewController {
-                        rootViewController.present(ViewController(), animated: true, completion: nil)
-                    }
-                } else {
-                    onHandleLandingURL(response: response, actionType: actionType, launchURL: launchURL)
+            
+            Utils.handleOnceException(exceptionName: "No CFG Key defined \(userInfo)", className: "iZooto", methodName: "ClickTrack", rid: ((notificationData.rid) ?? (notificationData.global?.rid)) ?? "", cid: ((notificationData.id) ?? (notificationData.global?.id)) ?? "")
+        }
+    }
+    
+    
+    
+    // Handle the InApp/Webview// and landing url listener
+    @objc static func onHandleInAPP(response : UNNotificationResponse , actionType : String,launchURL : String)
+    {
+        let userInfo = response.notification.request.content.userInfo
+        if let apsDict = userInfo["aps"] as? NSDictionary {
+            let notifcationData = Payload(dictionary: apsDict)
+            
+            if let inApp = notifcationData?.inApp, inApp.contains("1"), !inApp.isEmpty {
+                ViewController.seriveURL = notifcationData?.url
+                if let keyWindow = UIApplication.shared.keyWindow, let rootViewController = keyWindow.rootViewController {
+                    rootViewController.present(ViewController(), animated: true, completion: nil)
                 }
             } else {
                 onHandleLandingURL(response: response, actionType: actionType, launchURL: launchURL)
             }
+        } else {
+            onHandleLandingURL(response: response, actionType: actionType, launchURL: launchURL)
         }
+    }
     
-        // handle the borwser
-        @objc  static func onHandleLandingURL(response : UNNotificationResponse , actionType : String,launchURL : String)
-        {
-            let userInfo = response.notification.request.content.userInfo
-            if let apsDictionary = userInfo["aps"] as? NSDictionary {
-                let notifcationData = Payload(dictionary: apsDictionary)
-                if let inAppValue = notifcationData?.inApp, inAppValue.contains("0"), !inAppValue.isEmpty {
-                    print("Conditions are  met.")
-                    handleBroserNotification(url: launchURL)
-                } else {
-                    print("Conditions are not met.")
-                }
+    // handle the borwser
+    @objc  static func onHandleLandingURL(response : UNNotificationResponse , actionType : String,launchURL : String)
+    {
+        let userInfo = response.notification.request.content.userInfo
+        if let apsDictionary = userInfo["aps"] as? NSDictionary {
+            let notifcationData = Payload(dictionary: apsDictionary)
+            if let inAppValue = notifcationData?.inApp, inAppValue.contains("0"), !inAppValue.isEmpty {
+                print("Conditions are  met.")
+                handleBroserNotification(url: launchURL)
             } else {
-                print("Failed to create Payload from userInfo.")
+                print("Conditions are not met.")
             }
+        } else {
+            print("Failed to create Payload from userInfo.")
         }
-        
-        // handle the addtional data
-        @objc public static func handleClicks(response : UNNotificationResponse , actionType : String)
-        {
-            let userInfo = response.notification.request.content.userInfo
-            if let notificationDictionary = userInfo[AppConstant.iZ_NOTIFCATION_KEY_NAME] as? NSDictionary {
-                let notificationData = Payload(dictionary: notificationDictionary)
-                var data = Dictionary<String,Any>()
-                data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_ID] = notificationData?.act1id ?? ""
-                data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_TITLE] = notificationData?.act1name ?? ""
-                data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_URL] = notificationData?.act1link ?? ""
-                data[AppConstant.iZ_KEY_DEEPL_LINK_ADDITIONAL_DATA] = notificationData?.ap ?? ""
-                data[AppConstant.iZ_KEY_DEEP_LINK_LANDING_URL] = notificationData?.url ?? ""
-                data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_ID] = notificationData?.act2id ?? ""
-                data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_TITLE] = notificationData?.act2name ?? ""
-                data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_URL] = notificationData?.act2link ?? ""
-                data[AppConstant.iZ_KEY_DEEPL_LINK_ACTION_TYPE] = actionType
-                notificationOpenDelegate?.onNotificationOpen(action: data)
-            } else {
-                print("Failed to create Payload from userInfo.")
-            }
-            
-        }
-        
-        @objc public static func getQueryStringParameter(url: String, param: String) -> String? {
-            guard let url = URLComponents(string: url) else { return nil }
-            return url.queryItems?.first(where: { $0.name == param })?.value
-        }
-        
-        // Add Event Functionality
-        @objc public static func addEvent(eventName: String, data: Dictionary<String, Any>) {
-            guard !eventName.isEmpty else { return }
-            
-            let returnData = Utils.dataValidate(data: data)
-            do {
-                if let theJSONData = try? JSONSerialization.data(withJSONObject: returnData, options: .fragmentsAllowed),
-                   let validateData = String(data: theJSONData, encoding: .utf8) {
-                    
-                    if let token = Utils.getUserDeviceToken(), !token.isEmpty {
-                        RestAPI.callEvents(eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, pid: Utils.getUserId() ?? "", token: token)
-                    } else {
-                        sharedUserDefault?.set(data, forKey: AppConstant.KEY_EVENT)
-                        sharedUserDefault?.set(eventName, forKey: AppConstant.KEY_EVENT_NAME)
-                    }
-                }
-            }catch let error {
-                print("Error: \(error.localizedDescription)")
-            }
-        }
-        
-        // Add User Properties
-        @objc public static func addUserProperties( data : Dictionary<String,Any>)
-        {
-            let returnData =  Utils.dataValidate(data: data)
-            for (key, value) in returnData {
-                guard let stringValue = value as? String, !stringValue.isEmpty else {
-                    print(AppConstant.iZ_USERPROPERTIES_VALUE)
-                    return
-                }
-                guard !key.isEmpty else {
-                    print(AppConstant.iZ_USERPROPERTIES_VALUE)
-                    return
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if (!returnData.isEmpty)
-                {
-                    guard let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed) else{
-                        return
-                    }
-                    if let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue),
-                       let token = Utils.getUserDeviceToken(){
-                        if (!token.isEmpty)
-                        {
-                            RestAPI.callUserProperties(data: validationData as NSString, pid: Utils.getUserId() ?? "", token: token)
-                        }
-                        else
-                        {
-                            sharedUserDefault?.set(data, forKey:AppConstant.iZ_USERPROPERTIES_KEY)
-                        }
-                    }
-                }
-                else
-                {
-                    Utils.handleOnceException(exceptionName: "No data found in userProperties dictionary \(data)", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY,rid: "0", cid: "0")
-                    
-                }
-            }
-        }
+    }
     
-        // promptForPushNotifications
-        @objc public  static  func promptForPushNotifications() {
-            if #available(iOS 10.0, *) {
-                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-            }
-            if #available(iOS 10.0, *) {
+    // handle the addtional data
+    @objc public static func handleClicks(response : UNNotificationResponse , actionType : String)
+    {
+        let userInfo = response.notification.request.content.userInfo
+        if let notificationDictionary = userInfo[AppConstant.iZ_NOTIFCATION_KEY_NAME] as? NSDictionary {
+            let notificationData = Payload(dictionary: notificationDictionary)
+            var data = Dictionary<String,Any>()
+            data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_ID] = notificationData?.act1id ?? ""
+            data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_TITLE] = notificationData?.act1name ?? ""
+            data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON1_URL] = notificationData?.act1link ?? ""
+            data[AppConstant.iZ_KEY_DEEPL_LINK_ADDITIONAL_DATA] = notificationData?.ap ?? ""
+            data[AppConstant.iZ_KEY_DEEP_LINK_LANDING_URL] = notificationData?.url ?? ""
+            data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_ID] = notificationData?.act2id ?? ""
+            data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_TITLE] = notificationData?.act2name ?? ""
+            data[AppConstant.iZ_KEY_DEEPL_LINK_BUTTON2_URL] = notificationData?.act2link ?? ""
+            data[AppConstant.iZ_KEY_DEEPL_LINK_ACTION_TYPE] = actionType
+            notificationOpenDelegate?.onNotificationOpen(action: data)
+        } else {
+            print("Failed to create Payload from userInfo.")
+        }
+        
+    }
+    
+    @objc public static func getQueryStringParameter(url: String, param: String) -> String? {
+        guard let url = URLComponents(string: url) else { return nil }
+        return url.queryItems?.first(where: { $0.name == param })?.value
+    }
+    
+    // Add Event Functionality
+    @objc public static func addEvent(eventName: String, data: Dictionary<String, Any>) {
+        guard !eventName.isEmpty else { return }
+        
+        let returnData = Utils.dataValidate(data: data)
+        do {
+            if let theJSONData = try? JSONSerialization.data(withJSONObject: returnData, options: .fragmentsAllowed),
+               let validateData = String(data: theJSONData, encoding: .utf8) {
                 
-                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-                    (granted, error) in
-                    UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                    print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
-                    guard granted else { return }
-                    getNotificationSettings()
+                if let token = Utils.getUserDeviceToken(), !token.isEmpty {
+                    RestAPI.callEvents(eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, pid: Utils.getUserId() ?? "", token: token)
+                } else {
+                    sharedUserDefault?.set(data, forKey: AppConstant.KEY_EVENT)
+                    sharedUserDefault?.set(eventName, forKey: AppConstant.KEY_EVENT_NAME)
                 }
             }
+        }catch let error {
+            print("Error: \(error.localizedDescription)")
         }
-        @objc private static func handleBroserNotification(url : String)
-        {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if let izUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
-                    if let izUrl = URL(string: izUrlString) {
-                        UIApplication.shared.open(izUrl)
+    }
+    
+    // Add User Properties
+    @objc public static func addUserProperties( data : Dictionary<String,Any>)
+    {
+        let returnData =  Utils.dataValidate(data: data)
+        for (key, value) in returnData {
+            guard let stringValue = value as? String, !stringValue.isEmpty else {
+                print(AppConstant.iZ_USERPROPERTIES_VALUE)
+                return
+            }
+            guard !key.isEmpty else {
+                print(AppConstant.iZ_USERPROPERTIES_VALUE)
+                return
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if (!returnData.isEmpty)
+            {
+                guard let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed) else{
+                    return
+                }
+                if let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue),
+                   let token = Utils.getUserDeviceToken(){
+                    if (!token.isEmpty)
+                    {
+                        RestAPI.callUserProperties(data: validationData as NSString, pid: Utils.getUserId() ?? "", token: token)
+                    }
+                    else
+                    {
+                        sharedUserDefault?.set(data, forKey:AppConstant.iZ_USERPROPERTIES_KEY)
                     }
                 }
-            }
-        }
-        
-        /*
-         - setNotificationEnable
-         - isSubscribe -> true - Notification received and regsiter a devcie token
-         ->isSubscribe -> false - Device token unregistered
-         iOS SDK- Exposed a new method for handle the notification subscribe/unsubscribe
-         */
-        
-        @objc public static func setSubscription(isSubscribe : Bool)
-        {
-            if(isSubscribe)
-            {
-                UIApplication.shared.registerForRemoteNotifications()
             }
             else
             {
-                UIApplication.shared.unregisterForRemoteNotifications()
+                Utils.handleOnceException(exceptionName: "No data found in userProperties dictionary \(data)", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY,rid: "0", cid: "0")
+                
             }
         }
     }
+    
+    // promptForPushNotifications
+    @objc public  static  func promptForPushNotifications() {
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+        }
+        if #available(iOS 10.0, *) {
+            
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+                (granted, error) in
+                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                guard granted else { return }
+                getNotificationSettings()
+            }
+        }
+    }
+    @objc private static func handleBroserNotification(url : String)
+    {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if let izUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
+                if let izUrl = URL(string: izUrlString) {
+                    UIApplication.shared.open(izUrl)
+                }
+            }
+        }
+    }
+    
+    /*
+     - setNotificationEnable
+     - isSubscribe -> true - Notification received and regsiter a devcie token
+     ->isSubscribe -> false - Device token unregistered
+     iOS SDK- Exposed a new method for handle the notification subscribe/unsubscribe
+     */
+    
+    @objc public static func setSubscription(isSubscribe : Bool)
+    {
+        if(isSubscribe)
+        {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+        else
+        {
+            UIApplication.shared.unregisterForRemoteNotifications()
+        }
+    }
+    
+    @objc public static func handleSilentPushNotification(userInfo: [AnyHashable: Any]){
+        
+        // Check if it's a silent push
+        if let apsDictionary = userInfo["aps"] as? NSDictionary,
+           apsDictionary["content-available"] as? Int == 1 {
+            if let notificationData = Payload(dictionary: apsDictionary){
+                var number : Int?
+                var cfgValue = ""
+                if (notificationData.global?.cfg != nil)
+                {
+                    if let cfg = notificationData.global?.cfg {
+                        cfgValue = cfg
+                        number = Int(cfg)
+                    }
+                    
+                } else if (notificationData.cfg != nil) {
+                    if let cfg = notificationData.cfg {
+                        cfgValue = cfg
+                        number = Int(cfg)
+                    }
+                }
+                if let intNum = number {
+                    handleImpresseionCfgValue(cfgNumber: intNum, notificationData: notificationData, bundleName: Bundle.main.bundleIdentifier ?? "")
+                }else {
+                    Utils.handleOnceException(exceptionName: "CFG value :\(cfgValue) .", className: "iZooto", methodName: "trackSilentPush", rid: "" , cid: "")
+                }
+            }
+        } else {
+            Utils.handleOnceException(exceptionName: "Failed to convert payload in NSDistionary DATA: \(userInfo)", className: "iZooto", methodName: "trackSilentPush", rid: "", cid: "")
+        }
+    }
+    
+}
 
 // Handle banner imange uploading and deleting
 @available(iOS 11.0, *)

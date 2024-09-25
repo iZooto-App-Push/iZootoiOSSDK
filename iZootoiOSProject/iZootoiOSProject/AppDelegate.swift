@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
        // iZooto.promptForPushNotifications()
         let iZootoInitSettings = ["auto_prompt": true,"nativeWebview": true,"provisionalAuthorization":false]
-        iZooto.initialisation(izooto_id: "4ef0b7813ee35ff6d560dc341f45484d54acd333", application: application,  iZootoInitSettings:iZootoInitSettings)
+        iZooto.initialisation(izooto_id: "92d7f6d0e5ebc331d0ea9e00aaf0879db6fba9cf", application: application,  iZootoInitSettings:iZootoInitSettings)
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
@@ -139,8 +139,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         iZooto.notificationHandler(response: response)//iZooto.notificationHandler
         completionHandler()
-
     }
+        
+        func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        //        print("Silent push received: \(userInfo)")
+            iZooto.handleSilentPushNotification(userInfo: userInfo)
+            }
         
        
     

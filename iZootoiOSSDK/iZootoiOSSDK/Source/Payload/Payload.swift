@@ -78,14 +78,26 @@ public class Payload  : NSObject{
         reqInt = dictionary["ri"] as? Int   //required Int
         mutablecontent = dictionary["mutable-content"] as? Int
         url = dictionary["ln"] as? String   // link
+        if let url0 = dictionary["ln"] as? String {
+            self.url = Utils.addMacros(url: url0)
+        }
         //  icon = dictionary["icon"] as? String
         act1name = dictionary["b1"] as? String  // button1 name
         act1link = dictionary["l1"] as? String  // button 1link
+        if let url1 = dictionary["l1"] as? String {
+            act1link = Utils.addMacros(url: url1)
+        }
         act2name = dictionary["b2"] as? String   // button 2 name
         act2link = dictionary["l2"] as? String    // button 2 link
+        if let url2 = dictionary["l2"] as? String {
+            act2link = Utils.addMacros(url: url2)
+        }
         ap = dictionary["ap"] as? String          // additional parameeter
         cfg = dictionary["cfg"] as? String           // cfg
         fetchurl = dictionary["fu"] as? String    // fetch_url
+        if let fetch = dictionary["fu"] as? String {
+            fetchurl = Utils.addMacros(url: fetch)
+        }
         inApp = dictionary["ia"] as? String          // inApp
         act1id = dictionary["d1"] as? String //action1 id
         act2id = dictionary["d2"] as? String // action2 id
