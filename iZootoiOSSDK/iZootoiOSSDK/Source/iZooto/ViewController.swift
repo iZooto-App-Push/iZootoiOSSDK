@@ -30,10 +30,10 @@ class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setToolBar()
-        activityIndicator = UIActivityIndicatorView()
+               activityIndicator = UIActivityIndicatorView()
                activityIndicator.center = self.view.center
                activityIndicator.hidesWhenStopped = true
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+               activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
 
                view.addSubview(activityIndicator)
         

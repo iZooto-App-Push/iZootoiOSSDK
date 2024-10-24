@@ -7,8 +7,10 @@
 
 import Foundation
 
-struct DatParsing : Decodable
+public struct DatParsing : Decodable
 {
     let pid : String
+    let isBadge : String?
+
 }
 

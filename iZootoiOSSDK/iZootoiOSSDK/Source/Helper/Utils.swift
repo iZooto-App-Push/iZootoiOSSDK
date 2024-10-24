@@ -43,12 +43,20 @@ public class Utils : NSObject
     }
     
     public static func getUserDeviceToken() -> String? {
-        return sharedUserDefault?.string(forKey: SharedUserDefault.Key.token) ?? ""
+        if let userDefault = UserDefaults(suiteName: Utils.getBundleName()){
+            return userDefault.string(forKey: AppConstant.IZ_GRPS_TKN)
+        }else{
+            return "token not found"
+        }
     }
     
     public static func getUserId() -> String? {
-        let userDefault = UserDefaults.standard
-        return userDefault.string(forKey: AppConstant.REGISTERED_ID)
+        if let userDefault = UserDefaults(suiteName: Utils.getBundleName()){
+            return userDefault.string(forKey: AppConstant.REGISTERED_ID)
+        }else{
+            return "pid not found"
+        }
+        
     }
     public static func initFireBaseInialise(isInitialise : Bool)
     {
@@ -109,10 +117,18 @@ public class Utils : NSObject
     
     public static func getBundleName()->String
     {
-        if let bundleID = Bundle.main.bundleIdentifier{
-            return "group."+bundleID+".iZooto"
+        var bundleID = ""
+        if let bundleName = Bundle.main.bundleIdentifier{
+            if (bundleName.contains(".iZootoNotificationExtendsServices")){
+                bundleID = bundleName.replacingOccurrences(of: ".iZootoNotificationExtendsServices", with: "")
+                return "group."+bundleID+".iZooto"
+            }else{
+                bundleID = bundleName
+                return "group."+bundleID+".iZooto"
+            }
+        }else{
+            return "bundle name not found"
         }
-        return "Not found"
     }
     
     // get Bundle ID
@@ -172,18 +188,16 @@ public class Utils : NSObject
 //        let pattern = "[a-zA-Z0-9-_.~%]+"
 //        return true
 //    }
-    static func handleOnceException(exceptionName: String, className: String, methodName: String,  rid: String, cid: String)
+    static func handleOnceException(exceptionName: String, className: String, methodName: String,  rid: String?, cid: String?, userInfo: [AnyHashable: Any]?)
     {
-        
-        
         let userDefaults = UserDefaults.standard
-        guard let appid = (UserDefaults.standard.value(forKey: "appID") as? String) else {
-            print("App ID not found to send exception.")
-            return
+        var appid = ""
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+            appid = userDefaults.value(forKey: "appID") as? String ?? ""
         }
         if userDefaults.object(forKey: methodName) == nil{
                userDefaults.set("isPresent", forKey: methodName)
-            RestAPI.sendExceptionToServer(exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid)
+            RestAPI.sendExceptionToServer(exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid, userInfo: userInfo ?? nil)
                
            } else {
                print("Key \(methodName) already exists. Data not stored.")
