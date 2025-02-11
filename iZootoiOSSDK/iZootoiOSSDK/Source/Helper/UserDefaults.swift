@@ -47,6 +47,7 @@ extension UserDefaults
             return "Retry Again"
         }
     }
+ 
     public static func isRegistered(isRegister : Bool)
     {
          Constant().userDefault.set(isRegister, forKey:Constant().isRegister)

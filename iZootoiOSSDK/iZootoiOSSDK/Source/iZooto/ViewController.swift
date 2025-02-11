@@ -22,7 +22,7 @@ class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
               let webConfiguration = WKWebViewConfiguration()
               webView = WKWebView(frame: .zero, configuration: webConfiguration)
               webView.uiDelegate = self
-             webView.navigationDelegate = self
+              webView.navigationDelegate = self
               webView.frame=self.view.bounds
               view.addSubview(webView)
         
@@ -30,10 +30,10 @@ class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setToolBar()
-               activityIndicator = UIActivityIndicatorView()
+        activityIndicator = UIActivityIndicatorView()
                activityIndicator.center = self.view.center
                activityIndicator.hidesWhenStopped = true
-               activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
 
                view.addSubview(activityIndicator)
         
@@ -44,6 +44,7 @@ class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
               webView.load(request)
            }
     }
+    
         private func setToolBar() {
         let screenWidth = self.view.bounds.width
         let backButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(backAction))

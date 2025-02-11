@@ -35,10 +35,11 @@ public class Payload  : NSObject{
     public var fetchurl : String?
     public var cfg : String?
     public var inApp : String?
-    public var relevence_score : Double?
+    public var relevance_score : Double?
     public var interrutipn_level : Int?
-    public var furv : String?
-    public var furc : String?
+    public var furv : [String]?
+    public var furc : [String]?
+    public var finalBids: [String: Any]?
     
     public class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
     {
@@ -101,22 +102,21 @@ public class Payload  : NSObject{
         inApp = dictionary["ia"] as? String          // inApp
         act1id = dictionary["d1"] as? String //action1 id
         act2id = dictionary["d2"] as? String // action2 id
-        relevence_score = dictionary["rs"] as? Double // relevance score
+        relevance_score = dictionary["rs"] as? Double // relevance score
         interrutipn_level = dictionary["il"] as? Int // interruption level
         
-        if let rcDict = dictionary["rc"] as? NSArray{
+        if let rcDict = dictionary["rc"] as? [String]{
             if rcDict.count > 0 {
-                let dictt = rcDict[0] as? String
-                if (dictt != "") { furc = dictt }
+                furc = rcDict
             }
         }
         
-        if let rvDict = dictionary["rv"] as? NSArray{
+        if let rvDict = dictionary["rv"] as? [String]{
             if rvDict.count > 0 {
-                let dictt = rvDict[0] as? String
-                if (dictt != "") {furv = dictt}
+                furv = rvDict
             }
         }
+        finalBids = dictionary["fb"] as? [String: Any]
     }
     
     
@@ -147,10 +147,11 @@ public class Payload  : NSObject{
         dictionary.setValue(self.inApp, forKey: "ia")
         dictionary.setValue(self.act1id, forKey: "d1")
         dictionary.setValue(self.act2id, forKey: "d2")
-        dictionary.setValue(self.relevence_score, forKey:"rs")
+        dictionary.setValue(self.relevance_score, forKey:"rs")
         dictionary.setValue(self.interrutipn_level, forKey: "il")
         dictionary.setValue(self.furc, forKey: "rc")
         dictionary.setValue(self.furv, forKey: "rv")
+        dictionary.setValue(self.finalBids, forKey: "fb")
         
         return dictionary
     }
@@ -200,8 +201,10 @@ public class AnKey {
     public var landingUrlAd : String?
     public var messageAd : String?
     public var titleAd : String?
-    public var adrv : String?
-    public var adrc : String?
+    public var adrv : [String]?
+    public var adrc : [String]?
+    public var act1link: String?
+    public var act2link: String?
     
     public class func modelsFromDictionaryArray(array:NSArray) -> [AnKey]
     {
@@ -225,20 +228,18 @@ public class AnKey {
         messageAd = dictionary["m"] as? String // Ad-Message
         titleAd = dictionary["t"] as? String //title-Ad
         landingUrlAd = dictionary["ln"] as? String //landingUrl - Ad
+        act1link = dictionary["l1"] as? String
+        act2link = dictionary["l2"] as? String
         
-        if let rcDict = dictionary["rc"] as? NSArray{
+        if let rcDict = dictionary["rc"] as? [String]{
             if rcDict.count > 0 {
-                let dictt = rcDict[0] as? String
-                if (dictt != "") { adrc = dictt }
+                adrc = rcDict
             }
         }
         
-        if let rvDict = dictionary["rv"] as? NSArray{
+        if let rvDict = dictionary["rv"] as? [String]{
             if rvDict.count > 0 {
-                let dictt = rvDict[0] as? String
-                if (dictt != "") {
-                    adrv = dictt
-                }
+                adrv = rvDict
             }
         }
     }
@@ -263,6 +264,10 @@ public class Global {
     
     public var act1name : String?
     public var act1Id : String?
+    public var act2name : String?
+    public var act2Id : String?
+    public var act1link : String?
+    public var act2link : String?
     public var cfg : String?
     public var created_on : String?
     public var inApp : String?
@@ -271,7 +276,7 @@ public class Global {
     public var rid : String?
     public var reqInt : Int?
     public var tag : String?
-    public var ttl : Int?
+    public var ttl : String?
     public var type : String?
     public var adCategory : String?
     
@@ -293,6 +298,10 @@ public class Global {
         
         act1name = dictionary["b1"] as? String  // button1 name
         act1Id = dictionary["d1"] as? String  // button1 Id
+        act2name = dictionary["b2"] as? String  // button2 name
+        act2Id = dictionary["d2"] as? String  // button2 Id
+        act1link = dictionary["l1"] as? String
+        act2link = dictionary["l2"] as? String
         cfg = dictionary["cfg"] as? String     // cfg
         created_on = dictionary["ct"] as? String // created_on
         inApp = dictionary["ia"] as? String   // inApp
@@ -301,7 +310,7 @@ public class Global {
         rid = dictionary["r"] as? String   // rid
         reqInt = dictionary["ri"] as? Int   //required Int
         tag = dictionary["tg"] as? String   //tag
-        ttl = dictionary["tl"] as? Int   // tag
+        ttl = dictionary["tl"] as? String   // tag
         type = dictionary["tp"] as? String //type
         adCategory = dictionary["category"] as? String //Ad-Category
     }
@@ -311,6 +320,10 @@ public class Global {
         
         dictionary.setValue(self.act1name, forKey: "b1")
         dictionary.setValue(self.act1Id, forKey: "d1")
+        dictionary.setValue(self.act2name, forKey: "b2")
+        dictionary.setValue(self.act2Id, forKey: "d2")
+        dictionary.setValue(self.act1link, forKey: "l1")
+        dictionary.setValue(self.act2link, forKey: "l2")
         dictionary.setValue(self.cfg, forKey: "cfg")
         dictionary.setValue(self.created_on, forKey: "ct")
         dictionary.setValue(self.inApp, forKey: "ia")

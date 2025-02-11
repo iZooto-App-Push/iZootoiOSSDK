@@ -2,8 +2,11 @@
 //  DeviceInfo.swift
 //  Pods
 //
-//  Created by AMIT_SDK_DEVELOPER on 24/10/24.
+//  Created by AMIT_SDK_DEVELOPER on 11/02/25.
 //
+
+
+
 
 import UIKit
 
@@ -212,7 +215,7 @@ struct AppDetails: Codable {
             name: bundle.infoDictionary?["CFBundleName"] as? String ?? "",
             version: bundle.infoDictionary?["CFBundleShortVersionString"] as? String ?? "",
             bundleId: bundle.bundleIdentifier ?? "",
-            sdkversion: "2.3.5"
+            sdkversion: "2.4.0"
         )
     }
     
@@ -237,3 +240,6 @@ class AppManager {
         return appDetails
     }
 }
+
+// Usage Example
+//AppManager.shared.printDetails()

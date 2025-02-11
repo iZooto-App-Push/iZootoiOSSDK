@@ -49,8 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         iZooto.notificationReceivedDelegate = self
         iZooto.landingURLDelegate = self
         iZooto.notificationOpenDelegate = self
-        iZooto.setLogLevel(isEnable: false)
-    
         return true
     }
         
@@ -97,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             // Authorized
                             let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
                             print(idfa)
-                            iZooto.getAdvertisementID(adid: idfa as NSString)
+                           // iZooto.getIDFAID(completion: <#T##(String) -> Void#>)(adid: idfa as NSString)
                         case .denied,
                                 .notDetermined,
                                 .restricted:
@@ -110,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
             } else {
                 let adID = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-                iZooto.getAdvertisementID(adid: adID as NSString)
+              //  iZooto.getAdvertisementID(adid: adID as NSString)
 
             }
             })

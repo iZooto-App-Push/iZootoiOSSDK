@@ -12,7 +12,7 @@ class AppConstant : NSObject
 {
     static let TAG = "iZooto"
     static let PERMISSION_GRANTED = "Permission granted:"
-    static let DEVICE_TOKEN="Device Token"
+    static let DEVICE_TOKEN="Your Device Token ->"
     static let SUCESSFULLY="Device Register Sucessfully"
     static let BADGE="BADGECOUNTUPDATE"
     static let IMAGE_ERROR = "Image loading error, Please check App Groups is added properly"
@@ -142,6 +142,7 @@ class AppConstant : NSObject
     static let IZ_BTYPE = "8"
     static let IZ_DTYPE = "3"
     static let IZ_OS_TYPE = "5"
+
     
     
 }

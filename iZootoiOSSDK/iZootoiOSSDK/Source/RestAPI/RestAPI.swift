@@ -44,22 +44,17 @@ public class RestAPI : NSObject
     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
-    static let SDKVERSION = "2.3.6"
-    //fallback url
+    static let SDKVERSION = "2.4.0"
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
-    static var fallBackLandingUrl = ""
-    
     static var EMAIL_CAPTURE_API = "https://eenp.izooto.com/eenp"
    
    
-
     //All notification Data
     static let ALL_NOTIFICATION_DATA = "https://nh.izooto.com/nh/"
     static var index = 0
     static var stopCalling = false
     static var lessData = 0
     
-    static var fallBackTitle = ""
     static let defaults = UserDefaults.standard
     private static var clickStoreData: [[String:Any]] = []
     private static var mediationClickStoreData: [[String:Any]] = []
@@ -67,7 +62,7 @@ public class RestAPI : NSObject
     static var tag_name = "RestAPI"
     
     
-    public static func getRequest(uuid: String, completionBlock: @escaping (String?) -> Void) -> Void
+    public static func getRequest(bundleName: String, uuid: String, completionBlock: @escaping (String?) -> Void) -> Void
     {
         if uuid != "" {
             if let requestURL = URL(string: "\(ENCRPTIONURL)\(uuid).dat"){
@@ -82,7 +77,7 @@ public class RestAPI : NSObject
                 URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
                     
                     if(error != nil) {
-                        Utils.handleOnceException(exceptionName: error?.localizedDescription ?? "no found", className: tag_name, methodName: "getRequest", rid: nil, cid: nil, userInfo: nil)
+                        Utils.handleOnceException(bundleName: bundleName, exceptionName: error?.localizedDescription ?? "no found", className: tag_name, methodName: "getRequest", rid: nil, cid: nil, userInfo: nil)
                         print(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
                         
                     }else
@@ -91,10 +86,10 @@ public class RestAPI : NSObject
                             if httpResponse.statusCode == 200{
                                 
                                 if UserDefaults.standard.value(forKey: AppConstant.iZ_CLICK_OFFLINE_DATA) != nil{
-                                    self.offlineClickTrackCall()
+                                    self.offlineClickTrackCall(bundleName: bundleName)
                                 }
                                 if UserDefaults.standard.value(forKey: AppConstant.iZ_MED_CLICK_OFFLINE_DATA) != nil{
-                                    self.mediationOfflineClickTrackCall()
+                                    self.mediationOfflineClickTrackCall(bundleName: bundleName)
                                 }
                                 do {
                                     if let data = data {
@@ -121,21 +116,21 @@ public class RestAPI : NSObject
                             }
                             else
                             {
-                                Utils.handleOnceException(exceptionName: "response error generated\(uuid)", className: tag_name, methodName: "getRequest", rid: nil, cid: nil, userInfo: nil)
+                                Utils.handleOnceException(bundleName: bundleName, exceptionName: "response error generated\(uuid)", className: tag_name, methodName: "getRequest", rid: nil, cid: nil, userInfo: nil)
                             }
                         }
                     }
                 }.resume()
             }
         }else{
-            Utils.handleOnceException(exceptionName: "iZooto app id is blank or null", className: tag_name, methodName: "getRequest", rid: nil, cid: nil, userInfo: nil)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "iZooto app id is blank or null", className: tag_name, methodName: "getRequest", rid: nil, cid: nil, userInfo: nil)
         }
     }
     
     
     
     // send event to server
-    static func callEvents(eventName : String, data : NSString,pid : String,token : String)
+    static func callEvents(bundleName: String, eventName : String, data : NSString,pid : String,token : String)
     {
         if( eventName != ""  && data != "" && pid != ""){
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
@@ -177,23 +172,23 @@ public class RestAPI : NSObject
                             sharedUserDefault?.set("", forKey: AppConstant.KEY_EVENT_NAME)
                             
                         }else{
-                            Utils.handleOnceException(exceptionName: error?.localizedDescription ?? "Error code" , className: tag_name, methodName: "callEvents",  rid: nil, cid: nil, userInfo: nil)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: error?.localizedDescription ?? "Error code" , className: tag_name, methodName: "callEvents",  rid: nil, cid: nil, userInfo: nil)
                         }
                     }
                 } catch {
-                    Utils.handleOnceException(exceptionName: error.localizedDescription , className: tag_name, methodName: "callEvents",rid: nil, cid: nil, userInfo: nil)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: error.localizedDescription , className: tag_name, methodName: "callEvents",rid: nil, cid: nil, userInfo: nil)
                     
                 }
             }.resume()
         }
         else
         {
-            Utils.handleOnceException(exceptionName: "user id or event data is null" , className: tag_name, methodName: "callEvents",  rid: nil, cid: nil, userInfo: nil)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "user id or event data is null" , className: tag_name, methodName: "callEvents",  rid: nil, cid: nil, userInfo: nil)
         }
     }
     
     // send user properties to server
-    static func callUserProperties( data : NSString,pid : String,token : String)
+    static func callUserProperties(bundleName : String, data : NSString,pid : String,token : String)
     {
         if( data != ""  && pid != ""){
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
@@ -232,19 +227,19 @@ public class RestAPI : NSObject
                             sharedUserDefault?.set("", forKey:AppConstant.iZ_USERPROPERTIES_KEY)
                             print("User properties added.")
                         }else{
-                            Utils.handleOnceException(exceptionName:  "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")" , className: tag_name, methodName: "callUserProperties", rid: nil, cid: nil, userInfo: nil)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName:  "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")" , className: tag_name, methodName: "callUserProperties", rid: nil, cid: nil, userInfo: nil)
                             
                         }
                     }
                 } catch {
-                    Utils.handleOnceException(exceptionName:  "" , className: tag_name, methodName: "callUserProperties", rid: nil, cid: nil, userInfo: nil)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName:  "" , className: tag_name, methodName: "callUserProperties", rid: nil, cid: nil, userInfo: nil)
                     
                 }
             }.resume()
         }
         else
         {
-            Utils.handleOnceException(exceptionName:  "User Properties data is blank" , className: tag_name, methodName: "callUserProperties",  rid: nil, cid: nil, userInfo: nil)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName:  "User Properties data is blank" , className: tag_name, methodName: "callUserProperties",  rid: nil, cid: nil, userInfo: nil)
             
         }
     }
@@ -301,62 +296,44 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            debugPrint("callImpression Success")
+//                            debugPrint("callImpression Success")
                         }else{
-                            Utils.handleOnceException(exceptionName:  error?.localizedDescription ?? "Error code " , className: tag_name, methodName: "callImpression",rid: rid, cid: cid, userInfo: userInfo)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName:  error?.localizedDescription ?? "Error code " , className: tag_name, methodName: "callImpression",rid: rid, cid: cid, userInfo: userInfo)
                         }
                     }
                 } catch let error {
-                    Utils.handleOnceException(exceptionName:  error.localizedDescription, className: tag_name, methodName: "callImpression",  rid: rid, cid: cid, userInfo: userInfo)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName:  error.localizedDescription, className: tag_name, methodName: "callImpression",  rid: rid, cid: cid, userInfo: userInfo)
                 }
             }.resume()
         }
         else
         {
-            Utils.handleOnceException(exceptionName:  "rid,pid or token is blank" , className: tag_name, methodName: "callImpression",  rid: rid, cid: cid, userInfo: userInfo)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName:  "rid,pid or token is blank" , className: tag_name, methodName: "callImpression",  rid: rid, cid: cid, userInfo: userInfo)
         }
     }
     
     // track the notification click
-    static func clickTrack(notificationData : Payload,type : String, pid : String,token : String, userInfo:[AnyHashable : Any]?, globalLn: String, title: String)
+    static func clickTrack(bundleName : String, notificationData : Payload,type : String, pid : String,token : String, userInfo:[AnyHashable : Any]?)
     {
-        var clickLn = ""
         let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~#[]@!$'()*+,;")  //-> /:?&
-        if globalLn == ""{
-            clickLn = notificationData.url ?? ""
-            clickLn = clickLn.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? ""
-        }else{
-            clickLn = globalLn.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? ""
-        }
-
+        var clickLn = notificationData.url?.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? ""
         if let encodedURLString = clickLn.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             clickLn = encodedURLString
         }
-        var rid: String? = nil
-        var cid: String? = nil
-        var apData = ""
-        if notificationData.ankey != nil {
-            rid = notificationData.global?.rid
-            cid = notificationData.global?.id
-        }else{
-            rid = notificationData.rid
-            cid = notificationData.id
-            apData = notificationData.ap ?? ""
-        }
-        if rid != "" && rid != nil && pid != "" && token != ""{
+        if notificationData.rid != "" && notificationData.rid != nil && pid != "" && token != ""{
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             
             var queryItems: [URLQueryItem] = [
                 URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
                 URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: "cid", value: cid),
-                URLQueryItem(name: "rid", value: rid),
-                URLQueryItem(name: "ti", value: "\(title)"),
+                URLQueryItem(name: "cid", value: notificationData.id),
+                URLQueryItem(name: "rid", value: notificationData.rid),
+                URLQueryItem(name: "ti", value: "\(notificationData.alert?.title)"),
                 URLQueryItem(name: "op", value: "click"),
                 URLQueryItem(name: "ver", value: SDKVERSION),
                 URLQueryItem(name: "ln", value: "\(clickLn)"),
-                URLQueryItem(name: "ap", value: apData),
+                URLQueryItem(name: "ap", value: "\(notificationData.ap)"),
             ]
             
             if type != "0"{
@@ -364,7 +341,7 @@ public class RestAPI : NSObject
             }
             requestBodyComponents.queryItems = queryItems
             
-            let dict = ["pid": pid, "bKey": token, "cid":cid , "rid":rid, "ti":title, "op":"click", "ver": SDKVERSION, "btn": type]
+            let dict = ["pid": pid, "bKey": token, "cid":notificationData.id , "rid":notificationData.rid, "ti":notificationData.alert?.title, "op":"click", "ver": SDKVERSION, "btn": type]
             guard let url = URL(string: RestAPI.CLICK_URL) else {
                 // Handle the case where the URL is nil
                 print("Error: Invalid URL")
@@ -383,80 +360,24 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
+//                            print("medition clk")
                         }else{
-                            Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: tag_name, methodName: "clickTrack", rid: rid, cid: cid, userInfo: userInfo)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: tag_name, methodName: "clickTrack", rid: notificationData.rid, cid: notificationData.id, userInfo: userInfo)
                         }
                     }
                 } catch let error{
                     self.clickStoreData.append(dict)
                     UserDefaults.standard.set(self.clickStoreData, forKey: AppConstant.iZ_CLICK_OFFLINE_DATA)
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)" , className: tag_name, methodName: "clickTrack",  rid: rid, cid: cid, userInfo: userInfo)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)" , className: tag_name, methodName: "clickTrack",  rid: notificationData.rid, cid: notificationData.id, userInfo: userInfo)
                 }
             }.resume()
         }else
         {
-            Utils.handleOnceException(exceptionName: "rid or cid value is blank" , className: tag_name, methodName: "clickTrack",  rid: rid, cid: cid, userInfo: userInfo)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid or cid value is blank" , className: tag_name, methodName: "clickTrack",  rid: notificationData.rid, cid: notificationData.id, userInfo: userInfo)
         }
     }
     
-    
-    
-    static func fallbackClickTrack(title : String, landingUrl : String,rid :String, cid : String, userInfo: [AnyHashable : Any]?)
-    {
-        
-        let pid = Utils.getUserId() ?? ""
-        let token = Utils.getUserDeviceToken() ?? ""
-       
-            if(rid != "" && cid != "")
-            {
-                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                        URLQueryItem(name: "ti", value: title),
-                        URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                        URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                        URLQueryItem(name: "cid", value: cid),
-                        URLQueryItem(name: "rid", value: rid),
-                        URLQueryItem(name: "op", value: "click"),
-                        URLQueryItem(name: "ver", value: SDKVERSION),
-                        URLQueryItem(name: "ln", value: landingUrl),
-                    ]
-                
-                guard let url = URL(string: RestAPI.CLICK_URL) else {
-                    // Handle the case where the URL is nil
-                    print("Error: Invalid URL")
-                    return
-                }
-                var request = URLRequest(url: url)
-                request.httpMethod = AppConstant.iZ_POST_REQUEST
-                request.allHTTPHeaderFields = requestHeaders
-                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                URLSession.shared.dataTask(with: request){(data,response,error) in
-                    
-                    do {
-                        if let error = error {
-                            throw error
-                        }
-                        // Check the HTTP response status code
-                        if let httpResponse = response as? HTTPURLResponse {
-                            if httpResponse.statusCode == 200 {
-                            }
-                        }
-                    } catch let error{
-                        Utils.handleOnceException(exceptionName: "\(error.localizedDescription ?? "")", className: tag_name, methodName: "clickTrack", rid: rid, cid: cid, userInfo: userInfo)
-                        
-                    }
-                }.resume()
-            }
-            else
-            {
-                Utils.handleOnceException(exceptionName: "rid or cid value is blank", className: tag_name, methodName: "clickTrack", rid: rid, cid: cid, userInfo: userInfo)
-                
-            }
-        
-    }
-    
-    static func offlineClickTrackCall(){
+    static func offlineClickTrackCall(bundleName:String){
         
         if let dd = UserDefaults.standard.value(forKey: AppConstant.iZ_CLICK_OFFLINE_DATA) as? [[String : Any]]{
             var tempArray: [[String:Any]] = []
@@ -464,7 +385,7 @@ public class RestAPI : NSObject
                 tempArray = dd
                 let data = dict as? NSDictionary
                 
-                self.clickOfflineTrack(pid: data?.value(forKey: "pid") as? String ?? "", cid: data?.value(forKey: "cid") as? String, rid: data?.value(forKey: "rid") as? String, ver: data?.value(forKey: "ver") as? String ?? "", btn: data?.value(forKey: "btn") as? String ?? "", token: data?.value(forKey: "bKey") as? String ?? "", title: data?.value(forKey: "ti") as? String ?? "",ln: data?.value(forKey: "ln") as? String ?? "", userInfo: nil)
+                self.clickOfflineTrack(bundleName: bundleName, pid: data?.value(forKey: "pid") as? String ?? "", cid: data?.value(forKey: "cid") as? String, rid: data?.value(forKey: "rid") as? String, ver: data?.value(forKey: "ver") as? String ?? "", btn: data?.value(forKey: "btn") as? String ?? "", token: data?.value(forKey: "bKey") as? String ?? "", title: data?.value(forKey: "ti") as? String ?? "",ln: data?.value(forKey: "ln") as? String ?? "", userInfo: nil)
             }
             tempArray.removeAll()
             UserDefaults.standard.set(tempArray, forKey: AppConstant.iZ_CLICK_OFFLINE_DATA)
@@ -472,13 +393,13 @@ public class RestAPI : NSObject
         }
     }
     
-    static func mediationOfflineClickTrackCall(){
+    static func mediationOfflineClickTrackCall(bundleName: String){
         if let dd = UserDefaults.standard.value(forKey: AppConstant.iZ_MED_CLICK_OFFLINE_DATA) as? [[String : Any]]{
             var tempArray: [[String:Any]] = []
             tempArray = dd
             for dict in dd{
                 if let data = dict as? NSDictionary {
-                    self.callAdMediationClickApi(finalDict: data, userInfo: nil)
+                    self.callAdMediationClickApi(bundleName: bundleName, finalDict: data, userInfo: nil)
                 }
             }
             tempArray.removeAll()
@@ -488,7 +409,7 @@ public class RestAPI : NSObject
     }
     
     //Offline click track
-    static func clickOfflineTrack(pid: String, cid: String?, rid: String?, ver: String, btn: String , token : String, title: String,ln :String, userInfo: [AnyHashable : Any]?)
+    static func clickOfflineTrack(bundleName: String, pid: String, cid: String?, rid: String?, ver: String, btn: String , token : String, title: String,ln :String, userInfo: [AnyHashable : Any]?)
     {
         if(rid != nil && pid != "" && token != "")
         {
@@ -526,14 +447,14 @@ public class RestAPI : NSObject
                         }
                     }
                 } catch {
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: tag_name, methodName: "clickTrackOffline", rid:rid, cid: cid, userInfo: userInfo)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: tag_name, methodName: "clickTrackOffline", rid:rid, cid: cid, userInfo: userInfo)
                     
                 }
             }.resume()
         }
         else
         {
-            Utils.handleOnceException(exceptionName: "rid or pid or token is blank", className: tag_name, methodName: "clickTrackOffline", rid: rid, cid: cid, userInfo: userInfo)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid or pid or token is blank", className: tag_name, methodName: "clickTrackOffline", rid: rid, cid: cid, userInfo: userInfo)
         }
     }
     
@@ -560,21 +481,35 @@ public class RestAPI : NSObject
     // getting advertisement id
     
     @objc public static func identifierForAdvertising() -> String? {
+        var idfa = ""
         if #available(iOS 14, *) {
-            if (sharedUserDefault?.bool(forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID) ?? false) {
-//                print(ASIdentifierManager.shared().advertisingIdentifier.uuidString)
-                let adid = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_) ?? "0000-0000-0000-0000"
-                return adid
+            let trackingStatus = ATTrackingManager.trackingAuthorizationStatus
+            switch trackingStatus {
+            case .authorized:
+                idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                UserDefaults.standard.set(true, forKey: "registerTokenKey")
+                return idfa
+            case .denied, .notDetermined, .restricted :
+                idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                return idfa
+            @unknown default:
+                idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                return idfa
             }
-            return "0000-0000-0000-0000"
-        }
-        else {
-            return ASIdentifierManager.shared().advertisingIdentifier.uuidString
+        } else {
+            // Fallback for iOS 13 and below
+            if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+                idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                return idfa
+            } else {
+                idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                return idfa
+            }
         }
     }
     
     // last visit data send to server
-    @objc static func lastVisit(pid : String,token : String)
+    @objc static func lastVisit(bundleName: String,pid : String,token : String)
     {
         if(token != "" && pid != "")
         {
@@ -619,36 +554,38 @@ public class RestAPI : NSObject
                             if httpResponse.statusCode == 200 {
                                 
                             }else{
-                                Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
+                                Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
                             }
                         }
                     } catch {
-                        Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
+                        Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
                     }
                 }.resume()
             }
             else
             {
-                Utils.handleOnceException(exceptionName: "json is not correct", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
+                Utils.handleOnceException(bundleName: bundleName, exceptionName: "json is not correct", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
             }
         }
         else
         {
-            Utils.handleOnceException(exceptionName: "pid is not found", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "pid is not found", className: tag_name, methodName: "lastVisit" , rid: nil,cid :nil, userInfo: nil)
         }
     }
     // last impression send to server
     @objc static func lastImpression(notificationData : Payload,pid : String,token : String,url : String,bundleName : String, userInfo: [AnyHashable : Any]? )
     {
-        if(notificationData.rid != nil && pid != "" && token != "")
+        let rid = notificationData.rid ?? notificationData.global?.rid
+        let cid = notificationData.id ?? notificationData.global?.id
+        if(rid != nil && pid != "" && token != "")
         {
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems = [
                 URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
                 URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: "cid", value: notificationData.id),
-                URLQueryItem(name: "rid", value: notificationData.rid),
+                URLQueryItem(name: "cid", value: cid),
+                URLQueryItem(name: "rid", value: rid),
                 URLQueryItem(name: "op", value: "view")
             ]
             guard let url = URL(string: url) else {
@@ -676,24 +613,24 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            
+                            //print("last impression called.")
                         }else{
-                            Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid,cid : notificationData.id, userInfo: userInfo)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: rid,cid : cid, userInfo: userInfo)
                         }
                     }
                 } catch {
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: rid, cid : cid, userInfo: userInfo)
                 }
             }.resume()
         }
         else
         {
-            Utils.handleOnceException(exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: rid, cid : cid, userInfo: userInfo)
         }
     }
     
     // last click data send to server
-    @objc static func lastClick(notificationData : Payload,pid : String,token : String,url : String, userInfo: [AnyHashable: Any]?)
+    @objc static func lastClick(bundleName: String, notificationData : Payload,pid : String,token : String,url : String, userInfo: [AnyHashable: Any]?)
     {
         if(pid != "" && token != "" && notificationData.rid != nil)
         {
@@ -704,7 +641,7 @@ public class RestAPI : NSObject
                 URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
                 URLQueryItem(name: "cid", value: notificationData.id),
                 URLQueryItem(name: "rid", value: notificationData.rid),
-                URLQueryItem(name: "op", value: "view")
+                URLQueryItem(name: "op", value: "click")
             ]
             
             guard let url = URL(string: url) else {
@@ -733,24 +670,25 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
+                            //print("last click called.")
                         }else{
-                            Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid,cid : notificationData.id, userInfo: userInfo)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid,cid : notificationData.id, userInfo: userInfo)
                         }
                     }
                     
                 } catch {
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
                 }
             }.resume()
         }
         else
         {
-            Utils.handleOnceException(exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
         }
     }
     
     // register the token on our panel
-    @objc static func registerToken(token : String, pid : String)
+    @objc static func registerToken(bundleName:String, token : String, pid : String)
     {
         if(token != "" && pid != "")
         {
@@ -808,7 +746,7 @@ public class RestAPI : NSObject
                             print(AppConstant.SUCESSFULLY)
                             
                             let currentUnixTimestamp: TimeInterval = TimeInterval(Int(Date().timeIntervalSince1970 * 1000))
-                            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){//used in addMacros
+                            if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){//used in addMacros
                                 userDefaults.setValue(currentUnixTimestamp, forKey: "unixTS")
                             }
                             let date = Date()
@@ -817,7 +755,7 @@ public class RestAPI : NSObject
                             let formattedDate = format.string(from: date)
                             if(formattedDate != (sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_LAST_VISIT)))
                             {
-                                RestAPI.lastVisit(pid: pid, token:token)
+                                RestAPI.lastVisit(bundleName: bundleName, pid: pid, token:token)
                                 sharedUserDefault?.set(formattedDate, forKey: AppConstant.iZ_KEY_LAST_VISIT)
                                 let dicData = sharedUserDefault?.dictionary(forKey:AppConstant.iZ_USERPROPERTIES_KEY)
                                 if(dicData != nil)
@@ -829,101 +767,28 @@ public class RestAPI : NSObject
                             }
                             
                         }else{
-                            Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
                             print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR)
                             
                         }
                     }
                 } catch {
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
                 }
             }.resume()
         }
         else
         {
-            Utils.handleOnceException(exceptionName: "pid or token is not generated", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "pid or token is not generated", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
         }
     }
     
-    // send the token with adID
-    @objc static func registerToken(token : String, pid : String ,adid : NSString)
-    {
-        if(token != "" && pid != "")
-        {
-            let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems =
-            [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
-                URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: AppConstant.IZ_BTYPE),
-                URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: AppConstant.IZ_DTYPE),
-                URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(Utils.currentTimeInMilliSeconds())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_SDK_VERSION, value:"\(Utils.getAppVersion())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_OS, value: AppConstant.IZ_OS_TYPE),
-                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
-                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: adid as? String),
-                URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(Utils.getVersion())"),
-                URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(Utils.getDeviceName())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(Utils.getAppVersion())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_PLUGIN_VRSION_NAME, value: "\(pluginVersion)")
-                
-            ]
-            guard let url = URL(string: RestAPI.BASEURL) else {
-                // Handle the case where the URL is nil
-                print("Error: Invalid URL")
-                return
-            }
-            var request = URLRequest(url: url)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "Referer")
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            let config = URLSessionConfiguration.default
-            if #available(iOS 11.0, *) {
-                config.waitsForConnectivity = true
-            } else {
-                // Fallback on earlier versions
-            }
-            URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
-                
-                do {
-                    if let error = error {
-                        throw error
-                    }
-                    // Check the HTTP response status code
-                    if let httpResponse = response as? HTTPURLResponse {
-                        if httpResponse.statusCode == 200 {
-                            sharedUserDefault?.set(true,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-                            sharedUserDefault?.set(adid, forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
-                            
-                        }else{
-                            sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-                            sharedUserDefault?.set("", forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID_)
-                            Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
-                        }
-                    }
-                    
-                } catch {
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
-                }
-            }.resume()
-        }
-        else
-        {
-            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: nil, cid: nil, userInfo: nil)
-            sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-        }
-    }
-   
-    
-    @objc static func sendExceptionToServer(exceptionName: String, className: String, methodName: String, rid: String?, cid: String?, appId: String, userInfo: [AnyHashable: Any]?) {
+    @objc static func sendExceptionToServer(bundleName:String, exceptionName: String, className: String, methodName: String, rid: String?, cid: String?, appId: String, userInfo: [AnyHashable: Any]?) {
         // Retrieve app and device details
         let appDetails = AppManager.shared.appDetails
         let deviceDetails = AppManager.shared.deviceInfo
-        let pid = Utils.getUserId() ?? ""
-        let token = Utils.getUserDeviceToken() ?? ""
+        let pid = Utils.getUserId(bundleName: bundleName) ?? ""
+        let token = Utils.getUserDeviceToken(bundleName: bundleName) ?? ""
         let pluginVersion = sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_PLUGIN_VERSION_VALUE) ?? ""
         let currentDate = Date()
         let currentTimeStamp = Int(currentDate.timeIntervalSince1970)
@@ -1010,8 +875,6 @@ public class RestAPI : NSObject
     //Ad-Mediation Impression
     @objc static func callAdMediationImpressionApi(finalDict: NSDictionary, bundleName: String, userInfo: [AnyHashable : Any]?){
         
-        let defaults = UserDefaults.standard
-        
         if (finalDict.count != 0) {
             let rid = finalDict.value(forKey: "rid") as? String
             let jsonData = try? JSONSerialization.data(withJSONObject: finalDict as? [String: Any])
@@ -1042,21 +905,20 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            
+//                            print("mediation medi success")
                         }
                     }
                 } catch {
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "CallAdMediationImpressionApi", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "CallAdMediationImpressionApi", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
                 }
             }.resume()
         }else{
-            Utils.handleOnceException(exceptionName: "key's are blank in request parameter,\(finalDict) ", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Impression API",  rid: finalDict.value(forKey: "rid") as? String, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "key's are blank in request parameter,\(finalDict) ", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Impression API",  rid: finalDict.value(forKey: "rid") as? String, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
         }
     }
     
     //Ad-Mediation ClickAPI
-    @objc static func callAdMediationClickApi(finalDict: NSDictionary, userInfo: [AnyHashable : Any]?){
-        
+    @objc static func callAdMediationClickApi(bundleName:String, finalDict: NSDictionary, userInfo: [AnyHashable : Any]?){
         let defaults = UserDefaults.standard
         if (finalDict.count != 0) {
             let rid = finalDict.value(forKey: "rid") as? String
@@ -1082,9 +944,9 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            print("Mediation Click Success")
+//                            print("Mediation Click Success")
                         }else{
-                            Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 1", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 1", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
                         }
                     }
                 } catch {
@@ -1094,71 +956,15 @@ public class RestAPI : NSObject
                     }
                     UserDefaults.standard.set(self.mediationClickStoreData, forKey: AppConstant.iZ_MED_CLICK_OFFLINE_DATA)
                     
-                    Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 2", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 2", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
                 }
             }.resume()
         }else{
-            Utils.handleOnceException(exceptionName: "key's are blank in request parameter, \(finalDict)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 3",  rid: finalDict.value(forKey: "rid") as? String, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: "key's are blank in request parameter, \(finalDict)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 3",  rid: finalDict.value(forKey: "rid") as? String, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
         }
-    }
-    static func fetcherAdMediationClickApi(url: String, title: String, rid: String, callForMedc: Bool, userInfo: [AnyHashable : Any]?) {
-
-        var pid = ""
-        var token = ""
-        if let userDefault = UserDefaults(suiteName: iZooto.groupName){
-            pid = userDefault.value(forKey: AppConstant.iZ_PID) as? String ?? ""
-            token = userDefault.value(forKey: AppConstant.IZ_GRPS_TKN) as? String ?? ""
-        }
-        
-        let served: [String: Any] = ["a": 0, "b": 0, "ln": url, "t": -1, "ti": title]
-        let bids: [String] = []
-        let currentUTS = Int(Date().timeIntervalSince1970 * 1000)
-        
-        // Create the final request dictionary
-        let requestDictionary: [String: Any] = ["bKey": token, "av": SDKVERSION, "served": served, "bids": bids, "pid": pid, "rid": rid, "ta": "\(currentUTS)"]
-        
-        // Serialize the final dictionary to JSON data
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestDictionary, options: []),
-              let jsonString = String(data: jsonData, encoding: .utf8) else {
-            Utils.handleOnceException(exceptionName: "error in converting dictionary to JSON", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "fetcherAdMediationClickApi", rid: rid, cid: nil, userInfo: userInfo)
-            return
-        }
-//        print(jsonString)
-        var baseUrl = ""
-        if callForMedc {
-            baseUrl = RestAPI.MEDIATION_CLICK_URL
-        }else{
-            baseUrl = RestAPI.MEDIATION_IMPRESSION_URL
-        }
-        guard let url = URL(string: baseUrl) else {
-            // Handle the case where the URL is nil
-            print("Error: Invalid URL")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "Referer")
-        request.httpBody = jsonData
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        URLSession.shared.dataTask(with: request){(data,response,error) in
-            do {
-                if let error = error {
-                    Utils.handleOnceException(exceptionName: "Network error: \(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "fetcherAdMediationClickApi", rid: rid, cid: nil, userInfo: userInfo)
-                }
-                // Check the HTTP response status code
-                if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 200 {
-                    }
-                }
-            } catch {
-                Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "fetcherAdMediationClickApi", rid: rid, cid: nil, userInfo: userInfo)
-            }
-        }.resume()
     }
     
-    static func callRV_RC_Request( urlString : String)
+    static func callRV_RC_Request(bundleName:String, urlString : String)
     {
         if urlString.contains("https"){
             // create post request
@@ -1178,11 +984,11 @@ public class RestAPI : NSObject
                         // Check the HTTP response status code
                         if let httpResponse = response as? HTTPURLResponse {
                             if httpResponse.statusCode == 200 {
-                                print("RC and RC api hits successfully")
+//                                print("RV and RC api hits successfully ")
                             }
                         }
                     } catch {
-                        Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "callRV_RC_Request", rid: nil, cid: nil, userInfo: nil)
+                        Utils.handleOnceException(bundleName:bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "callRV_RC_Request", rid: nil, cid: nil, userInfo: nil)
                     }
                 }.resume()
             }
@@ -1268,7 +1074,7 @@ public class RestAPI : NSObject
     
     
     // add email capture api
-    @objc static func addEmailDetails(token:String,pid : String,email : String,fName:String,lName:String)
+    @objc static func addEmailDetails(bundleName: String, token:String,pid : String,email : String,fName:String,lName:String)
     {
         guard !token.isEmpty, pid != "" else {
            // Logger.warning("Token is an empty string or pid is 0")
@@ -1293,7 +1099,6 @@ public class RestAPI : NSObject
           ]
         guard let url = URL(string: RestAPI.EMAIL_CAPTURE_API) else {
             // Handle the case where the URL is nil
-            print("Error: Invalid URL")
             return
         }
         var request = URLRequest(url: url)
@@ -1325,12 +1130,10 @@ public class RestAPI : NSObject
                         }
                         let dict = ["nlo":"0"]
                         iZooto.addUserProperties(data: dict)
-                       // print("Email received sucessfully\(httpResponse.statusCode)")
                     }
                 }
             } catch {
-                debugPrint("Error occured on api")
-                Utils.handleOnceException(exceptionName: error.localizedDescription, className: "RestAPI", methodName: "addEmailDetails", rid: nil, cid: nil, userInfo: nil)
+                Utils.handleOnceException(bundleName: bundleName, exceptionName: error.localizedDescription, className: "RestAPI", methodName: "addEmailDetails", rid: nil, cid: nil, userInfo: nil)
             }
         }.resume()
     }
@@ -1338,7 +1141,6 @@ public class RestAPI : NSObject
     // get App version
     static func getAppVersion() -> String {
         if let dictionary = Bundle.main.infoDictionary, let version = dictionary["CFBundleShortVersionString"] as? String{
-            // print(version)
             return "\(version)"
         }
         return "0.0"

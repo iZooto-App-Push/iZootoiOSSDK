@@ -42,17 +42,17 @@ public class Utils : NSObject
         }
     }
     
-    public static func getUserDeviceToken() -> String? {
-        if let userDefault = UserDefaults(suiteName: Utils.getBundleName()){
+    public static func getUserDeviceToken(bundleName: String) -> String? {
+        if let userDefault = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
             return userDefault.string(forKey: AppConstant.IZ_GRPS_TKN)
         }else{
             return "token not found"
         }
     }
     
-    public static func getUserId() -> String? {
-        if let userDefault = UserDefaults(suiteName: Utils.getBundleName()){
-            return userDefault.string(forKey: AppConstant.REGISTERED_ID)
+    public static func getUserId(bundleName: String) -> String? {
+        if let userDefault = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
+            return userDefault.string(forKey: AppConstant.iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppManager/DeviceInfo.swift)
         }else{
             return "pid not found"
         }
@@ -115,20 +115,9 @@ public class Utils : NSObject
         return returnString
     }
     
-    public static func getBundleName()->String
+    public static func getGroupName(bundleName: String)->String
     {
-        var bundleID = ""
-        if let bundleName = Bundle.main.bundleIdentifier{
-            if (bundleName.contains(".iZootoNotificationExtendsServices")){
-                bundleID = bundleName.replacingOccurrences(of: ".iZootoNotificationExtendsServices", with: "")
-                return "group."+bundleID+".iZooto"
-            }else{
-                bundleID = bundleName
-                return "group."+bundleID+".iZooto"
-            }
-        }else{
-            return "bundle name not found"
-        }
+        return "group."+bundleName+".iZooto"
     }
     
     // get Bundle ID
@@ -188,16 +177,16 @@ public class Utils : NSObject
 //        let pattern = "[a-zA-Z0-9-_.~%]+"
 //        return true
 //    }
-    static func handleOnceException(exceptionName: String, className: String, methodName: String,  rid: String?, cid: String?, userInfo: [AnyHashable: Any]?)
+    static func handleOnceException(bundleName: String, exceptionName: String, className: String, methodName: String,  rid: String?, cid: String?, userInfo: [AnyHashable: Any]?)
     {
         let userDefaults = UserDefaults.standard
         var appid = ""
-        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+        if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
             appid = userDefaults.value(forKey: "appID") as? String ?? ""
         }
         if userDefaults.object(forKey: methodName) == nil{
                userDefaults.set("isPresent", forKey: methodName)
-            RestAPI.sendExceptionToServer(exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid, userInfo: userInfo ?? nil)
+            RestAPI.sendExceptionToServer(bundleName: bundleName, exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid, userInfo: userInfo ?? nil)
                
            } else {
                print("Key \(methodName) already exists. Data not stored.")
@@ -205,12 +194,13 @@ public class Utils : NSObject
     }
     
     static func addMacros(url: String) -> String {
+        let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
         var finalUrl = url.trimmingCharacters(in: .whitespacesAndNewlines)
         if finalUrl != "" && !finalUrl.isEmpty{
             var registerTime: TimeInterval = 0
-            let token = Utils.getUserDeviceToken() ?? ""
-            let pid = Utils.getUserId() ?? ""
-            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+            let token = Utils.getUserDeviceToken(bundleName: bundleName) ?? ""
+            let pid = Utils.getUserId(bundleName: bundleName) ?? ""
+            if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
                 registerTime = userDefaults.value(forKey: "unixTS") as? TimeInterval ?? 0
             }
             let time = Utils.unixTimeDifference(unixTimestamp: registerTime )
