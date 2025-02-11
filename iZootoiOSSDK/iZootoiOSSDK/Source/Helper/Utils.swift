@@ -52,7 +52,7 @@ public class Utils : NSObject
     
     public static func getUserId(bundleName: String) -> String? {
         if let userDefault = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
-            return userDefault.string(forKey: AppConstant.iZootoiOSSDK/iZootoiOSSDK/Source/Helper/AppManager/DeviceInfo.swift)
+            return userDefault.string(forKey: AppConstant.REGISTERED_ID)
         }else{
             return "pid not found"
         }
