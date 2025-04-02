@@ -829,7 +829,6 @@ public class RestAPI : NSObject
             "exceptionDetails": filteredExceptionDetails
         ]
 
-        
         // Convert the dictionary to JSON data
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody, options: []) else {
             print("Error: Could not serialize JSON request body")
@@ -874,7 +873,6 @@ public class RestAPI : NSObject
     
     //Ad-Mediation Impression
     @objc static func callAdMediationImpressionApi(finalDict: NSDictionary, bundleName: String, userInfo: [AnyHashable : Any]?){
-        
         if (finalDict.count != 0) {
             let rid = finalDict.value(forKey: "rid") as? String
             let jsonData = try? JSONSerialization.data(withJSONObject: finalDict as? [String: Any])
@@ -984,7 +982,7 @@ public class RestAPI : NSObject
                         // Check the HTTP response status code
                         if let httpResponse = response as? HTTPURLResponse {
                             if httpResponse.statusCode == 200 {
-//                                print("RV and RC api hits successfully ")
+//                                print("RV and RC api hits successfully.")
                             }
                         }
                     } catch {

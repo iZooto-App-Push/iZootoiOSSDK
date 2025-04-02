@@ -174,7 +174,7 @@ public class iZooto : NSObject
         }
         if let eventData = sharedUserDefault?.dictionary(forKey:AppConstant.KEY_EVENT),
            let eventName = sharedUserDefault?.string(forKey: AppConstant.KEY_EVENT_NAME){
-            addEvent(bundleName: bundleName, eventName: eventName, data: eventData)
+            addEvent(eventName: eventName, data: eventData)
         }
      
     }
@@ -449,7 +449,7 @@ public class iZooto : NSObject
                 }
             }
         }else{
-            completion("Token sync in progress, please try after some time.", nil)
+            completion("Feed data is not enable, kindly contact to support team.", nil)
         }
     }
     
@@ -707,18 +707,19 @@ public class iZooto : NSObject
                                                                                    let cprValue = Double(cprValue) {
                                                                                     finalCPCValue = String(cpcValue / (10 * cprValue))
                                                                                 } else {
+                                                                                    finalCPCValue = "0.0"
                                                                                     print("Failed to calculate finalCPCValue")
                                                                                 }
                                                                             } else {
                                                                                 finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
                                                                             }
                                                                             let t = Int(Date().timeIntervalSince(startDate) * 1000)
-                                                                            if let finalCPCValueDouble = Double(finalCPCValue) {
-                                                                                let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
-                                                                                servedData = [AppConstant.iZ_A_KEY: 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t,AppConstant.iZ_RETURN_BIDS: finalCPC]
-                                                                                finalDataValue.setValue("1", forKey: "result")
-                                                                                bidsData.append(servedData)
-                                                                            }
+                                                                            let finalCPCValueDouble = Double(finalCPCValue) ?? 0.0
+                                                                            let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
+                                                                            servedData = [AppConstant.iZ_A_KEY: 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t,AppConstant.iZ_RETURN_BIDS: finalCPC]
+                                                                            finalDataValue.setValue("1", forKey: "result")
+//                                                                            bidsData.append(servedData)
+                                                                            
                                                                             // get title
                                                                             processNotificationData(notificationData: &notificationData, jsonDictionary: jsonDictionary, apsDictionary: apsDictionary, bundleName: bundleName)
                                                                         }
@@ -737,17 +738,20 @@ public class iZooto : NSObject
                                                                                    let cpcValue = Double(cpcString),
                                                                                    let cprValue = Double(cprValue) {
                                                                                     finalCPCValue = String(cpcValue / (10 * cprValue))
+                                                                                }else {
+                                                                                    finalCPCValue = "0.0"
+                                                                                    print("Failed to calculate finalCPCValue")
                                                                                 }
                                                                             } else {
                                                                                 finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
                                                                             }
                                                                             let t = Int(Date().timeIntervalSince(startDate) * 1000)
-                                                                            if let finalCPCValueDouble = Double(finalCPCValue) {
-                                                                                let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
-                                                                                servedData = [AppConstant.iZ_A_KEY: 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t,AppConstant.iZ_RETURN_BIDS: finalCPC]
-                                                                                finalDataValue.setValue("1", forKey: "result")
-                                                                                bidsData.append(servedData)
-                                                                            }
+                                                                            let finalCPCValueDouble = Double(finalCPCValue) ?? 0.0
+                                                                            let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
+                                                                            servedData = [AppConstant.iZ_A_KEY: 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t,AppConstant.iZ_RETURN_BIDS: finalCPC]
+                                                                            finalDataValue.setValue("1", forKey: "result")
+//                                                                            bidsData.append(servedData)
+                                                                            
                                                                             
                                                                             //title
                                                                             processArrayNotificationData(notificationData: &notificationData, jsonArray: jsonArray)
@@ -818,7 +822,7 @@ public class iZooto : NSObject
                         }
                     }
                     //tp = 5
-                      else if let value = gt.value(forKey: AppConstant.iZ_TPKEY) as? String, value == "5" {
+                    else if let value = gt.value(forKey: AppConstant.iZ_TPKEY) as? String, value == "5" {
                         if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
                             finalData["aps"] = tempData
                             if let apsDictionary = finalData["aps"] as? NSDictionary {
@@ -884,13 +888,12 @@ public class iZooto : NSObject
                                                 cpcValue = dict["cpc"] as? String ?? ""
                                                 ctrValue = dict["ctr"] as? String ?? ""
                                                 cpmValue = dict["cpm"] as? String ?? ""
-                                                fpValue = dict["fp"] as? Double ?? 0.0
+                                                fpValue = Double((dict["fp"] as? String)?.removingTilde() ?? "") ?? 0.0
                                                 if cpcValue != ""{
                                                     cpcFinalValue = cpcValue
                                                 }else{
                                                     cpcFinalValue = cpmValue
                                                 }
-                                                
                                                 if let pf = dict["pf"] as? String{
                                                     if pf == "1" {
                                                         taboolaAnKey = dict
@@ -934,19 +937,29 @@ public class iZooto : NSObject
                                                                                        let cpcValue = Double(cpcString),
                                                                                        let ctrValue = Double(ctrValue) {
                                                                                         finalCPCValue = String(cpcValue / (10 * ctrValue))
+                                                                                    }else {
+                                                                                        finalCPCValue = "0.0"
+                                                                                        Utils.handleOnceException(bundleName: bundleName, exceptionName: "Index : \(index+1), Cpc conversion into Double failled", className: "iZooto", methodName: "payloadDataChange1", rid: notificationData.global?.rid, cid: notificationData.global?.id, userInfo: userInfo)
                                                                                     }
                                                                                 } else {
                                                                                     finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
                                                                                 }
                                                                                 let t = Int(Date().timeIntervalSince(startDate) * 1000)
-                                                                                if let finalCPCValueDouble = Double(finalCPCValue) {
-                                                                                    let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
-                                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPC]
-                                                                                    if let servedDataDict = servedData as? [String: Any] {
-                                                                                        winnerServed = servedDataDict
-                                                                                    }
-                                                                                    bidsData.append(servedData)
+                                                                                //                                                                                let finalCPCValueDouble = Double(finalCPCValue) ?? 0.0
+                                                                                var finalCPCValueDouble = 0.0
+                                                                                if let tempCpc = Double(finalCPCValue){
+                                                                                    finalCPCValueDouble = tempCpc
+                                                                                }else{
+                                                                                    finalCPCValueDouble = 0.0
+                                                                                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "Index : \(index+1), Cpc conversion into Double failled : \(finalCPCValue)", className: "iZooto", methodName: "payLoadDataChange2", rid: notificationData.global?.rid, cid: notificationData.global?.id, userInfo: userInfo)
                                                                                 }
+                                                                                let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
+                                                                                servedData = [AppConstant.iZ_A_KEY: index + 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPC]
+                                                                                if let servedDataDict = servedData as? [String: Any] {
+                                                                                    winnerServed = servedDataDict
+                                                                                }
+                                                                                bidsData.append(servedData)
+                                                                                
                                                                                 // get title
                                                                                 processNotificationData(notificationData: &notificationData, jsonDictionary: jsonDictionary, apsDictionary: apsDictionary, bundleName: bundleName)
                                                                             }
@@ -964,19 +977,28 @@ public class iZooto : NSObject
                                                                                        let cpcValue = Double(cpcString),
                                                                                        let ctrValue = Double(ctrValue) {
                                                                                         finalCPCValue = String(cpcValue / (10 * ctrValue))
+                                                                                    }else{
+                                                                                        finalCPCValue = "0.0"
+                                                                                        Utils.handleOnceException(bundleName: bundleName, exceptionName: "Index : \(index+1), Cpc conversion into Double failled", className: "iZooto", methodName: "payloadDataChange3", rid: notificationData.global?.rid, cid: notificationData.global?.id, userInfo: userInfo)
                                                                                     }
                                                                                 } else {
                                                                                     finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
                                                                                 }
                                                                                 let t = Int(Date().timeIntervalSince(startDate) * 1000)
-                                                                                if let finalCPCValueDouble = Double(finalCPCValue) {
-                                                                                    let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
-                                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPC]
-                                                                                    if let servedDataDict = servedData as? [String: Any] {
-                                                                                        winnerServed = servedDataDict
-                                                                                    }
-                                                                                    bidsData.append(servedData)
+                                                                                //let finalCPCValueDouble = Double(finalCPCValue) ?? 0.0
+                                                                                var finalCPCValueDouble = 0.0
+                                                                                if let tempCpc = Double(finalCPCValue){
+                                                                                    finalCPCValueDouble = tempCpc
+                                                                                }else{
+                                                                                    finalCPCValueDouble = 0.0
+                                                                                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "Index : \(index+1), Cpc conversion into Double failled : \(finalCPCValue)", className: "iZooto", methodName: "payLoadDataChange4", rid: notificationData.global?.rid, cid: notificationData.global?.id, userInfo: userInfo)
                                                                                 }
+                                                                                let finalCPC = Double(floor(finalCPCValueDouble * 10000) / 10000)
+                                                                                servedData = [AppConstant.iZ_A_KEY: index + 1,AppConstant.iZ_B_KEY: finalCPC,AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPC]
+                                                                                if let servedDataDict = servedData as? [String: Any] {
+                                                                                    winnerServed = servedDataDict
+                                                                                }
+                                                                                bidsData.append(servedData)
                                                                                 //title
                                                                                 processArrayNotificationData(notificationData: &notificationData, jsonArray: jsonArray)
                                                                             }
@@ -1017,9 +1039,18 @@ public class iZooto : NSObject
                                                                 //completion(finalData)
                                                                 if let Tdata = taboolaAnKey,
                                                                    let tIndex = pfIndex,
-                                                                   let cpcString = Tdata["cpc"] as? String,
-                                                                   let Tcpc = Double(cpcString) {
-                                                                    if Tcpc > winnerCpc {
+                                                                   let cpcString = Tdata["cpc"] as? String
+                                                                {
+                                                                    let tcpc = cpcString.removingTilde()
+                                                                    var Tcpc = 0.0
+                                                                    if let tempCpc = Double(tcpc){
+                                                                        Tcpc = tempCpc
+                                                                    }else{
+                                                                        Tcpc = 0.0
+                                                                        Utils.handleOnceException(bundleName: bundleName, exceptionName: "Index : \(tIndex), Cpc conversion into Double failled : \(tcpc)", className: "iZooto", methodName: "payLoadDataChange5", rid: notificationData.global?.rid, cid: notificationData.global?.id, userInfo: userInfo)
+                                                                    }
+                                                                    let tfpValue = Double((Tdata["fp"] as? String)?.removingTilde() ?? "") ?? 0.0
+                                                                    if (tfpValue < Tcpc) && (Tcpc > winnerCpc){
                                                                         servedData = [AppConstant.iZ_A_KEY: tIndex,AppConstant.iZ_B_KEY: Tcpc, AppConstant.iZ_T_KEY: ta, AppConstant.iZ_RETURN_BIDS: Tcpc]
                                                                         finalDataValue.setValue("\(tIndex)", forKey: "result")
                                                                         bidsData.append(servedData)
@@ -1028,6 +1059,10 @@ public class iZooto : NSObject
                                                                         finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
                                                                         self.taboolaAds(anKey: taboolaAnKey, index: tIndex, bundleName: bundleName, userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                                                         return
+                                                                    }else{
+                                                                        servedData = [AppConstant.iZ_A_KEY: tIndex, AppConstant.iZ_B_KEY: Tcpc, AppConstant.iZ_T_KEY: ta, AppConstant.iZ_RETURN_BIDS: Tcpc]
+                                                                        bidsData.append(servedData)
+                                                                        finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
                                                                     }
                                                                 }
                                                                 if let winnerPayload = winnerData {
@@ -1039,8 +1074,8 @@ public class iZooto : NSObject
                                                                         }
                                                                     }
                                                                     finalNotificationPayload(userInfo: userInfo, notificationData: winnerPayload, bestAttemptContent: bestAttemptContent)
-                                                                    if notificationData.ankey?.adrv != nil{
-                                                                        if let rvArr = notificationData.ankey?.adrv{
+                                                                    if winnerPayload.ankey?.adrv != nil{
+                                                                        if let rvArr = winnerPayload.ankey?.adrv{
                                                                             for url in rvArr {
                                                                                 RestAPI.callRV_RC_Request(bundleName: bundleName, urlString: url)
                                                                             }
@@ -1099,7 +1134,7 @@ public class iZooto : NSObject
         let t = Int(Date().timeIntervalSince(startDate) * 1000)
         servedData = [AppConstant.iZ_A_KEY: 1,AppConstant.iZ_B_KEY: "0.0",AppConstant.iZ_T_KEY: t,AppConstant.iZ_RETURN_BIDS: "0.0"]
         finalDataValue.setValue("0", forKey: "result")
-        bidsData.append(servedData)
+//        bidsData.append(servedData)
         finalDataValue.setValue(t, forKey: "ta")
         finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
         finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
@@ -1147,6 +1182,28 @@ public class iZooto : NSObject
         if let action2url = notificationData.ankey?.act2link,
            notificationData.global?.act2name != nil{
             notificationData.ankey?.act2link = getParseArrayValue(jsonData: jsonArray, sourceString: action2url)
+        }
+        
+        //get the value of RC
+        if notificationData.ankey?.adrc != nil {
+            var urlArr: [String] = []
+            if let val = notificationData.ankey?.adrc {
+                for urlStr in val {
+                    urlArr.append(getParseArrayValue(jsonData: jsonArray, sourceString: urlStr))
+                }
+            }
+            notificationData.ankey?.adrc = urlArr
+        }
+        
+        //get RV url
+        if notificationData.ankey?.adrv != nil {
+            var rvUrlArr: [String] = []
+            if let urlStrArr = notificationData.ankey?.adrv{
+                for urlStr in urlStrArr{
+                    rvUrlArr.append(getParseArrayValue(jsonData: jsonArray, sourceString: urlStr))
+                }
+            }
+            notificationData.ankey?.adrv = rvUrlArr
         }
     }
 
@@ -1225,18 +1282,11 @@ public class iZooto : NSObject
             let startDate = Date()
             tempData.setValue([anData], forKey: AppConstant.iZ_ANKEY)
             finalData["aps"] = tempData
+            finalDataValue.setValue([], forKey: AppConstant.iZ_SERVEDKEY)
             if let apsDictionary = finalData["aps"] as? NSDictionary {
                 if var notificationData = Payload(dictionary: apsDictionary){
                     if(notificationData.global?.rid != nil && notificationData.global?.created_on != nil)
                     {
-                        let cpmValue = anData["cpm"] as? String ?? ""
-                        let ctrValue = anData["ctr"] as? String ?? ""
-                        let cpcValue = anData["cpc"] as? String ?? ""
-                        if cpcValue != ""{
-                            cpcFinalValue = cpcValue
-                        }else{
-                            cpcFinalValue = cpmValue
-                        }
                         let session: URLSession = {
                             let configuration = URLSessionConfiguration.default
                             configuration.timeoutIntervalForRequest = 2
@@ -1263,15 +1313,6 @@ public class iZooto : NSObject
                                                 }
                                             }else{
                                                 if let jsonDictionary = json as? [String:Any] {
-                                                    if cpmValue != "" {
-                                                        let cpcString = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
-                                                        if let cpc = Double(cpcString),
-                                                           let ctrValue = Double(ctrValue) {
-                                                            finalCPCValue = String(cpc / (10 * ctrValue))
-                                                        }
-                                                    } else {
-                                                        finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
-                                                    }
                                                     // get title
                                                     processNotificationData(notificationData: &notificationData, jsonDictionary: jsonDictionary, apsDictionary: apsDictionary, bundleName: bundleName)
                                                 }
@@ -1286,15 +1327,6 @@ public class iZooto : NSObject
                                                     }
                                                     return
                                                 }else{
-                                                    if cpmValue != "" {
-                                                        if let cpcString = getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue) as? String,
-                                                           let cpcValue = Double(cpcString),
-                                                           let cprValue = Double(cprValue) {
-                                                            finalCPCValue = String(cpcValue / (10 * cprValue))
-                                                        }
-                                                    } else {
-                                                        finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
-                                                    }
                                                     //title
                                                     processArrayNotificationData(notificationData: &notificationData, jsonArray: jsonArray)
                                                 }
@@ -1320,6 +1352,16 @@ public class iZooto : NSObject
                                                 RestAPI.callAdMediationImpressionApi(finalDict: finalDict, bundleName: bundleName, userInfo: userInfo)
                                             }
                                         }
+                                        
+                                        //call rv api here for pf = 1 ads
+                                        if notificationData.ankey?.adrv != nil{
+                                            if let rvArr = notificationData.ankey?.adrv{
+                                                for url in rvArr {
+                                                    RestAPI.callRV_RC_Request(bundleName: bundleName, urlString: url)
+                                                }
+                                            }
+                                        }
+                                        
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                             autoreleasepool {
                                                 guard let string = notificationData.ankey?.bannerImageAd else { return }
@@ -1444,25 +1486,27 @@ public class iZooto : NSObject
                                                         if let cpc = Double(cpcString),
                                                            let ctrValue = Double(ctrValue) {
                                                             finalCPCValue = String(cpc / (10 * ctrValue))
+                                                        }else{
+                                                            finalCPCValue = "0.0"
                                                         }
                                                     } else {
                                                         finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
                                                     }
                                                     let t = Int(Date().timeIntervalSince(startDate) * 1000)
-                                                    if let finalCPCValueDouble = Double(finalCPCValue) {
-                                                        let finalCPCDouble = floor(finalCPCValueDouble * 10000) / 10000
-                                                        bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1,AppConstant.iZ_B_KEY: finalCPCDouble, AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble])
-                                                        if let anKeyDict = anKey[fuCount] as? [String: Any] {
-                                                            anData = [anKeyDict]
-                                                            tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
-                                                            finalData["aps"] = tempData
-                                                        }
-                                                        if succ != "done" {
-                                                            succ = "true"
-                                                            servedData = [AppConstant.iZ_A_KEY: fuCount + 1,AppConstant.iZ_B_KEY: finalCPCDouble,AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble]
-                                                            finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
-                                                        }
+                                                    let finalCPCValueDouble = Double(finalCPCValue) ?? 0.0
+                                                    let finalCPCDouble = floor(finalCPCValueDouble * 10000) / 10000
+                                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1,AppConstant.iZ_B_KEY: finalCPCDouble, AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble])
+                                                    if let anKeyDict = anKey[fuCount] as? [String: Any] {
+                                                        anData = [anKeyDict]
+                                                        tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                                        finalData["aps"] = tempData
                                                     }
+                                                    if succ != "done" {
+                                                        succ = "true"
+                                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1,AppConstant.iZ_B_KEY: finalCPCDouble,AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble]
+                                                        finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
+                                                    }
+                                                    
                                                     // get title
                                                     processNotificationData(notificationData: &notificationData, jsonDictionary: jsonDictionary, apsDictionary: apsDictionary, bundleName: bundleName)
                                                 }
@@ -1499,25 +1543,27 @@ public class iZooto : NSObject
                                                         if let cpc = Double(cpcString),
                                                            let ctrValue = Double(ctrValue) {
                                                             finalCPCValue = String(cpc / (10 * ctrValue))
+                                                        }else{
+                                                            finalCPCValue = "0.0"
                                                         }
                                                     } else {
                                                         finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
                                                     }
                                                     let t = Int(Date().timeIntervalSince(startDate) * 1000)
-                                                    if let finalCPCValueDouble = Double(finalCPCValue) {
-                                                        let finalCPCDouble = floor(finalCPCValueDouble * 10000) / 10000
-                                                        bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: finalCPCDouble, AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble])
-                                                        if let anKeyDict = anKey[fuCount] as? [String: Any] {
-                                                            anData = [anKeyDict]
-                                                            tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
-                                                            finalData["aps"] = tempData
-                                                        }
-                                                        if succ != "done" {
-                                                            succ = "true"
-                                                            servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: finalCPCDouble, AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble]
-                                                            finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
-                                                        }
+                                                    let finalCPCValueDouble = Double(finalCPCValue) ?? 0.0
+                                                    let finalCPCDouble = floor(finalCPCValueDouble * 10000) / 10000
+                                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: finalCPCDouble, AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble])
+                                                    if let anKeyDict = anKey[fuCount] as? [String: Any] {
+                                                        anData = [anKeyDict]
+                                                        tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                                                        finalData["aps"] = tempData
                                                     }
+                                                    if succ != "done" {
+                                                        succ = "true"
+                                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: finalCPCDouble, AppConstant.iZ_T_KEY: t, AppConstant.iZ_RETURN_BIDS: finalCPCDouble]
+                                                        finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
+                                                    }
+                                                    
                                                     //title
                                                     processArrayNotificationData(notificationData: &notificationData, jsonArray: jsonArray)
                                                 }
@@ -2908,14 +2954,14 @@ public class iZooto : NSObject
         }
         
         // Add Event Functionality
-    @objc public static func addEvent(bundleName: String, eventName: String, data: Dictionary<String, Any>) {
+    @objc public static func addEvent(eventName: String, data: Dictionary<String, Any>) {
             guard !eventName.isEmpty else { return }
             
             let returnData = Utils.dataValidate(data: data)
             do {
                 if let theJSONData = try? JSONSerialization.data(withJSONObject: returnData, options: .fragmentsAllowed),
                    let validateData = String(data: theJSONData, encoding: .utf8) {
-                    
+                    let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
                     if let token = Utils.getUserDeviceToken(bundleName: bundleName), !token.isEmpty {
                         RestAPI.callEvents(bundleName: bundleName, eventName: Utils.eventValidate(eventName: eventName), data: validateData as NSString, pid: Utils.getUserId(bundleName: bundleName) ?? "", token: token)
                     } else {
@@ -3132,6 +3178,10 @@ extension String {
     func fromBase64() -> String? {
         guard let data = Data(base64Encoded: self) else { return nil }
         return String(data: data, encoding: .utf8)
+    }
+    
+    func removingTilde() -> String {
+        return self.contains("~") ? self.replacingOccurrences(of: "~", with: "") : self
     }
 }
 extension Double {
