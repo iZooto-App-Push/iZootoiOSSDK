@@ -213,7 +213,7 @@ struct AppDetails: Codable {
             name: bundle.infoDictionary?["CFBundleName"] as? String ?? "",
             version: bundle.infoDictionary?["CFBundleShortVersionString"] as? String ?? "",
             bundleId: bundle.bundleIdentifier ?? "",
-            sdkversion: "2.3.5"
+            sdkversion: RestAPI.SDKVERSION
         )
     }
     

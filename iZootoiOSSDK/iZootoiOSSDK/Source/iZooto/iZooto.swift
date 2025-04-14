@@ -384,6 +384,12 @@ public class iZooto : NSObject
                 sharedUserDefaults.synchronize()
             }
          
+        } else if (badgeNumber == 2) {
+            if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)) {
+                userDefaults.set(true, forKey: "badgeViaFunction")
+                userDefaults.setValue(badgeNumber, forKey: "BADGECOUNT")
+                userDefaults.synchronize()
+            }
         }
         else
         {
@@ -1648,9 +1654,17 @@ public class iZooto : NSObject
     @objc public static func didReceiveNotificationExtensionRequest(bundleName : String,soundName :String,isBadge : Bool,
                                                                     request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
     {
-        var groupName = "group."+bundleName+".iZooto"
+        let groupName = "group."+bundleName+".iZooto"
         let userInfo = request.content.userInfo
-        var isEnabled = false
+        let isEnabled = false
+        if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
+            let appId = userDefaults.value(forKey: "appID") as? String ?? ""
+            if appId.isEmpty {
+                let errorMessage = "Bundle name mismatch: Please ensure the bundle name in the NotificationService class matches the main app's bundle identifier. A mismatch can affect push notifications, badge count, delivery and impressions."
+                debugPrint(errorMessage)
+                Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(errorMessage) , your bundle name is :\(bundleName)", className: "iZooto", methodName: "didReceiveNotification", rid: nil, cid: nil, userInfo: userInfo)
+            }
+        }
         if let jsonDictionary = userInfo as? [String:Any] {
             if let aps = jsonDictionary["aps"] as? NSDictionary{
                 if aps.value(forKey: AppConstant.iZ_ANKEY) != nil {
@@ -2518,7 +2532,7 @@ public class iZooto : NSObject
         }
     }
     
-    // Handle the clicks the notification from Banner,Button
+    //MARK: Handle the clicks the notification from Banner,Button
     @objc public static func notificationHandler(response : UNNotificationResponse)
     {
         let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
@@ -2526,8 +2540,14 @@ public class iZooto : NSObject
             let badgeC = userDefaults.integer(forKey:"Badge")
             let isBadge = userDefaults.bool(forKey: "isBadge")
             if isBadge{
-                self.badgeCount = badgeC
-                userDefaults.set(badgeC - 1, forKey:"Badge")
+                if userDefaults.integer(forKey: "BADGECOUNT") == 2 {
+                    self.badgeCount = 0
+                    userDefaults.set(0, forKey:"Badge")
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                }else{
+                    self.badgeCount = badgeC
+                    userDefaults.set(badgeC - 1, forKey:"Badge")
+                }
             }else{
                 self.badgeCount = 0
                 userDefaults.set(0, forKey:"Badge")

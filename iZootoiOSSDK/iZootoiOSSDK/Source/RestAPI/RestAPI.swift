@@ -44,7 +44,7 @@ public class RestAPI : NSObject
     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
-    static let SDKVERSION = "2.4.2"
+    static let SDKVERSION = "2.4.3"
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var EMAIL_CAPTURE_API = "https://eenp.izooto.com/eenp"
    
@@ -817,7 +817,7 @@ public class RestAPI : NSObject
             "appDetails": [
                 "name": appDetails.name,
                 "version": appDetails.version,
-                "bundleID": appDetails.bundleId,
+                "bundleID": bundleName,
             ],
             "sdkDetails": [
                 "pid": pid,
