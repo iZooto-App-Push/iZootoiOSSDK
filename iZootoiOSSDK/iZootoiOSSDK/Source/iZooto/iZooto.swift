@@ -23,9 +23,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 @objc
 public class iZooto : NSObject
 {
-    static var appDelegate = UIApplication.shared.delegate!
-//    private static var myIdLnArray: [[String:Any]] = []
-//    private static var myRCArray: [[String:Any]] = []
+    static var appDelegate = UIApplication.shared.delegate
     private let application : UIApplication
     private static var type = "0"
     private static let checkData = 1 as Int
@@ -59,7 +57,6 @@ public class iZooto : NSObject
     @objc private static var bidsData = [NSMutableDictionary()]
     //to store category details
     private static var categoryArray: [[String:Any]] = []
-//    @objc static var groupName = Utils.getBundleName()
     
     @objc public init(application : UIApplication)
     {
@@ -185,117 +182,192 @@ public class iZooto : NSObject
         }
     }
     // get IDFA ID
+    /// Fetches the Identifier for Advertisers (IDFA) asynchronously after a 5-second delay.
+    /// Also triggers token registration if not already done and tracking is authorized.
+    /// - Parameter completion: A closure returning the IDFA string.
     @objc public static func getIDFAID(completion: @escaping (String) -> Void) {
-        // Default IDFA value if tracking is not authorized or available
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0){
+        
+        // Perform IDFA retrieval and token registration on the main thread after a 5-second delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             var idfa = ""
             
+            // Handle IDFA retrieval for iOS 14 and later
             if #available(iOS 14, *) {
+                // Request user's permission to track
                 ATTrackingManager.requestTrackingAuthorization { status in
                     DispatchQueue.main.async {
                         switch status {
                         case .authorized:
-                            // Tracking authorized, get the IDFA
+                            // User granted permission, retrieve IDFA
                             idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                            
+                            // Fetch bundle identifier for retrieving associated user values
                             let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
+                            
+                            // Retrieve stored device token and PID (user ID)
                             guard
                                 let token = Utils.getUserDeviceToken(bundleName: bundleName), !token.isEmpty,
                                 let pid = Utils.getUserId(bundleName: bundleName), pid != "" else {
+                                // Exit if required values are missing
                                 return
                             }
-                            // Check if the function has already been called
+                            
+                            // Ensure token registration only happens once
                             let defaults = UserDefaults.standard
                             if !defaults.bool(forKey: "registerTokenKey") {
+                                // Register token using REST API
                                 RestAPI.registerToken(bundleName: bundleName, token: token, pid: pid)
-                                defaults.set(true, forKey: "registerTokenKey") // Mark as registered
+                                // Mark as registered
+                                defaults.set(true, forKey: "registerTokenKey")
                             }
-                            
+                        
                         case .denied, .notDetermined, .restricted:
-                            // Access denied or unavailable; return an empty or default value
+                            // User denied or has not yet made a decision, fallback to fetching IDFA (may be all-zero)
                             idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                            
                         @unknown default:
+                            // Handle any future unknown statuses
                             idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
                         }
-                        // Call completion handler with the IDFA value
+                        
+                        // Return IDFA via completion handler
                         completion(idfa)
                     }
                 }
             } else {
-                // For iOS versions below 14, fetch the IDFA directly
+                // For iOS versions below 14, directly retrieve IDFA
                 idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                
+                // Fetch bundle identifier for retrieving associated user values
                 let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
+                
+                // Retrieve stored device token and PID (user ID)
                 guard
                     let token = Utils.getUserDeviceToken(bundleName: bundleName), !token.isEmpty,
                     let pid = Utils.getUserId(bundleName: bundleName), pid != "" else {
+                    // Exit if required values are missing
                     return
                 }
-                // Check if the function has already been called
+                
+                // Ensure token registration only happens once
                 let defaults = UserDefaults.standard
                 if !defaults.bool(forKey: "registerTokenKey") {
+                    // Register token using REST API
                     RestAPI.registerToken(bundleName: bundleName, token: token, pid: pid)
-                    defaults.set(true, forKey: "registerTokenKey") // Mark as registered
+                    // Mark as registered
+                    defaults.set(true, forKey: "registerTokenKey")
                 }
+                
+                // Return IDFA via completion handler
                 completion(idfa)
             }
         }
     }
 
+
     
-    // register for pushNotification Setting
-    @objc public  static  func registerForPushNotifications() {
+    /// Registers the app for push notification settings and requests user permission.
+    /// This method sets the UNUserNotificationCenter delegate and prompts the user to allow notifications.
+    @objc public static func registerForPushNotifications() {
+        
+        // Ensure the OS version supports UNUserNotificationCenter (iOS 11+)
         if #available(iOS 11.0, *) {
+            // Set the current notification center's delegate to the app delegate
             UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
         }
+        
+        // Again, ensure the device is running iOS 11+ before requesting authorization
         if #available(iOS 11.0, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-                (granted, error) in
+            // Request authorization for alert, sound, and badge notifications
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+                
+                // Set the delegate again inside the callback to ensure it's applied
                 UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                
+                // Log whether permission was granted
+                debugPrint(AppConstant.PERMISSION_GRANTED, "\(granted)")
+                
+                // If permission is not granted, exit early
                 guard granted else { return }
+                
+                // Proceed to fetch the current notification settings
                 getNotificationSettings()
             }
         }
     }
+
     
-    // provision setting
-    @objc private static func registerForPushNotificationsProvisional()
-    {
+    /// Requests provisional authorization for push notifications.
+    /// This allows the app to deliver notifications quietly without requiring the user's immediate permission.
+    @objc private static func registerForPushNotificationsProvisional() {
+        
+        // Ensure the iOS version is 12.0 or later, as provisional authorization is only supported from iOS 12 onwards
         if #available(iOS 12.0, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge,.provisional]) {
-                (granted, error) in
-                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+            
+            // Request authorization with provisional option (notifications are delivered silently without alerting the user initially)
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .provisional]) { (granted, error) in
+                
+                // Log whether the user provisionally granted permission
+                debugPrint(AppConstant.PERMISSION_GRANTED, "\(granted)")
+                
+                // If permission not granted, exit
                 guard granted else { return }
+                
+                // Fetch and handle the user's notification settings
                 getNotificationSettingsProvisional()
             }
         }
     }
+
     
-    //  Handle notification prompt setting
-    @objc  private static func getNotificationSettings() {
+    /// Handles notification prompt settings by checking if the user has granted authorization,
+    /// and if so, registers the app for remote notifications.
+    @objc private static func getNotificationSettings() {
+        
+        // Ensure the iOS version supports UNUserNotificationCenter (iOS 11+)
         if #available(iOS 11.0, *) {
+            
+            // Fetch the current notification settings
             UNUserNotificationCenter.current().getNotificationSettings { settings in
+                
+                // Exit early if the user has not authorized notifications
                 guard settings.authorizationStatus == .authorized else { return }
+                
+                // Register the app for remote (push) notifications on the main thread
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
             }
         }
     }
+
     
-    // Handle provisional setting
-    @objc  private static func getNotificationSettingsProvisional() {
+    /// Handles notification settings specifically for provisional authorization.
+    /// If the user has provisionally allowed notifications, this registers the app for remote notifications.
+    @objc private static func getNotificationSettingsProvisional() {
+        
+        // Ensure iOS version is 11.0 or later to use UNUserNotificationCenter
         if #available(iOS 11.0, *) {
+            
+            // Retrieve the current notification settings
             UNUserNotificationCenter.current().getNotificationSettings { settings in
+                
+                // Check if the authorization status is 'provisional' (iOS 12+ feature)
                 if #available(iOS 12.0, *) {
-                    guard settings.authorizationStatus == .provisional else { return }
+                    guard settings.authorizationStatus == .provisional else {
+                        // Exit if the user hasn't provisionally allowed notifications
+                        return
+                    }
                 }
+                
+                // Register the app for remote notifications on the main thread
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
             }
         }
     }
+
     
     /* Getting APNS Token from this methods */
     @objc public static func getToken(deviceToken : Data)
@@ -330,10 +402,10 @@ public class iZooto : NSObject
                 userDefaults.set(pid, forKey: AppConstant.REGISTERED_ID)
                 userDefaults.synchronize()
             }
-            if(RestAPI.SDKVERSION != sharedUserDefault?.string(forKey: AppConstant.iZ_SDK_VERSION)) || (RestAPI.getAppVersion() != sharedUserDefault?.string(forKey: AppConstant.iZ_APP_VERSION))
+            if(RestAPI.SDKVERSION != sharedUserDefault?.string(forKey: AppConstant.iZ_SDK_VERSION)) || (Utils.getAppVersion() != sharedUserDefault?.string(forKey: AppConstant.iZ_APP_VERSION))
             {
                 sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: AppConstant.iZ_SDK_VERSION)
-                sharedUserDefault?.set(RestAPI.getAppVersion(), forKey: AppConstant.iZ_APP_VERSION)
+                sharedUserDefault?.set(Utils.getAppVersion(), forKey: AppConstant.iZ_APP_VERSION)
                 RestAPI.registerToken(bundleName: bundleName, token: token, pid: pid)
             }
         }
@@ -344,8 +416,8 @@ public class iZooto : NSObject
                 if(pid != "" && token != "")
                 {
                     RestAPI.registerToken(bundleName: bundleName, token: token, pid: pid)
-                    if RestAPI.getAppVersion() != ""{
-                        sharedUserDefault?.set(RestAPI.getAppVersion(), forKey: AppConstant.iZ_APP_VERSION)
+                    if Utils.getAppVersion() != ""{
+                        sharedUserDefault?.set(Utils.getAppVersion(), forKey: AppConstant.iZ_APP_VERSION)
                     }
                     sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: AppConstant.iZ_SDK_VERSION)
                     sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
@@ -367,53 +439,77 @@ public class iZooto : NSObject
         }
     }
     
-    // handle the badge count
-    @objc public static func setBadgeCount(badgeNumber : NSInteger)
-    {
+    /// Handles setting the app's badge count and stores it in shared UserDefaults.
+    /// Behavior changes based on the value of `badgeNumber`.
+    ///
+    /// - Parameter badgeNumber: The badge count value to be set.
+    @objc public static func setBadgeCount(badgeNumber: NSInteger) {
+        
+        // Retrieve the app's bundle identifier
         let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
-        if(badgeNumber == -1)
-        {
-
+        
+        // If badgeNumber is -1, only update sharedUserDefault without using App Group
+        if badgeNumber == -1 {
             sharedUserDefault?.setValue(badgeNumber, forKey: "BADGECOUNT")
         }
-        if(badgeNumber == 1)
-        {
+        
+        // If badgeNumber is 1, store the value and a flag into app group shared UserDefaults
+        if badgeNumber == 1 {
             if let sharedUserDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)) {
-                sharedUserDefaults.set(true, forKey: "badgeViaFunction")
-                sharedUserDefaults.setValue(badgeNumber, forKey: "BADGECOUNT")
+                sharedUserDefaults.set(true, forKey: "badgeViaFunction")          // Mark that the badge was set via function
+                sharedUserDefaults.setValue(badgeNumber, forKey: "BADGECOUNT")    // Store the badge count
                 sharedUserDefaults.synchronize()
             }
-         
-        } else if (badgeNumber == 2) {
+        }
+        // If badgeNumber is 2, same behavior as above with separate condition
+        else if badgeNumber == 2 {
             if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)) {
                 userDefaults.set(true, forKey: "badgeViaFunction")
                 userDefaults.setValue(badgeNumber, forKey: "BADGECOUNT")
+                userDefaults.set(0, forKey:"Badge")
+                UIApplication.shared.applicationIconBadgeNumber = 0
                 userDefaults.synchronize()
             }
         }
-        else
-        {
+        // For all other badgeNumber values (except -1), only set the flag without storing count
+        else {
             if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)) {
                 userDefaults.set(true, forKey: "badgeViaFunction")
                 userDefaults.synchronize()
             }
         }
     }
+
     
-    @objc public static func  syncUserDetailsEmail(email:String,fName:String,lName : String)
-    {
+    /// Syncs the user's email, first name, and last name with the backend if the email is new.
+    /// It also stores the email locally and ensures input validation.
+    ///
+    /// - Parameters:
+    ///   - email: The user's email address.
+    ///   - fName: The user's first name.
+    ///   - lName: The user's last name.
+    @objc public static func syncUserDetailsEmail(email: String, fName: String, lName: String) {
+        
+        // Fetch the bundle identifier
         let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
+        
+        // Validate email is not empty
         guard email != "" else {
             print("Email should not be blank")
             return
         }
+        
+        // Retrieve stored token and pid (user identifier)
         let token = Utils.getUserDeviceToken(bundleName: bundleName)
         let pid = Utils.getUserId(bundleName: bundleName) ?? ""
         
-        if(email != (sharedUserDefault?.string(forKey: "email")))
-        {
+        // Proceed only if the email is different from the one already stored
+        if email != sharedUserDefault?.string(forKey: "email") {
+            
+            // Save new email in sharedUserDefault
             sharedUserDefault?.set(email, forKey: "email")
             
+            // Limit the length of first and last names to 50 characters
             let maxLength = 50
             var firstname = fName
             var lastName = lName
@@ -423,41 +519,73 @@ public class iZooto : NSObject
             if lastName.count > maxLength {
                 lastName = String(lastName.prefix(maxLength))
             }
-            if(email.count<100){
+            
+            // Check email length before proceeding
+            if email.count < 100 {
+                // Validate email format
                 if isValidEmail(email) {
-                    RestAPI.addEmailDetails(bundleName: bundleName, token: token ?? "", pid: pid, email: email, fName: firstname, lName: lastName)
+                    // Send details to backend using REST API
+                    RestAPI.addEmailDetails(
+                        bundleName: bundleName,
+                        token: token ?? "",
+                        pid: pid,
+                        email: email,
+                        fName: firstname,
+                        lName: lastName
+                    )
                 } else {
                     print("In-Valid Email Address")
                 }
             }
+        } else {
+            print("Email id already exists")
         }
-        else{
-            print("Email id already exits")
-        }
-        
     }
-    static  func isValidEmail(_ email: String) -> Bool {
+
+    /// Validates if the provided email string matches a standard email format.
+    ///
+    /// - Parameter email: The email address string to validate.
+    /// - Returns: A boolean indicating whether the email format is valid or not.
+    static func isValidEmail(_ email: String) -> Bool {
+        // Regular expression pattern for validating an email address
         let emailRegex = #"^\S+@\S+\.\S+$"#
+        
+        // Create an NSPredicate with the regex pattern to match the email string
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        
+        // Evaluate the email string against the regular expression
         return emailPredicate.evaluate(with: email)
     }
+
     
-    //All Notification Data
-    @objc public static func getNotificationFeed(isPagination: Bool,completion: @escaping (String?, Error?) -> Void){
+    /// Fetches the notification feed, optionally supporting pagination.
+    ///
+    /// - Parameter isPagination: A boolean value indicating whether pagination should be used to fetch the next set of data.
+    /// - Parameter completion: A closure that returns either a JSON string (on success) or an error message (on failure).
+    @objc public static func getNotificationFeed(isPagination: Bool, completion: @escaping (String?, Error?) -> Void) {
+        // Retrieve the bundle name (App identifier) to access related user data
         let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
-        if let userID = Utils.getUserId(bundleName: bundleName), let token = Utils.getUserDeviceToken(bundleName: bundleName){
-            RestAPI.fetchDataFromAPI(isPagination: isPagination,iZPID: userID) { (jsonString, error) in
+        
+        // Ensure both user ID and device token are available before making the API call
+        if let userID = Utils.getUserId(bundleName: bundleName), let token = Utils.getUserDeviceToken(bundleName: bundleName) {
+            // Call API to fetch the notification feed, passing the pagination flag and user ID
+            RestAPI.fetchDataFromAPI(isPagination: isPagination, iZPID: userID) { (jsonString, error) in
+                // Handle error scenario (API call failed)
                 if let error = error {
+                    // Log error and return a message indicating no more data is available
                     debugPrint(error)
                     completion("No more data", nil)
                 } else if let jsonString = jsonString {
+                    // On successful response, return the fetched JSON string via completion handler
                     completion(jsonString, nil)
                 }
             }
-        }else{
-            completion("Feed data is not enable, kindly contact to support team.", nil)
+        } else {
+            // If user ID or device token is not available, return an error message via completion handler
+            completion("Feed data is not enabled, kindly contact the support team.", nil)
         }
     }
+
     
     // Ad's Fallback Url Call
     @available(iOS 11.0, *)
@@ -1935,7 +2063,7 @@ public class iZooto : NSObject
     }
     
     // To handle badgeCount, Sound and call impression
-    @objc public static func setupBadgeSoundAndHandleImpression( bundleName: String, isBadge: Bool, bestAttemptContent :UNMutableNotificationContent, notificationData: Payload, userInfo: [AnyHashable : Any]? , isEnabled: Bool, soundName:String) {
+    @objc static func setupBadgeSoundAndHandleImpression( bundleName: String, isBadge: Bool, bestAttemptContent :UNMutableNotificationContent, notificationData: Payload, userInfo: [AnyHashable : Any]? , isEnabled: Bool, soundName:String) {
         // custom notification sound
         if (soundName != "")
         {
@@ -2272,7 +2400,7 @@ public class iZooto : NSObject
                 DispatchQueue.main.async {
                     let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
                     alert.addAction(UIAlertAction(title: " Not Now", style: UIAlertAction.Style.default, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction!) in
+                    alert.addAction(UIAlertAction(title: "Take me there", style: .default, handler: { (action: UIAlertAction) in
                         
                         DispatchQueue.main.async {
                             guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
@@ -2441,19 +2569,23 @@ public class iZooto : NSObject
             }
             let notificationData = Payload(dictionary: apsDict)
             let alert = UIAlertController(title: notificationData?.alert?.title, message:notificationData?.alert?.body, preferredStyle: UIAlertController.Style.alert)
-            if (notificationData?.act1name != nil && notificationData?.act1name != ""){
-                alert.addAction(UIAlertAction(title: notificationData?.act1name, style: .default, handler: { (action: UIAlertAction!) in
+            if let act1name = notificationData?.act1name, !act1name.isEmpty,
+               let act1Link = notificationData?.act1link,
+               let encodedLink = act1Link.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+               let url = URL(string: encodedLink) {
+                alert.addAction(UIAlertAction(title: act1name, style: .default, handler: { _ in
+                    DispatchQueue.main.async {
+                        UIApplication.shared.open(url)
+                    }
                 }))
             }
-            if (notificationData?.act2name != nil && notificationData?.act2name != "")
-            {
-                alert.addAction(UIAlertAction(title: notificationData?.act2name, style: .default, handler: { (action: UIAlertAction!) in
-                    
-                    let izUrlStr = notificationData?.act2link?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                    if let url = URL(string:izUrlStr ?? "") {
-                        DispatchQueue.main.async {
-                            UIApplication.shared.open(url)
-                        }
+            if let act2Name = notificationData?.act2name, !act2Name.isEmpty,
+               let act2Link = notificationData?.act2link,
+               let encodedLink = act2Link.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+               let url = URL(string: encodedLink) {
+                alert.addAction(UIAlertAction(title: act2Name, style: .default, handler: { _ in
+                    DispatchQueue.main.async {
+                        UIApplication.shared.open(url)
                     }
                 }))
             }
@@ -2667,7 +2799,7 @@ public class iZooto : NSObject
                                                 if checkWebview {
                                                     landingURLDelegate?.onHandleLandingURL(url: act1link)
                                                 } else {
-                                                    ViewController.seriveURL = act1link
+                                                    ViewController.serviceURL = act1link
                                                     if let keyWindow = UIApplication.shared.keyWindow {
                                                         keyWindow.rootViewController?.present(ViewController(), animated: true, completion: nil)
                                                     }
@@ -2700,7 +2832,7 @@ public class iZooto : NSObject
                                                 if checkWebview {
                                                     landingURLDelegate?.onHandleLandingURL(url: act2link)
                                                 } else {
-                                                    ViewController.seriveURL = act2link
+                                                    ViewController.serviceURL = act2link
                                                     if let keyWindow = UIApplication.shared.keyWindow {
                                                         keyWindow.rootViewController?.present(ViewController(), animated: true, completion: nil)
                                                     }
@@ -2728,7 +2860,7 @@ public class iZooto : NSObject
                                             if checkWebview {
                                                 landingURLDelegate?.onHandleLandingURL(url: url)
                                             } else {
-                                                ViewController.seriveURL = url
+                                                ViewController.serviceURL = url
                                                 if let keyWindow = UIApplication.shared.keyWindow {
                                                     keyWindow.rootViewController?.present(ViewController(), animated: true, completion: nil)
                                                 }
@@ -2766,8 +2898,10 @@ public class iZooto : NSObject
                                         }
                                         else
                                         {
-                                            ViewController.seriveURL = notificationData.url
-                                            UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                            ViewController.serviceURL = notificationData.url
+                                            if let keyWindow = UIApplication.shared.keyWindow {
+                                                keyWindow.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                            }
                                         }
                                     }
                                 }
@@ -2919,7 +3053,7 @@ public class iZooto : NSObject
                 let notifcationData = Payload(dictionary: apsDict)
                 
                 if let inApp = notifcationData?.inApp, inApp.contains("1"), !inApp.isEmpty {
-                    ViewController.seriveURL = notifcationData?.url
+                    ViewController.serviceURL = notifcationData?.url
                     if let keyWindow = UIApplication.shared.keyWindow, let rootViewController = keyWindow.rootViewController {
                         rootViewController.present(ViewController(), animated: true, completion: nil)
                     }
@@ -2946,7 +3080,7 @@ public class iZooto : NSObject
         }
         
         // handle the addtional data
-        @objc public static func handleClicks(response : UNNotificationResponse , actionType : String)
+        @objc static func handleClicks(response : UNNotificationResponse , actionType : String)
         {
             let userInfo = response.notification.request.content.userInfo
             if let notificationDictionary = userInfo[AppConstant.iZ_NOTIFCATION_KEY_NAME] as? NSDictionary {
@@ -2968,7 +3102,7 @@ public class iZooto : NSObject
             
         }
         
-        @objc public static func getQueryStringParameter(url: String, param: String) -> String? {
+        @objc static func getQueryStringParameter(url: String, param: String) -> String? {
             guard let url = URLComponents(string: url) else { return nil }
             return url.queryItems?.first(where: { $0.name == param })?.value
         }

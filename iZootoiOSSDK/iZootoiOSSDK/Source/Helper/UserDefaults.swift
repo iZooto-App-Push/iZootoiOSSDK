@@ -37,16 +37,7 @@ extension UserDefaults
          Constant().userDefault.set(token, forKey: Constant().userToken)
        // UserDefaults.standard.synchronize()
     }
-    public  static func getUserToken()->NSString
-    {
-        if  Constant().userDefault.string(forKey: Constant().userToken) != nil{
-            return  Constant().userDefault.string(forKey: Constant().userToken)! as NSString
-        }
-        else
-        {
-            return "Retry Again"
-        }
-    }
+
  
     public static func isRegistered(isRegister : Bool)
     {

@@ -41,7 +41,7 @@ public class Payload  : NSObject{
     public var furc : [String]?
     public var finalBids: [String: Any]?
     
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
+    internal class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
     {
         var models:[Payload] = []
         for item in array {
@@ -120,7 +120,7 @@ public class Payload  : NSObject{
     }
     
     
-    public func dictionaryRepresentation() -> NSDictionary {
+    internal func dictionaryRepresentation() -> NSDictionary {
         let dictionary = NSMutableDictionary()
         dictionary.setValue(self.alert?.dictionaryRepresentation(), forKey: "alert")
         dictionary.setValue(self.ankey?.dictionaryRepresentation(), forKey: "an")

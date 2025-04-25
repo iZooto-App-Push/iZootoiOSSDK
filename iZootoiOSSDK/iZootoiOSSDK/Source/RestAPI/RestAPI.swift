@@ -6,12 +6,10 @@
 //  Copyright © 2020 Amit. All rights reserved.
 //
 import Foundation
-import Foundation
 import UIKit
 import AdSupport
 import AppTrackingTransparency
 import UserNotifications
-import os.log
 
 
 protocol ResponseHandler  : AnyObject{
@@ -44,7 +42,7 @@ public class RestAPI : NSObject
     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
-    static let SDKVERSION = "2.4.3"
+    static let SDKVERSION = "2.4.4"
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var EMAIL_CAPTURE_API = "https://eenp.izooto.com/eenp"
    
@@ -758,10 +756,9 @@ public class RestAPI : NSObject
                                 RestAPI.lastVisit(bundleName: bundleName, pid: pid, token:token)
                                 sharedUserDefault?.set(formattedDate, forKey: AppConstant.iZ_KEY_LAST_VISIT)
                                 let dicData = sharedUserDefault?.dictionary(forKey:AppConstant.iZ_USERPROPERTIES_KEY)
-                                if(dicData != nil)
-                                {
+                                if let safeDictData = dicData {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                                        iZooto.addUserProperties(data: dicData!)
+                                        iZooto.addUserProperties(data: safeDictData)
                                     }
                                 }
                             }
@@ -1134,14 +1131,6 @@ public class RestAPI : NSObject
                 Utils.handleOnceException(bundleName: bundleName, exceptionName: error.localizedDescription, className: "RestAPI", methodName: "addEmailDetails", rid: nil, cid: nil, userInfo: nil)
             }
         }.resume()
-    }
-    
-    // get App version
-    static func getAppVersion() -> String {
-        if let dictionary = Bundle.main.infoDictionary, let version = dictionary["CFBundleShortVersionString"] as? String{
-            return "\(version)"
-        }
-        return "0.0"
     }
     
     public static func getBundleName()->String

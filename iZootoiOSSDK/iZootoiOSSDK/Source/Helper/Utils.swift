@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 @objc
-public class Utils : NSObject
+internal class Utils : NSObject
 {
     public static  let TOKEN = "save_token"
     
@@ -28,18 +28,6 @@ public class Utils : NSObject
         let preferences = UserDefaults.standard
         preferences.set(access_token, forKey: TOKEN)
         Utils.didSave(preferences: preferences)
-    }
-    
-    public static func getAccessToken() -> String{
-        let preferences = UserDefaults.standard
-        if preferences.string(forKey: TOKEN) != nil{
-            if let access_token = preferences.string(forKey: TOKEN) {
-                return access_token
-            }
-            return "Token not found."
-        } else {
-            return ""
-        }
     }
     
     public static func getUserDeviceToken(bundleName: String) -> String? {
@@ -120,22 +108,6 @@ public class Utils : NSObject
         return "group."+bundleName+".iZooto"
     }
     
-    // get Bundle ID
-    static func getAppInfo()->String {
-        if let dictionary = Bundle.main.infoDictionary {
-            if let version = dictionary["CFBundleShortVersionString"] as? String {
-                return version
-            }
-        }
-        return "0.0"
-    }
-    
-    // get App Name
-    static func getAppName()->String {
-        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
-        return appName ?? ""
-    }
-    
     // getOS Information
     static func getOSInfo()->String {
         let os = ProcessInfo().operatingSystemVersion
@@ -144,12 +116,7 @@ public class Utils : NSObject
     
     // get App version
     static func getAppVersion() -> String {
-        if let dictionary = Bundle.main.infoDictionary{
-            if let version = dictionary["CFBundleShortVersionString"] as? String{
-                return version
-            }
-        }
-        return "0.0"
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
     }
     
     // current timestamp
@@ -158,13 +125,6 @@ public class Utils : NSObject
         let currentDate = Date()
         let since1970 = currentDate.timeIntervalSince1970
         return Int(since1970 * 1000)
-    }
-    
-    // get device id
-    static func getUUID()->String
-    {
-        let device_id = UIDevice.current.identifierForVendor?.uuidString
-        return device_id ?? ""
     }
     
     //get add version
@@ -185,12 +145,12 @@ public class Utils : NSObject
             appid = userDefaults.value(forKey: "appID") as? String ?? ""
         }
         if userDefaults.object(forKey: methodName) == nil{
-               userDefaults.set("isPresent", forKey: methodName)
+            userDefaults.set("isPresent", forKey: methodName)
             RestAPI.sendExceptionToServer(bundleName: bundleName, exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid, userInfo: userInfo ?? nil)
-               
-           } else {
-               print("Key \(methodName) already exists. Data not stored.")
-           }
+            
+        } else {
+            print("Key \(methodName) already exists. Data not stored.")
+        }
     }
     
     static func addMacros(url: String) -> String {
@@ -260,8 +220,7 @@ public class Utils : NSObject
         
         let years = components.year ?? 0
         let months = components.month ?? 0
-        let days = components.day ?? 0
-        let totalDays = calendar.dateComponents([.day], from: registeredDate, to: currentDate).day!
+        let totalDays = calendar.dateComponents([.day], from: registeredDate, to: currentDate).day ?? 0
         let totalMonths = months + years * 12
         
         return (years: years, months: totalMonths, days: totalDays)
