@@ -42,7 +42,7 @@ public class RestAPI : NSObject
     static let EXCEPTION_URL="https://aerr.izooto.com/aerr";
     static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
     static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc";
-    static let SDKVERSION = "2.4.4"
+    static let SDKVERSION = "2.4.5"
     static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     static var EMAIL_CAPTURE_API = "https://eenp.izooto.com/eenp"
    
@@ -205,7 +205,7 @@ public class RestAPI : NSObject
             }
             var request = URLRequest(url: url)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "Referer")
+            request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             let config = URLSessionConfiguration.default

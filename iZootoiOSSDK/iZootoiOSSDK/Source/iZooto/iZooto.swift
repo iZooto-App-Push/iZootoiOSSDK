@@ -385,6 +385,14 @@ public class iZooto : NSObject
         let formattedDate = format.string(from: date)
         let userDefaults1 = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName))
         let storedToken = userDefaults1?.value(forKey: AppConstant.IZ_GRPS_TKN) as? String
+        
+        if let savedString = UserDefaults.standard.string(forKey: "userPropertiesData"),
+                  let data = savedString.data(using: .utf8),
+                  let dict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                   addUserProperties(data: dict!)
+               }
+
+        
         if UserDefaults.getRegistered() && (token == storedToken)
         {
             let pid = Utils.getUserId(bundleName: bundleName) ?? ""
@@ -3132,41 +3140,23 @@ public class iZooto : NSObject
         @objc public static func addUserProperties( data : Dictionary<String,Any>)
         {
             let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
-            let returnData =  Utils.dataValidate(data: data)
-            for (key, value) in returnData {
-                guard let stringValue = value as? String, !stringValue.isEmpty else {
-                    print(AppConstant.iZ_USERPROPERTIES_VALUE)
-                    return
-                }
-                guard !key.isEmpty else {
-                    print(AppConstant.iZ_USERPROPERTIES_VALUE)
-                    return
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if (!returnData.isEmpty)
-                {
-                    guard let theJSONData = try?  JSONSerialization.data(withJSONObject: returnData,options: .fragmentsAllowed) else{
-                        return
-                    }
-                    if let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue),
-                       let token = Utils.getUserDeviceToken(bundleName: bundleName){
-                        if (!token.isEmpty)
-                        {
-                            RestAPI.callUserProperties(bundleName: bundleName, data: validationData as NSString, pid: Utils.getUserId(bundleName: bundleName) ?? "", token: token)
-                        }
-                        else
-                        {
-                            sharedUserDefault?.set(data, forKey:AppConstant.iZ_USERPROPERTIES_KEY)
-                        }
-                    }
-                }
-                else
-                {
-                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "No data found in userProperties dictionary \(data)", className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_USERPROPERTIES_KEY,rid: nil, cid: nil, userInfo: nil)
-                    
-                }
-            }
+            // Validate input
+                  guard !data.isEmpty else {
+                      print("addUserProperties: Input data is empty.")
+                      return
+                  }
+                  
+                  let token = Utils.getUserDeviceToken(bundleName: bundleName) ?? ""
+                  let pid = Utils.getUserId(bundleName: bundleName) ?? ""
+                  
+                  // If token or pid is missing, cache data for later
+                  guard !token.isEmpty, !pid.isEmpty else {
+                      if let jsonData = try? JSONSerialization.data(withJSONObject: data, options: []) {
+                          UserDefaults.standard.set(jsonData, forKey: "userPropertiesData")
+                      }
+                      return
+                  }
+                  UserPropertyManager.sendUserProperties(properties: data, bundleName: bundleName)
         }
     
         // promptForPushNotifications
