@@ -40,6 +40,12 @@ public class Payload  : NSObject{
     public var furv : [String]?
     public var furc : [String]?
     public var finalBids: [String: Any]?
+  
+    
+    public var t : String?
+    public var m : String?
+    public var bi : String?
+    public var bn : String?
     
     internal class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
     {
@@ -60,7 +66,7 @@ public class Payload  : NSObject{
             ankey = AnKey(dictionary: dictt)
         }
         
-        if let dictionary = dictionary["alert"] as? NSDictionary {
+        if let dictionary = dictionary[AppConstant.iZ_ALERTKEY] as? NSDictionary {
             alert = Alert(dictionary: dictionary)
         }
         if let gData = dictionary["g"] as? NSDictionary {
@@ -68,40 +74,40 @@ public class Payload  : NSObject{
         }
         
         key = dictionary["k"] as? Int    // key
-        id = dictionary["id"] as? String   // id
-        sound = dictionary["su"] as? String //sound
-        category = dictionary["category"] as? String  // category
+        id = (dictionary["id"] as? String)?.trimmedOrNil   // id
+        sound = (dictionary["su"] as? String)?.trimmedOrNil //sound
+        category = (dictionary["category"] as? String)?.trimmedOrNil  // category
         badge = dictionary["badge"] as? Int   //badge
-        rid = dictionary["r"] as? String  // rid
+        rid = (dictionary["r"] as? String)?.trimmedOrNil  // rid
         ttl = dictionary["tl"] as? Int  // ttl
-        tag = dictionary["tg"] as? String   //tag
-        created_on = dictionary["ct"] as? String   // created_on
+        tag = (dictionary["tg"] as? String)?.trimmedOrNil   //tag
+        created_on = (dictionary["ct"] as? String)?.trimmedOrNil   // created_on
         reqInt = dictionary["ri"] as? Int   //required Int
         mutablecontent = dictionary["mutable-content"] as? Int
-        url = dictionary["ln"] as? String   // link
-        if let url0 = dictionary["ln"] as? String {
+        url = (dictionary[AppConstant.iZ_LNKEY] as? String)?.trimmedOrNil   // link
+        if let url0 = (dictionary[AppConstant.iZ_LNKEY] as? String)?.trimmedOrNil {
             self.url = Utils.addMacros(url: url0)
         }
         //  icon = dictionary["icon"] as? String
-        act1name = dictionary["b1"] as? String  // button1 name
-        act1link = dictionary["l1"] as? String  // button 1link
-        if let url1 = dictionary["l1"] as? String {
+        act1name = (dictionary["b1"] as? String)?.trimmedOrNil  // button1 name
+        act1link = (dictionary["l1"] as? String)?.trimmedOrNil  // button 1link
+        if let url1 = (dictionary["l1"] as? String)?.trimmedOrNil {
             act1link = Utils.addMacros(url: url1)
         }
-        act2name = dictionary["b2"] as? String   // button 2 name
-        act2link = dictionary["l2"] as? String    // button 2 link
-        if let url2 = dictionary["l2"] as? String {
+        act2name = (dictionary["b2"] as? String)?.trimmedOrNil   // button 2 name
+        act2link = (dictionary["l2"] as? String)?.trimmedOrNil    // button 2 link
+        if let url2 = (dictionary["l2"] as? String)?.trimmedOrNil {
             act2link = Utils.addMacros(url: url2)
         }
-        ap = dictionary["ap"] as? String          // additional parameeter
-        cfg = dictionary["cfg"] as? String           // cfg
-        fetchurl = dictionary["fu"] as? String    // fetch_url
-        if let fetch = dictionary["fu"] as? String {
+        ap = (dictionary["ap"] as? String)?.trimmedOrNil        // additional parameeter
+        cfg = (dictionary["cfg"] as? String)?.trimmedOrNil          // cfg
+        fetchurl = (dictionary["fu"] as? String)?.trimmedOrNil    // fetch_url
+        if let fetch = (dictionary["fu"] as? String)?.trimmedOrNil {
             fetchurl = Utils.addMacros(url: fetch)
         }
-        inApp = dictionary["ia"] as? String          // inApp
-        act1id = dictionary["d1"] as? String //action1 id
-        act2id = dictionary["d2"] as? String // action2 id
+        inApp = (dictionary["ia"] as? String)?.trimmedOrNil          // inApp
+        act1id = (dictionary["d1"] as? String)?.trimmedOrNil //action1 id
+        act2id = (dictionary["d2"] as? String)?.trimmedOrNil // action2 id
         relevance_score = dictionary["rs"] as? Double // relevance score
         interrutipn_level = dictionary["il"] as? Int // interruption level
         
@@ -117,12 +123,16 @@ public class Payload  : NSObject{
             }
         }
         finalBids = dictionary["fb"] as? [String: Any]
+        t = dictionary["t"] as? String
+        m = dictionary["m"] as? String
+        bi = dictionary["bi"] as? String
+
     }
     
     
     internal func dictionaryRepresentation() -> NSDictionary {
         let dictionary = NSMutableDictionary()
-        dictionary.setValue(self.alert?.dictionaryRepresentation(), forKey: "alert")
+        dictionary.setValue(self.alert?.dictionaryRepresentation(), forKey: AppConstant.iZ_ALERTKEY)
         dictionary.setValue(self.ankey?.dictionaryRepresentation(), forKey: "an")
         dictionary.setValue(self.global?.dictionaryRepresentation(), forKey: "g")
         dictionary.setValue(self.key, forKey: "k")
@@ -136,7 +146,7 @@ public class Payload  : NSObject{
         dictionary.setValue(self.created_on, forKey: "ct")
         dictionary.setValue(self.reqInt, forKey: "ri")
         dictionary.setValue(self.mutablecontent, forKey: "mutable-content")
-        dictionary.setValue(self.url, forKey: "ln")
+        dictionary.setValue(self.url, forKey: AppConstant.iZ_LNKEY)
         dictionary.setValue(self.act1name, forKey: "b1")
         dictionary.setValue(self.act1link, forKey: "l1")
         dictionary.setValue(self.act2name, forKey: "b2")
@@ -152,6 +162,11 @@ public class Payload  : NSObject{
         dictionary.setValue(self.furc, forKey: "rc")
         dictionary.setValue(self.furv, forKey: "rv")
         dictionary.setValue(self.finalBids, forKey: "fb")
+        // for fetcher to get title, body and binner image
+        dictionary.setValue(self.t, forKey: "t")
+        dictionary.setValue(self.m, forKey: "m")
+        dictionary.setValue(self.bi, forKey: "bi")
+        dictionary.setValue(self.bn, forKey: "bn")
         
         return dictionary
     }
@@ -178,17 +193,17 @@ public class Alert {
     }
     required public init?(dictionary: NSDictionary) {
         
-        title = dictionary["title"] as? String //title
-        subtitle = dictionary["subtitle"] as? String//subtitle
-        body = dictionary["body"] as? String//body
-        attachment_url = dictionary["attachment-url"] as? String//attachment-url
+        title = (dictionary["title"] as? String)?.trimmedOrNil //title
+        subtitle = (dictionary["subtitle"] as? String)?.trimmedOrNil //subtitle
+        body = (dictionary["body"] as? String)?.trimmedOrNil //body
+        attachment_url = (dictionary["attachment-url"] as? String)?.trimmedOrNil //attachment-url
     }
     public func dictionaryRepresentation() -> NSDictionary {
         let dictionary = NSMutableDictionary()
         dictionary.setValue(self.title, forKey: "title")  //title
         dictionary.setValue(self.subtitle, forKey: "subtitle")  //subtitle
         dictionary.setValue(self.body, forKey: "body")  //body
-        dictionary.setValue(self.attachment_url, forKey: "attachment_url") // attachment_url
+        dictionary.setValue(self.attachment_url, forKey: "attachment-url") // attachment_url
         return dictionary
     }
 }
@@ -205,6 +220,7 @@ public class AnKey {
     public var adrc : [String]?
     public var act1link: String?
     public var act2link: String?
+    public var returningBids: String?
     
     public class func modelsFromDictionaryArray(array:NSArray) -> [AnKey]
     {
@@ -221,15 +237,16 @@ public class AnKey {
     }
     required public init?(dictionary: NSDictionary) {
         
-        bannerImageAd = dictionary["bi"] as? String//attachment-url
-        cpmAd = dictionary["cpm"] as? String //CPMValue
-        fetchUrlAd = dictionary["fu"] as? String // Ad- FetchUrl
-        idAd = dictionary["id"] as? String // Ad- id
-        messageAd = dictionary["m"] as? String // Ad-Message
-        titleAd = dictionary["t"] as? String //title-Ad
-        landingUrlAd = dictionary["ln"] as? String //landingUrl - Ad
-        act1link = dictionary["l1"] as? String
-        act2link = dictionary["l2"] as? String
+        bannerImageAd = (dictionary["bi"] as? String)?.trimmedOrNil//attachment-url
+        cpmAd = (dictionary["cpm"] as? String)?.trimmedOrNil //CPMValue
+        fetchUrlAd = (dictionary["fu"] as? String)?.trimmedOrNil // Ad- FetchUrl
+        idAd = (dictionary["id"] as? String)?.trimmedOrNil // Ad- id
+        messageAd = (dictionary["m"] as? String)?.trimmedOrNil // Ad-Message
+        titleAd = (dictionary["t"] as? String)?.trimmedOrNil //title-Ad
+        landingUrlAd = (dictionary[AppConstant.iZ_LNKEY] as? String)?.trimmedOrNil //landingUrl - Ad
+        act1link = (dictionary["l1"] as? String)?.trimmedOrNil
+        act2link = (dictionary["l2"] as? String)?.trimmedOrNil
+        returningBids = (dictionary["rb"] as? String)?.trimmedOrNil
         
         if let rcDict = dictionary["rc"] as? [String]{
             if rcDict.count > 0 {
@@ -251,10 +268,11 @@ public class AnKey {
         dictionary.setValue(self.idAd, forKey: "id")
         dictionary.setValue(self.messageAd, forKey: "m")
         dictionary.setValue(self.titleAd, forKey: "t")
-        dictionary.setValue(self.landingUrlAd, forKey: "ln")
+        dictionary.setValue(self.landingUrlAd, forKey: AppConstant.iZ_LNKEY)
         
         dictionary.setValue(self.adrc, forKey: "rc")
         dictionary.setValue(self.adrv, forKey: "rv")
+        dictionary.setValue(self.returningBids, forKey: "rb")
         
         return dictionary
     }
@@ -296,23 +314,23 @@ public class Global {
     }
     required public init?(dictionary: NSDictionary) {
         
-        act1name = dictionary["b1"] as? String  // button1 name
-        act1Id = dictionary["d1"] as? String  // button1 Id
-        act2name = dictionary["b2"] as? String  // button2 name
-        act2Id = dictionary["d2"] as? String  // button2 Id
-        act1link = dictionary["l1"] as? String
-        act2link = dictionary["l2"] as? String
-        cfg = dictionary["cfg"] as? String     // cfg
-        created_on = dictionary["ct"] as? String // created_on
-        inApp = dictionary["ia"] as? String   // inApp
-        id = dictionary["id"] as? String   // id
+        act1name = (dictionary["b1"] as? String)?.trimmedOrNil  // button1 name
+        act1Id = (dictionary["d1"] as? String)?.trimmedOrNil  // button1 Id
+        act2name = (dictionary["b2"] as? String)?.trimmedOrNil  // button2 name
+        act2Id = (dictionary["d2"] as? String)?.trimmedOrNil  // button2 Id
+        act1link = (dictionary["l1"] as? String)?.trimmedOrNil
+        act2link = (dictionary["l2"] as? String)?.trimmedOrNil
+        cfg = (dictionary["cfg"] as? String)?.trimmedOrNil     // cfg
+        created_on = (dictionary["ct"] as? String)?.trimmedOrNil // created_on
+        inApp = (dictionary["ia"] as? String)?.trimmedOrNil   // inApp
+        id = (dictionary["id"] as? String)?.trimmedOrNil   // id
         key = dictionary["k"] as? Int      // key
-        rid = dictionary["r"] as? String   // rid
+        rid = (dictionary["r"] as? String)?.trimmedOrNil   // rid
         reqInt = dictionary["ri"] as? Int   //required Int
-        tag = dictionary["tg"] as? String   //tag
-        ttl = dictionary["tl"] as? String   // tag
-        type = dictionary["tp"] as? String //type
-        adCategory = dictionary["category"] as? String //Ad-Category
+        tag = (dictionary["tg"] as? String)?.trimmedOrNil   //tag
+        ttl = (dictionary["tl"] as? String)?.trimmedOrNil   // tag
+        type = (dictionary["tp"] as? String)?.trimmedOrNil //type
+        adCategory = (dictionary["category"] as? String)?.trimmedOrNil //Ad-Category
     }
     
     public func dictionaryRepresentation() -> NSDictionary {
@@ -357,8 +375,8 @@ public class iZootoBase {
     }
     required public init?(dictionary: NSDictionary) {
         
-        if (dictionary["aps"] != nil) {
-            if let dictionary = dictionary["aps"] as? NSDictionary {
+        if (dictionary[AppConstant.iZ_NOTIFCATION_KEY_NAME] != nil) {
+            if let dictionary = dictionary[AppConstant.iZ_NOTIFCATION_KEY_NAME] as? NSDictionary {
                 aps = Payload(dictionary: dictionary)
             }
         }
@@ -367,11 +385,19 @@ public class iZootoBase {
         
         let dictionary = NSMutableDictionary()
         
-        dictionary.setValue(self.aps?.dictionaryRepresentation(), forKey: "aps")
+        dictionary.setValue(self.aps?.dictionaryRepresentation(), forKey: AppConstant.iZ_NOTIFCATION_KEY_NAME)
         
         return dictionary
     }
     
+}
+
+
+extension String {
+    var trimmedOrNil: String? {
+        let trimmed = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
 }
 
 

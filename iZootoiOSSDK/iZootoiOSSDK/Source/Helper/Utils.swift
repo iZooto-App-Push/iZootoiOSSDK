@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AdSupport
 @objc
 internal class Utils : NSObject
 {
@@ -32,7 +33,7 @@ internal class Utils : NSObject
     
     public static func getUserDeviceToken(bundleName: String) -> String? {
         if let userDefault = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
-            return userDefault.string(forKey: AppConstant.IZ_GRPS_TKN)
+            return userDefault.string(forKey: AppConstant.IZ_DEVICE_TOKEN)
         }else{
             return "token not found"
         }
@@ -103,7 +104,7 @@ internal class Utils : NSObject
         return returnString
     }
     
-    public static func getGroupName(bundleName: String)->String
+    public static func getGroupName(bundleName: String)->String?
     {
         return "group."+bundleName+".iZooto"
     }
@@ -169,7 +170,7 @@ internal class Utils : NSObject
                 finalUrl = finalUrl.replacingOccurrences(of: "{~UUID~}", with: token)
             }
             if finalUrl.contains("{~ADID~}") {
-                finalUrl = finalUrl.replacingOccurrences(of: "{~ADID~}", with: RestAPI.identifierForAdvertising() ?? "")
+                finalUrl = finalUrl.replacingOccurrences(of: "{~ADID~}", with: ASIdentifierManager.shared().advertisingIdentifier.uuidString)
             }
             if finalUrl.contains("{~PID~}") {
                 finalUrl = finalUrl.replacingOccurrences(of: "{~PID~}", with: pid)

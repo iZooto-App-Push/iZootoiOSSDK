@@ -1,10 +1,10 @@
 //
 //  DeviceInfo.swift
-//  iZootoiOSSDK
+//  Pods
 //
-//  Created by AMIT_SDK_DEVELOPER on 06/03/25.
-//  Copyright © 2025 Amit. All rights reserved.
+//  Created by Rambali Kumar on 30/09/24.
 //
+
 
 import UIKit
 
@@ -213,7 +213,7 @@ struct AppDetails: Codable {
             name: bundle.infoDictionary?["CFBundleName"] as? String ?? "",
             version: bundle.infoDictionary?["CFBundleShortVersionString"] as? String ?? "",
             bundleId: bundle.bundleIdentifier ?? "",
-            sdkversion: RestAPI.SDKVERSION
+            sdkversion: ApiConfig.SDK_VERSION
         )
     }
     
@@ -239,3 +239,5 @@ class AppManager {
     }
 }
 
+// Usage Example
+//AppManager.shared.printDetails()

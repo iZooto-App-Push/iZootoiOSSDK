@@ -7,6 +7,10 @@
 //
 
 import Foundation
+
+
+
+
 @objc
 class AppConstant : NSObject
 {
@@ -95,6 +99,7 @@ class AppConstant : NSObject
     static let iZ_KEY_CHECK_VERSION = "check"
     static let iZ_KEY_PLUGIN_VERSION_VALUE = "pluginVersion"
     static let iZ_KEY_PLUGIN_VRSION_NAME = "pv"
+    static let IZ_INITIALISATION_LOG = "iZooto SDK Warning: iZooto App Id appears to be misconfigured or mismatched. Kindly review and validate your integration settings via the iZooto dashboard."
     
     //Ad Mediation constant
     static let iZ_LN_ID_ARRAY = "lnArray"
@@ -112,6 +117,8 @@ class AppConstant : NSObject
     static let iZ_rcArray = "rcArray"
     static let iZ_CLICK_OFFLINE_DATA = "ClickOffData"
     static let iZ_MED_CLICK_OFFLINE_DATA = "MediationClickOffData"
+    static let iZ_RID_KEY = "rid"
+    static let iZ_CID_KEY = "cid"
     //CT
     static let iZ_catId = "catId"
     static let iZ_b1Id = "b1Id"
@@ -124,6 +131,7 @@ class AppConstant : NSObject
     static let iZ_B_KEY = "b"
     static let iZ_T_KEY = "t"
     static let iZ_RETURN_BIDS = "rb"
+    static let iZ_CTR_KEY = "ctr"
     static let IZ_LAST_VIEW = "LASTVIEW"
     static let IZ_LAST_VIEW_WEEKLY = "LASTVIEWWEEKLY"
     static let IZ_LAST_VIEW_WEEKDAYS = "VIEWWEEKDAYS"
@@ -136,13 +144,21 @@ class AppConstant : NSObject
     static let iZ_CT_KEY = "ct"
     static let iZ_P_KEY = "p"
     static let IZ_TITLE_KEY = "title"
-    static let IZ_GRPS_TKN = "DEVICETOKEN"
+    static let IZ_DEVICE_TOKEN = "device_token"
     static let iZ_PID = "PID"
     
     static let IZ_BTYPE = "8"
     static let IZ_DTYPE = "3"
     static let IZ_OS_TYPE = "5"
+    
+    
+    static let BUNDLE_IDENTIFIER = "CFBundleIdentifier"
+    static let FAILED_EMAIL = "syncUserData"
+    static let IZ_REFERER = "Referer"
+    static let AD_RESPONSE_KEY = "msgCode"
+    static let IZ_FETCH_AD_DETAILS = "fb"
+    static let IZ_MOBILE_PACKAGE_NAME = "mpn"
+    static let IZ_SDK_NAME_KEY = "sn"
+    static let IZ_SDK_NAME_VALUE = "izooto-sdk"
 
-    
-    
 }

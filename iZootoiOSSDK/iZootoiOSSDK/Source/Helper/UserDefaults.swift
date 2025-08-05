@@ -19,7 +19,6 @@ extension UserDefaults
 {
     public static func saveUserID(userID : Int)
     {
-      // print(userID)
         Constant().userDefault.set(userID, forKey: Constant().userID)
        // UserDefaults.standard.synchronize()
     }
