@@ -1,5 +1,0 @@
-#import <Foundation/Foundation.h>
-@interface PodsDummy_Pods_iZootoiOSProject_iZootoNotificationExtendsServices : NSObject
-@end
-@implementation PodsDummy_Pods_iZootoiOSProject_iZootoNotificationExtendsServices
-@end
