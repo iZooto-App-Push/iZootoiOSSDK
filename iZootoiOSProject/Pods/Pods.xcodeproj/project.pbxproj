@@ -7,36 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		11AF432668DDD9C36C431347C837FBEC /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F125B9F38F2933DAA9103F38FAC0966 /* Payload.swift */; };
-		189424BE19BBCEC61176FEB53A7C439B /* ShareUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA33AFF83BFF170759C2ADA44050A7E /* ShareUserDefault.swift */; };
-		26A28158B7F418D6A2E66AAD240187D3 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */; };
-		2749C1CA107609451F81704D4F48B646 /* Pods-iZootoiOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B201C4F280ABED4678173B09385B7B0 /* Pods-iZootoiOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		292D81ABF792CA6172187F1B6D3CE2B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		41ED17D89C0BAE4BFCDF2F38550CEBF6 /* iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 20812220CA9438455EBA6997C8452F0A /* iZootoiOSSDK-dummy.m */; };
-		76658186AFC8995733BD215FBD683E7F /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667E2DB11A83548F8CA85C341863F6B0 /* RestAPI.swift */; };
-		8D511BED29FC8091D17D9F2151FBBD7E /* iZootoiOSSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DDD80A23DE0230512414096B770C0C1 /* iZootoiOSSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		90DFA506EEACEB9A4D97320C51F125DC /* iZooto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD9D1A5FE4842D39A88167ABFD3A9AD /* iZooto.swift */; };
-		97005CFBDA8869D5DB93469DF280679E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		A395BBC7C1A217BD54385F6A0A7991E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C0F4DA6FDF39AF38F7BCA118CEF7A4 /* ViewController.swift */; };
-		BA695A6B4C2C9A4DC36E112C5C5A88F4 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FEE9D9F6FDD41D099FA0B9CF056FB /* AppConstant.swift */; };
-		BAD26AA44D492421C23FA3C447B12004 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0160B27713A8B211E842286F9A834AEC /* UserDefaults.swift */; };
-		BF0AD610CA80C37F067F30EE19CC6B5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		C6C73462E7CC5B9CAB161FD68F2E32DA /* Pods-iZootoiOSProject-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BCEF0DE8A9F0BEB909FB6957234534 /* Pods-iZootoiOSProject-dummy.m */; };
-		DCD8772DABADE13C9E940DE4C57CACF8 /* DatParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E15ABF589227D38231DF280A5E63C8D /* DatParsing.swift */; };
-		F5140AC739E1C9026C10B216FB3BD793 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD0CC0D8B13EC0EA06843367D85DB6A /* Utils.swift */; };
-		F60576294F9039C0844D7FFB2324EB8F /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FA1E335C2FE4F85A61C0211B6E5D1245 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB3F6B03881B162D0A2446EC9F25D300 /* iZootoiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B17EF20E5BED284F311F2525C9273E00 /* iZootoiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0B94CD5BEA08F5A67416A51C2E14C0ED /* SDKLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26579FC71494D003F7EF2A4BC1F59AC /* SDKLog.swift */; };
+		12141CF4E6E4D494282BB75F4BB1C3EC /* SdkSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA0A4E92E609D5BB2302D6934B1F367 /* SdkSetting.swift */; };
+		13B2E04DFD36706E051C3E12B5F9BD40 /* ShareUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668958D546455509DF1EB43FA70F865E /* ShareUserDefault.swift */; };
+		1ADBCEA2F22A341B9FAB16D7DA1451C3 /* DatParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9851A34A6ABF7B9DC5FBF07FC61032E6 /* DatParsing.swift */; };
+		247C393D9782F76C4BFCB69DF2B1A1E5 /* FetcherAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062C2BB596CC983662E4305170EA0C97 /* FetcherAds.swift */; };
+		2AC431E942559557C1ED4CE6A6E7C7D9 /* iZootoiOSSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 41007015E3745948188E7535BABCBC14 /* iZootoiOSSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		34BB82A6B0820C429E25766379B689D7 /* UserPropertyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03913A2A23EE75FEC5E08C246AE01B4F /* UserPropertyManager.swift */; };
+		37D7C85652D0C9D7CB2670BEA1537FE3 /* MediationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28DA448E85DA40090CA50D7AF7F420C /* MediationManager.swift */; };
+		3873740B4C28090167B8F2B32F5C914B /* Pods-iZootoiOSProject-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BCEF0DE8A9F0BEB909FB6957234534 /* Pods-iZootoiOSProject-dummy.m */; };
+		3948953D3788DA85F886CDCD6CCFC2F3 /* iZootoiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A8B4C7437A9EFD56322B4B59F14B427B /* iZootoiOSSDK-dummy.m */; };
+		39DCCEBAA7ABFEACA721EAA429A4DA12 /* FallbackAdsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1807411FD46E914E0B8C7BA322B06B1 /* FallbackAdsManager.swift */; };
+		45E77F79A3A5E0585CCC178AA95A146E /* iZooto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D67107EFAC9FCB29ECCE80DA0E47784 /* iZooto.swift */; };
+		534827D7AE739543817310FED1B7CD13 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0309E6111B784AD8F17D1D970E7B2BB /* Utils.swift */; };
+		54022F81F7D36BB2F10BAB5A9B9B73E5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BDA829DEFCC2CADC44EDC4370EDD3A /* ViewController.swift */; };
+		5DF6870077A629A9CCB5F7A82BD5D265 /* ApiConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F49124C1A9EA0240BF0CA9E90814606 /* ApiConfig.swift */; };
+		63A3D91D202C566B0965DA30053515E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		7E3DE975BDF074D7D045FE4BE9F11DA1 /* NotificationHandlerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179C69FCEED656F34C4AC6465F90230F /* NotificationHandlerHelper.swift */; };
+		7EDE190D9B4D8E71E5F00A4688C2FEE2 /* ForegrounNotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B3EAA7BD26E91282674842A773DDE /* ForegrounNotificationHelper.swift */; };
+		878A76B4AD8B03A00A77A6B98EDE7118 /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A64C8109B7F4055B98EB894BA73448 /* RestAPI.swift */; };
+		89801C37F85D9AE40D0F1246EFAE1CC5 /* Pods-iZootoiOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B201C4F280ABED4678173B09385B7B0 /* Pods-iZootoiOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8E1859B4D64A135B39F21DA5FC2732F8 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044849CFAE0F427C7AC95C4A4C222DC5 /* UserDefaults.swift */; };
+		94961767F28F63EB43A54E99A196CD62 /* NotificationCategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAD90C8E79B0988CAAAE9B7BEEFCB95 /* NotificationCategoryManager.swift */; };
+		96442CA8CCEB97AC48B47457FA4FF6C6 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */; };
+		9EBC47834340B181B2CEB4C7D3B3A485 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA025ACDD7064B501EBBF31F693D503C /* NetworkManager.swift */; };
+		A60241A9226D59D53B5CBE13BA0E0959 /* AppStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3F529C14E219E8DFFBAC053096E253 /* AppStorage.swift */; };
+		A922B0AA69DD6ABF2389A397626A78C3 /* EmailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F206277B83AB30C912707A6CDA4826 /* EmailManager.swift */; };
+		B1128B3A87562D1772751EB2D99A610F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		CF1953170BF6072E29AC5E6813EF4AE2 /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A7D507D0CA2C1493063EDA17F8136 /* BadgeManager.swift */; };
+		D125B0B5C1BD5EC4C456694185FB0DD3 /* iZootoiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 543CFD6D751FC1A51F14FFE2D96A5088 /* iZootoiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D7E42E87B9397C2B00C05D4ED6F3ABF0 /* DeviceTokenHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC174229CB97F9C4D0D22AC1BFB5627 /* DeviceTokenHandler.swift */; };
+		DA3FDC6AF0277EA03044AF22D036A441 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3111319EEB351876160D8E49AA7CF7D /* DeviceInfo.swift */; };
+		E013AF5987ED1247A039CD1D30BDA6EE /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FE0405A594AD2F8BEE858668DE80A2 /* APIRequest.swift */; };
+		E473B4B6C7BB5BFE573979646F818CFC /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FF608BDC04FBC66B8AD92A70A4CDE6 /* AppConstant.swift */; };
+		ED2AF69227E295738EED9179DDA3255A /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FA1E335C2FE4F85A61C0211B6E5D1245 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EE01FC165A56CDE24196BB302E9F2DCE /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0EF055FE88637283CABEBE7C3B100A /* Payload.swift */; };
+		EF62F23492BFB0A7B9A06B64AB292239 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		F5BFE36B6B46A56CDC5C11CE105CEA85 /* IZLooger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10922EC6BF7CC3F190669A21447C5AC7 /* IZLooger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		79FC8FEE5B6C7909D6894DC5D4B74E4B /* PBXContainerItemProxy */ = {
+		0BC8684A3A64AFAF6F3D47F259AFBF95 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = B937209D37B790611891BD8A8E7A54A9;
 			remoteInfo = iZootoiOSSDK;
 		};
-		AF1AFB66B10DE24E34F59A8D5EC3DC3E /* PBXContainerItemProxy */ = {
+		617EF2B0B44BC987B19A5C0839E6DDEA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -46,97 +64,128 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0160B27713A8B211E842286F9A834AEC /* UserDefaults.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		03913A2A23EE75FEC5E08C246AE01B4F /* UserPropertyManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserPropertyManager.swift; sourceTree = "<group>"; };
+		03F206277B83AB30C912707A6CDA4826 /* EmailManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EmailManager.swift; sourceTree = "<group>"; };
+		044849CFAE0F427C7AC95C4A4C222DC5 /* UserDefaults.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		05BDA829DEFCC2CADC44EDC4370EDD3A /* ViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		062C2BB596CC983662E4305170EA0C97 /* FetcherAds.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FetcherAds.swift; sourceTree = "<group>"; };
 		06445526E96D172E0CEB407B7D3552E2 /* Pods-iZootoiOSProject-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iZootoiOSProject-frameworks.sh"; sourceTree = "<group>"; };
-		08593562ADB71AFF2F2C3943E72C6EC1 /* Pods-iZootoiOSProject */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-iZootoiOSProject"; path = Pods_iZootoiOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		08593562ADB71AFF2F2C3943E72C6EC1 /* Pods_iZootoiOSProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iZootoiOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C4D03A9015BC6E61D8251F048C88EBB /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig"; sourceTree = "<group>"; };
-		0FD0CC0D8B13EC0EA06843367D85DB6A /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		0CAD90C8E79B0988CAAAE9B7BEEFCB95 /* NotificationCategoryManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationCategoryManager.swift; sourceTree = "<group>"; };
+		10922EC6BF7CC3F190669A21447C5AC7 /* IZLooger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IZLooger.swift; sourceTree = "<group>"; };
 		14A5AC2D6F3292340BD195CF76EC0C64 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist"; sourceTree = "<group>"; };
-		15C0F4DA6FDF39AF38F7BCA118CEF7A4 /* ViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		179C69FCEED656F34C4AC6465F90230F /* NotificationHandlerHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationHandlerHelper.swift; sourceTree = "<group>"; };
 		17BAE9F21037DF3C0DDB93B8C3268F0C /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-acknowledgements.markdown"; sourceTree = "<group>"; };
-		1F125B9F38F2933DAA9103F38FAC0966 /* Payload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
-		20812220CA9438455EBA6997C8452F0A /* iZootoiOSSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "iZootoiOSSDK-dummy.m"; sourceTree = "<group>"; };
-		25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = iZootoiOSSDK; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iZootoiOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2914555CC6631E120580ED88CB3610F8 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m"; sourceTree = "<group>"; };
+		384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3AC193045FEBEACCFB09A2029C78EFB9 /* Pods-iZootoiOSProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iZootoiOSProject.release.xcconfig"; sourceTree = "<group>"; };
-		4565D72D237CA69635BCDE67C990106D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices"; path = Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		667E2DB11A83548F8CA85C341863F6B0 /* RestAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RestAPI.swift; sourceTree = "<group>"; };
-		6CD9D1A5FE4842D39A88167ABFD3A9AD /* iZooto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = iZooto.swift; sourceTree = "<group>"; };
-		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		750A5D8F17FF3C975C3CB064A4A5652E /* iZootoiOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = iZootoiOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		41007015E3745948188E7535BABCBC14 /* iZootoiOSSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = iZootoiOSSDK.h; path = iZootoiOSSDK/iZootoiOSSDK.h; sourceTree = "<group>"; };
+		4565D72D237CA69635BCDE67C990106D /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		543CFD6D751FC1A51F14FFE2D96A5088 /* iZootoiOSSDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iZootoiOSSDK-umbrella.h"; sourceTree = "<group>"; };
+		668958D546455509DF1EB43FA70F865E /* ShareUserDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareUserDefault.swift; sourceTree = "<group>"; };
+		6C0EF055FE88637283CABEBE7C3B100A /* Payload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
+		6E3B3EAA7BD26E91282674842A773DDE /* ForegrounNotificationHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ForegrounNotificationHelper.swift; sourceTree = "<group>"; };
+		6E3F529C14E219E8DFFBAC053096E253 /* AppStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppStorage.swift; sourceTree = "<group>"; };
 		76A3F05BB7A1A1143A20F2DFF8C0F5B4 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-acknowledgements.plist"; sourceTree = "<group>"; };
+		77C2BB6F12EDD8C456988032E5BB1379 /* iZootoiOSSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iZootoiOSSDK-prefix.pch"; sourceTree = "<group>"; };
 		8B201C4F280ABED4678173B09385B7B0 /* Pods-iZootoiOSProject-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iZootoiOSProject-umbrella.h"; sourceTree = "<group>"; };
-		8BC3B22317438C77CEDD564C9ABC0DBF /* iZootoiOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = iZootoiOSSDK.release.xcconfig; sourceTree = "<group>"; };
 		8D086A5A5808C4B6C97CC4109DD81C26 /* Pods-iZootoiOSProject-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iZootoiOSProject-acknowledgements.plist"; sourceTree = "<group>"; };
+		8F49124C1A9EA0240BF0CA9E90814606 /* ApiConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ApiConfig.swift; sourceTree = "<group>"; };
+		9851A34A6ABF7B9DC5FBF07FC61032E6 /* DatParsing.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DatParsing.swift; sourceTree = "<group>"; };
+		9BC174229CB97F9C4D0D22AC1BFB5627 /* DeviceTokenHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceTokenHandler.swift; sourceTree = "<group>"; };
+		9D67107EFAC9FCB29ECCE80DA0E47784 /* iZooto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = iZooto.swift; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9DDD80A23DE0230512414096B770C0C1 /* iZootoiOSSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = iZootoiOSSDK.h; path = iZootoiOSSDK/iZootoiOSSDK.h; sourceTree = "<group>"; };
-		9E15ABF589227D38231DF280A5E63C8D /* DatParsing.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DatParsing.swift; sourceTree = "<group>"; };
-		9FF446970DA057119661A4534E1F76A2 /* iZootoiOSSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = iZootoiOSSDK.modulemap; sourceTree = "<group>"; };
 		A81A1DF39BB0619FE4CFB53D0B781F7A /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig"; sourceTree = "<group>"; };
-		B17EF20E5BED284F311F2525C9273E00 /* iZootoiOSSDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iZootoiOSSDK-umbrella.h"; sourceTree = "<group>"; };
+		A8B4C7437A9EFD56322B4B59F14B427B /* iZootoiOSSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "iZootoiOSSDK-dummy.m"; sourceTree = "<group>"; };
+		A8FF799C7F94033D38D90675AD6D172A /* iZootoiOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = iZootoiOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AF139BAEEE5BD9BD42E5C2254802DD09 /* iZootoiOSSDK-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "iZootoiOSSDK-Info.plist"; sourceTree = "<group>"; };
 		B20B387BB3616A65AD79A3F89274D473 /* Pods-iZootoiOSProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iZootoiOSProject.debug.xcconfig"; sourceTree = "<group>"; };
-		BDA33AFF83BFF170759C2ADA44050A7E /* ShareUserDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareUserDefault.swift; sourceTree = "<group>"; };
+		B4A64C8109B7F4055B98EB894BA73448 /* RestAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RestAPI.swift; sourceTree = "<group>"; };
+		B56A7D507D0CA2C1493063EDA17F8136 /* BadgeManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
+		B5E771EB358F7D3BEE491FEA7AD47D0E /* iZootoiOSSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = iZootoiOSSDK.modulemap; sourceTree = "<group>"; };
+		C0309E6111B784AD8F17D1D970E7B2BB /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		C1807411FD46E914E0B8C7BA322B06B1 /* FallbackAdsManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FallbackAdsManager.swift; sourceTree = "<group>"; };
+		C28DA448E85DA40090CA50D7AF7F420C /* MediationManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MediationManager.swift; sourceTree = "<group>"; };
 		C5C73709BC91E76C8E026CF83C86D2A7 /* Pods-iZootoiOSProject-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iZootoiOSProject-acknowledgements.markdown"; sourceTree = "<group>"; };
-		C80B0A1221ADC0609597CB79141CA076 /* iZootoiOSSDK-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "iZootoiOSSDK-Info.plist"; sourceTree = "<group>"; };
-		C8B97D514DF6FC13EF086E22E2BFD30E /* iZootoiOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = iZootoiOSSDK.debug.xcconfig; sourceTree = "<group>"; };
 		CEAA215BE47A368677A2AF4EB1D45FA2 /* Pods-iZootoiOSProject-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iZootoiOSProject-Info.plist"; sourceTree = "<group>"; };
 		D00A70AB97CD40AAFB64D7592FBEA14F /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices.modulemap"; sourceTree = "<group>"; };
 		D1BCEF0DE8A9F0BEB909FB6957234534 /* Pods-iZootoiOSProject-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iZootoiOSProject-dummy.m"; sourceTree = "<group>"; };
-		DA8FEE9D9F6FDD41D099FA0B9CF056FB /* AppConstant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
+		D1E20722D2BCC61222D7ED94EF18B3E3 /* iZootoiOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = iZootoiOSSDK.release.xcconfig; sourceTree = "<group>"; };
+		D3111319EEB351876160D8E49AA7CF7D /* DeviceInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		E1FF608BDC04FBC66B8AD92A70A4CDE6 /* AppConstant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
+		E26579FC71494D003F7EF2A4BC1F59AC /* SDKLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SDKLog.swift; sourceTree = "<group>"; };
+		EBA0A4E92E609D5BB2302D6934B1F367 /* SdkSetting.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SdkSetting.swift; sourceTree = "<group>"; };
 		EDAF5F67A5DB487B111FD227753BA6ED /* Pods-iZootoiOSProject.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-iZootoiOSProject.modulemap"; sourceTree = "<group>"; };
+		EEE5E705A2D839DC6843892C2426E8BC /* iZootoiOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = iZootoiOSSDK.debug.xcconfig; sourceTree = "<group>"; };
+		F7FE0405A594AD2F8BEE858668DE80A2 /* APIRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
+		FA025ACDD7064B501EBBF31F693D503C /* NetworkManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		FA1E335C2FE4F85A61C0211B6E5D1245 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h"; sourceTree = "<group>"; };
-		FBE3A252F6B5D9B802B0729C8DE0E831 /* iZootoiOSSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iZootoiOSSDK-prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		6F92020AB7AEB7D6803B3ABBA79DAA0A /* Frameworks */ = {
+		76DCBE8AFF19935B387316AD14B69C3D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF0AD610CA80C37F067F30EE19CC6B5D /* Foundation.framework in Frameworks */,
+				EF62F23492BFB0A7B9A06B64AB292239 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		71B43AB6D2076C41AF4EC5EF476ABE97 /* Frameworks */ = {
+		8FE08FB49140CBC52743B4AE41F4268B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				97005CFBDA8869D5DB93469DF280679E /* Foundation.framework in Frameworks */,
+				63A3D91D202C566B0965DA30053515E2 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EB97B63BB12E0FBCDB0DB37A286CBD0C /* Frameworks */ = {
+		B4EA857BE9B2FAE2033039A7D6E1894E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				292D81ABF792CA6172187F1B6D3CE2B2 /* Foundation.framework in Frameworks */,
+				B1128B3A87562D1772751EB2D99A610F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		017CF56DF0EF56E36E3ECEEC404867B4 /* Support Files */ = {
+		0A1278DF41785ED5E848ECF4F628C330 /* Mediation */ = {
 			isa = PBXGroup;
 			children = (
-				9FF446970DA057119661A4534E1F76A2 /* iZootoiOSSDK.modulemap */,
-				20812220CA9438455EBA6997C8452F0A /* iZootoiOSSDK-dummy.m */,
-				C80B0A1221ADC0609597CB79141CA076 /* iZootoiOSSDK-Info.plist */,
-				FBE3A252F6B5D9B802B0729C8DE0E831 /* iZootoiOSSDK-prefix.pch */,
-				B17EF20E5BED284F311F2525C9273E00 /* iZootoiOSSDK-umbrella.h */,
-				C8B97D514DF6FC13EF086E22E2BFD30E /* iZootoiOSSDK.debug.xcconfig */,
-				8BC3B22317438C77CEDD564C9ABC0DBF /* iZootoiOSSDK.release.xcconfig */,
+				C28DA448E85DA40090CA50D7AF7F420C /* MediationManager.swift */,
 			);
-			name = "Support Files";
-			path = "../iZootoiOSProject/Pods/Target Support Files/iZootoiOSSDK";
+			path = Mediation;
 			sourceTree = "<group>";
 		};
-		04EA0E58FE27F6907698069C38BC949F /* Pod */ = {
+		17546726E8942640A3671339FB862969 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				750A5D8F17FF3C975C3CB064A4A5652E /* iZootoiOSSDK.podspec */,
+				D204020A4B6B586BF0A71BD49673C292 /* CTAButton */,
+				674FF52675B0CE63F853675AF3563023 /* Fallback */,
+				37D9F1D15F6FD2D8CC5206DEA8F2659F /* Fetcher */,
+				27CA2D87D4F8C657BEFB2E8CB7269AAA /* ForegroundNotification */,
+				198E039D27E94681BC138D592590CE44 /* GoogleSignIn */,
+				BDC94692ED488772A3077BCDE3778FB9 /* Helper */,
+				E914605ADE11CB3B2B065E10FFA733EB /* iZooto */,
+				0A1278DF41785ED5E848ECF4F628C330 /* Mediation */,
+				BBC0D7688F3A154E8620822ADB0AE669 /* NetworkHandler */,
+				D89F3CAD278A1B578E989B433CE8763E /* Payload */,
+				8BB59DB9782E0F8809E940F4A215DAAE /* RestAPI */,
+				EDD6BAE07ABF43FBAD7523D0D33F1900 /* UserProperties */,
 			);
-			name = Pod;
+			name = Source;
+			path = iZootoiOSSDK/Source;
+			sourceTree = "<group>";
+		};
+		198E039D27E94681BC138D592590CE44 /* GoogleSignIn */ = {
+			isa = PBXGroup;
+			children = (
+				03F206277B83AB30C912707A6CDA4826 /* EmailManager.swift */,
+			);
+			path = GoogleSignIn;
 			sourceTree = "<group>";
 		};
 		1F89BF486A8B4B911E3C4898F49BCAD2 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */ = {
@@ -155,16 +204,28 @@
 			path = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices";
 			sourceTree = "<group>";
 		};
-		296D31A698CA39EB9932CCB996A12F34 /* Source */ = {
+		27CA2D87D4F8C657BEFB2E8CB7269AAA /* ForegroundNotification */ = {
 			isa = PBXGroup;
 			children = (
-				691BD37FC340ADDE0C8CBE378D41382A /* Helper */,
-				8718B798A430577FE3033C785105E190 /* iZooto */,
-				A57EB06528C838E2C224BEA22A6CBE70 /* Payload */,
-				BDF1666FFFBC8399BCB67763A3F6A628 /* RestAPI */,
+				6E3B3EAA7BD26E91282674842A773DDE /* ForegrounNotificationHelper.swift */,
 			);
-			name = Source;
-			path = iZootoiOSSDK/Source;
+			path = ForegroundNotification;
+			sourceTree = "<group>";
+		};
+		37D9F1D15F6FD2D8CC5206DEA8F2659F /* Fetcher */ = {
+			isa = PBXGroup;
+			children = (
+				062C2BB596CC983662E4305170EA0C97 /* FetcherAds.swift */,
+			);
+			path = Fetcher;
+			sourceTree = "<group>";
+		};
+		4690E148AEAFE4FFEA7F0E5C72B8C751 /* AppManager */ = {
+			isa = PBXGroup;
+			children = (
+				D3111319EEB351876160D8E49AA7CF7D /* DeviceInfo.swift */,
+			);
+			path = AppManager;
 			sourceTree = "<group>";
 		};
 		56D159B031243221385E1952295525E6 /* Targets Support Files */ = {
@@ -176,24 +237,12 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
+		674FF52675B0CE63F853675AF3563023 /* Fallback */ = {
 			isa = PBXGroup;
 			children = (
-				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
+				C1807411FD46E914E0B8C7BA322B06B1 /* FallbackAdsManager.swift */,
 			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		691BD37FC340ADDE0C8CBE378D41382A /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				DA8FEE9D9F6FDD41D099FA0B9CF056FB /* AppConstant.swift */,
-				9E15ABF589227D38231DF280A5E63C8D /* DatParsing.swift */,
-				BDA33AFF83BFF170759C2ADA44050A7E /* ShareUserDefault.swift */,
-				0160B27713A8B211E842286F9A834AEC /* UserDefaults.swift */,
-				0FD0CC0D8B13EC0EA06843367D85DB6A /* Utils.swift */,
-			);
-			path = Helper;
+			path = Fallback;
 			sourceTree = "<group>";
 		};
 		85208013ADEB16EEB6884ED81F58BD55 /* Pods-iZootoiOSProject */ = {
@@ -213,49 +262,92 @@
 			path = "Target Support Files/Pods-iZootoiOSProject";
 			sourceTree = "<group>";
 		};
-		85CEA9256F1633DB970510C859020961 /* iZootoiOSSDK */ = {
+		8700D617D74B56F46D948BC21D4B4942 /* storage */ = {
 			isa = PBXGroup;
 			children = (
-				9DDD80A23DE0230512414096B770C0C1 /* iZootoiOSSDK.h */,
-				04EA0E58FE27F6907698069C38BC949F /* Pod */,
-				296D31A698CA39EB9932CCB996A12F34 /* Source */,
-				017CF56DF0EF56E36E3ECEEC404867B4 /* Support Files */,
+				6E3F529C14E219E8DFFBAC053096E253 /* AppStorage.swift */,
 			);
-			name = iZootoiOSSDK;
-			path = ../../iZootoiOSSDK;
+			path = storage;
 			sourceTree = "<group>";
 		};
-		8718B798A430577FE3033C785105E190 /* iZooto */ = {
+		8BB59DB9782E0F8809E940F4A215DAAE /* RestAPI */ = {
 			isa = PBXGroup;
 			children = (
-				6CD9D1A5FE4842D39A88167ABFD3A9AD /* iZooto.swift */,
-				15C0F4DA6FDF39AF38F7BCA118CEF7A4 /* ViewController.swift */,
+				8F49124C1A9EA0240BF0CA9E90814606 /* ApiConfig.swift */,
+				B4A64C8109B7F4055B98EB894BA73448 /* RestAPI.swift */,
 			);
-			path = iZooto;
+			path = RestAPI;
 			sourceTree = "<group>";
 		};
-		A57EB06528C838E2C224BEA22A6CBE70 /* Payload */ = {
+		94F07C271AD67EFC8854513E9FEA10E6 /* badge */ = {
 			isa = PBXGroup;
 			children = (
-				1F125B9F38F2933DAA9103F38FAC0966 /* Payload.swift */,
+				B56A7D507D0CA2C1493063EDA17F8136 /* BadgeManager.swift */,
 			);
-			path = Payload;
+			path = badge;
 			sourceTree = "<group>";
 		};
 		B4DC9F65618486DEFFF83B78083F52B6 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				85CEA9256F1633DB970510C859020961 /* iZootoiOSSDK */,
+				CD927A9D36BF14E19C6BAE9D62768254 /* iZootoiOSSDK */,
 			);
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		BDF1666FFFBC8399BCB67763A3F6A628 /* RestAPI */ = {
+		B8472EC622EBF6C2FC9DAE0F0812D8AC /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				667E2DB11A83548F8CA85C341863F6B0 /* RestAPI.swift */,
+				B5E771EB358F7D3BEE491FEA7AD47D0E /* iZootoiOSSDK.modulemap */,
+				A8B4C7437A9EFD56322B4B59F14B427B /* iZootoiOSSDK-dummy.m */,
+				AF139BAEEE5BD9BD42E5C2254802DD09 /* iZootoiOSSDK-Info.plist */,
+				77C2BB6F12EDD8C456988032E5BB1379 /* iZootoiOSSDK-prefix.pch */,
+				543CFD6D751FC1A51F14FFE2D96A5088 /* iZootoiOSSDK-umbrella.h */,
+				EEE5E705A2D839DC6843892C2426E8BC /* iZootoiOSSDK.debug.xcconfig */,
+				D1E20722D2BCC61222D7ED94EF18B3E3 /* iZootoiOSSDK.release.xcconfig */,
 			);
-			path = RestAPI;
+			name = "Support Files";
+			path = "../iZootoiOSProject/Pods/Target Support Files/iZootoiOSSDK";
+			sourceTree = "<group>";
+		};
+		BBC0D7688F3A154E8620822ADB0AE669 /* NetworkHandler */ = {
+			isa = PBXGroup;
+			children = (
+				F7FE0405A594AD2F8BEE858668DE80A2 /* APIRequest.swift */,
+				FA025ACDD7064B501EBBF31F693D503C /* NetworkManager.swift */,
+			);
+			path = NetworkHandler;
+			sourceTree = "<group>";
+		};
+		BDC94692ED488772A3077BCDE3778FB9 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				E1FF608BDC04FBC66B8AD92A70A4CDE6 /* AppConstant.swift */,
+				9851A34A6ABF7B9DC5FBF07FC61032E6 /* DatParsing.swift */,
+				10922EC6BF7CC3F190669A21447C5AC7 /* IZLooger.swift */,
+				179C69FCEED656F34C4AC6465F90230F /* NotificationHandlerHelper.swift */,
+				E26579FC71494D003F7EF2A4BC1F59AC /* SDKLog.swift */,
+				EBA0A4E92E609D5BB2302D6934B1F367 /* SdkSetting.swift */,
+				668958D546455509DF1EB43FA70F865E /* ShareUserDefault.swift */,
+				044849CFAE0F427C7AC95C4A4C222DC5 /* UserDefaults.swift */,
+				C0309E6111B784AD8F17D1D970E7B2BB /* Utils.swift */,
+				4690E148AEAFE4FFEA7F0E5C72B8C751 /* AppManager */,
+				94F07C271AD67EFC8854513E9FEA10E6 /* badge */,
+				8700D617D74B56F46D948BC21D4B4942 /* storage */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		CD927A9D36BF14E19C6BAE9D62768254 /* iZootoiOSSDK */ = {
+			isa = PBXGroup;
+			children = (
+				41007015E3745948188E7535BABCBC14 /* iZootoiOSSDK.h */,
+				E181B2847284FC44CFB5063E1CD26498 /* Pod */,
+				17546726E8942640A3671339FB862969 /* Source */,
+				B8472EC622EBF6C2FC9DAE0F0812D8AC /* Support Files */,
+			);
+			name = iZootoiOSSDK;
+			path = ../../iZootoiOSSDK;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -269,20 +361,70 @@
 			);
 			sourceTree = "<group>";
 		};
+		D204020A4B6B586BF0A71BD49673C292 /* CTAButton */ = {
+			isa = PBXGroup;
+			children = (
+				0CAD90C8E79B0988CAAAE9B7BEEFCB95 /* NotificationCategoryManager.swift */,
+			);
+			path = CTAButton;
+			sourceTree = "<group>";
+		};
 		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				578452D2E740E91742655AC8F1636D1F /* iOS */,
+				E4801F62A6B08CD9B5410329F1A18FDE /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D89F3CAD278A1B578E989B433CE8763E /* Payload */ = {
+			isa = PBXGroup;
+			children = (
+				6C0EF055FE88637283CABEBE7C3B100A /* Payload.swift */,
+			);
+			path = Payload;
+			sourceTree = "<group>";
+		};
+		E181B2847284FC44CFB5063E1CD26498 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				A8FF799C7F94033D38D90675AD6D172A /* iZootoiOSSDK.podspec */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		E4801F62A6B08CD9B5410329F1A18FDE /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		E914605ADE11CB3B2B065E10FFA733EB /* iZooto */ = {
+			isa = PBXGroup;
+			children = (
+				9BC174229CB97F9C4D0D22AC1BFB5627 /* DeviceTokenHandler.swift */,
+				9D67107EFAC9FCB29ECCE80DA0E47784 /* iZooto.swift */,
+				05BDA829DEFCC2CADC44EDC4370EDD3A /* ViewController.swift */,
+			);
+			path = iZooto;
+			sourceTree = "<group>";
+		};
+		EDD6BAE07ABF43FBAD7523D0D33F1900 /* UserProperties */ = {
+			isa = PBXGroup;
+			children = (
+				03913A2A23EE75FEC5E08C246AE01B4F /* UserPropertyManager.swift */,
+			);
+			path = UserProperties;
 			sourceTree = "<group>";
 		};
 		FD6C73DDEE6B0B650DFE56C80D986C01 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK */,
-				08593562ADB71AFF2F2C3943E72C6EC1 /* Pods-iZootoiOSProject */,
-				4565D72D237CA69635BCDE67C990106D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */,
+				25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK.framework */,
+				08593562ADB71AFF2F2C3943E72C6EC1 /* Pods_iZootoiOSProject.framework */,
+				4565D72D237CA69635BCDE67C990106D /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -290,28 +432,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		4095D7DF146D7F88CFFCDD8CCE85F473 /* Headers */ = {
+		79EC5062087229A9490FD558B228F366 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2749C1CA107609451F81704D4F48B646 /* Pods-iZootoiOSProject-umbrella.h in Headers */,
+				89801C37F85D9AE40D0F1246EFAE1CC5 /* Pods-iZootoiOSProject-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		61EDF4C2D2E4737DB8B52BC3A89F111A /* Headers */ = {
+		A40150EA34A7BC40EFC1B637E3A93213 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D511BED29FC8091D17D9F2151FBBD7E /* iZootoiOSSDK.h in Headers */,
-				FB3F6B03881B162D0A2446EC9F25D300 /* iZootoiOSSDK-umbrella.h in Headers */,
+				2AC431E942559557C1ED4CE6A6E7C7D9 /* iZootoiOSSDK.h in Headers */,
+				D125B0B5C1BD5EC4C456694185FB0DD3 /* iZootoiOSSDK-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BBB55F3EE7FB6BDF6FB0238F92A35618 /* Headers */ = {
+		C9D99AA858A41409662403A3C1453D02 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F60576294F9039C0844D7FFB2324EB8F /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h in Headers */,
+				ED2AF69227E295738EED9179DDA3255A /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,50 +462,50 @@
 /* Begin PBXNativeTarget section */
 		5EB57B2C9F39DB44208FF53D626929E6 /* Pods-iZootoiOSProject */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3A409858D79082840126984BD5000E62 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject" */;
+			buildConfigurationList = 4E5A13E4022210445474BA336AF3FCE6 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject" */;
 			buildPhases = (
-				4095D7DF146D7F88CFFCDD8CCE85F473 /* Headers */,
-				4C9A4CF933F86E382C5A92E1F5CA55D6 /* Sources */,
-				EB97B63BB12E0FBCDB0DB37A286CBD0C /* Frameworks */,
-				B612DF5BE218DA5B23D2142C4EE52D42 /* Resources */,
+				79EC5062087229A9490FD558B228F366 /* Headers */,
+				11BB79BE6154446534E00A998FB239F7 /* Sources */,
+				76DCBE8AFF19935B387316AD14B69C3D /* Frameworks */,
+				BA5BA4F6875655B8E1C1200BE5F17E0C /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				284D7F5E1D88DFA773F83040E10C45A3 /* PBXTargetDependency */,
+				E219AB7B02E8EABDC88E953BCC1FC8EE /* PBXTargetDependency */,
 			);
 			name = "Pods-iZootoiOSProject";
 			productName = Pods_iZootoiOSProject;
-			productReference = 08593562ADB71AFF2F2C3943E72C6EC1 /* Pods-iZootoiOSProject */;
+			productReference = 08593562ADB71AFF2F2C3943E72C6EC1 /* Pods_iZootoiOSProject.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		83D6E2A01DA2DAE5556AFEF3CC5DDCE0 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 827E8C741F03EC773F12AA95FEF48085 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject-iZootoNotificationExtendsServices" */;
+			buildConfigurationList = 174B11555290800597C8B26F17EB0B08 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject-iZootoNotificationExtendsServices" */;
 			buildPhases = (
-				BBB55F3EE7FB6BDF6FB0238F92A35618 /* Headers */,
-				B8487813F3AC7B9B68C76A37EC1C8491 /* Sources */,
-				71B43AB6D2076C41AF4EC5EF476ABE97 /* Frameworks */,
-				15538F821A79AFBF3E377CCE4FA823F9 /* Resources */,
+				C9D99AA858A41409662403A3C1453D02 /* Headers */,
+				12D8C83D1A35D4326BAA9AE17793295E /* Sources */,
+				8FE08FB49140CBC52743B4AE41F4268B /* Frameworks */,
+				09C127DD9F7B639CDDF97D39371121D2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				1BDB2A5540B7133C3221612B30FA45C0 /* PBXTargetDependency */,
+				CB1F7A5F18D51DFB14E33D5DB4409608 /* PBXTargetDependency */,
 			);
 			name = "Pods-iZootoiOSProject-iZootoNotificationExtendsServices";
 			productName = Pods_iZootoiOSProject_iZootoNotificationExtendsServices;
-			productReference = 4565D72D237CA69635BCDE67C990106D /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices */;
+			productReference = 4565D72D237CA69635BCDE67C990106D /* Pods_iZootoiOSProject_iZootoNotificationExtendsServices.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B937209D37B790611891BD8A8E7A54A9 /* iZootoiOSSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C84FAB7F762F39FAD8CC7B8112C95736 /* Build configuration list for PBXNativeTarget "iZootoiOSSDK" */;
+			buildConfigurationList = 5E631C1464F3785119BA5F25BC1F7B38 /* Build configuration list for PBXNativeTarget "iZootoiOSSDK" */;
 			buildPhases = (
-				61EDF4C2D2E4737DB8B52BC3A89F111A /* Headers */,
-				3488E62D220B714008BB4C402A9F015E /* Sources */,
-				6F92020AB7AEB7D6803B3ABBA79DAA0A /* Frameworks */,
-				06058BD30CDFEB73B841E69C61BD5985 /* Resources */,
+				A40150EA34A7BC40EFC1B637E3A93213 /* Headers */,
+				FF3C6AA8157AB142DAF876DC35113EB8 /* Sources */,
+				B4EA857BE9B2FAE2033039A7D6E1894E /* Frameworks */,
+				9DF8DCC079D1A38F12B639EDE65BC3C4 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -371,7 +513,7 @@
 			);
 			name = iZootoiOSSDK;
 			productName = iZootoiOSSDK;
-			productReference = 25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK */;
+			productReference = 25801DD68FFB0EDFC188CAE48D6897B4 /* iZootoiOSSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -380,8 +522,8 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 12.0";
@@ -404,21 +546,21 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		06058BD30CDFEB73B841E69C61BD5985 /* Resources */ = {
+		09C127DD9F7B639CDDF97D39371121D2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		15538F821A79AFBF3E377CCE4FA823F9 /* Resources */ = {
+		9DF8DCC079D1A38F12B639EDE65BC3C4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B612DF5BE218DA5B23D2142C4EE52D42 /* Resources */ = {
+		BA5BA4F6875655B8E1C1200BE5F17E0C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -428,60 +570,78 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3488E62D220B714008BB4C402A9F015E /* Sources */ = {
+		11BB79BE6154446534E00A998FB239F7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA695A6B4C2C9A4DC36E112C5C5A88F4 /* AppConstant.swift in Sources */,
-				DCD8772DABADE13C9E940DE4C57CACF8 /* DatParsing.swift in Sources */,
-				90DFA506EEACEB9A4D97320C51F125DC /* iZooto.swift in Sources */,
-				41ED17D89C0BAE4BFCDF2F38550CEBF6 /* iZootoiOSSDK-dummy.m in Sources */,
-				11AF432668DDD9C36C431347C837FBEC /* Payload.swift in Sources */,
-				76658186AFC8995733BD215FBD683E7F /* RestAPI.swift in Sources */,
-				189424BE19BBCEC61176FEB53A7C439B /* ShareUserDefault.swift in Sources */,
-				BAD26AA44D492421C23FA3C447B12004 /* UserDefaults.swift in Sources */,
-				F5140AC739E1C9026C10B216FB3BD793 /* Utils.swift in Sources */,
-				A395BBC7C1A217BD54385F6A0A7991E1 /* ViewController.swift in Sources */,
+				3873740B4C28090167B8F2B32F5C914B /* Pods-iZootoiOSProject-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C9A4CF933F86E382C5A92E1F5CA55D6 /* Sources */ = {
+		12D8C83D1A35D4326BAA9AE17793295E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6C73462E7CC5B9CAB161FD68F2E32DA /* Pods-iZootoiOSProject-dummy.m in Sources */,
+				96442CA8CCEB97AC48B47457FA4FF6C6 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B8487813F3AC7B9B68C76A37EC1C8491 /* Sources */ = {
+		FF3C6AA8157AB142DAF876DC35113EB8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				26A28158B7F418D6A2E66AAD240187D3 /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices-dummy.m in Sources */,
+				5DF6870077A629A9CCB5F7A82BD5D265 /* ApiConfig.swift in Sources */,
+				E013AF5987ED1247A039CD1D30BDA6EE /* APIRequest.swift in Sources */,
+				E473B4B6C7BB5BFE573979646F818CFC /* AppConstant.swift in Sources */,
+				A60241A9226D59D53B5CBE13BA0E0959 /* AppStorage.swift in Sources */,
+				CF1953170BF6072E29AC5E6813EF4AE2 /* BadgeManager.swift in Sources */,
+				1ADBCEA2F22A341B9FAB16D7DA1451C3 /* DatParsing.swift in Sources */,
+				DA3FDC6AF0277EA03044AF22D036A441 /* DeviceInfo.swift in Sources */,
+				D7E42E87B9397C2B00C05D4ED6F3ABF0 /* DeviceTokenHandler.swift in Sources */,
+				A922B0AA69DD6ABF2389A397626A78C3 /* EmailManager.swift in Sources */,
+				39DCCEBAA7ABFEACA721EAA429A4DA12 /* FallbackAdsManager.swift in Sources */,
+				247C393D9782F76C4BFCB69DF2B1A1E5 /* FetcherAds.swift in Sources */,
+				7EDE190D9B4D8E71E5F00A4688C2FEE2 /* ForegrounNotificationHelper.swift in Sources */,
+				F5BFE36B6B46A56CDC5C11CE105CEA85 /* IZLooger.swift in Sources */,
+				45E77F79A3A5E0585CCC178AA95A146E /* iZooto.swift in Sources */,
+				3948953D3788DA85F886CDCD6CCFC2F3 /* iZootoiOSSDK-dummy.m in Sources */,
+				37D7C85652D0C9D7CB2670BEA1537FE3 /* MediationManager.swift in Sources */,
+				9EBC47834340B181B2CEB4C7D3B3A485 /* NetworkManager.swift in Sources */,
+				94961767F28F63EB43A54E99A196CD62 /* NotificationCategoryManager.swift in Sources */,
+				7E3DE975BDF074D7D045FE4BE9F11DA1 /* NotificationHandlerHelper.swift in Sources */,
+				EE01FC165A56CDE24196BB302E9F2DCE /* Payload.swift in Sources */,
+				878A76B4AD8B03A00A77A6B98EDE7118 /* RestAPI.swift in Sources */,
+				0B94CD5BEA08F5A67416A51C2E14C0ED /* SDKLog.swift in Sources */,
+				12141CF4E6E4D494282BB75F4BB1C3EC /* SdkSetting.swift in Sources */,
+				13B2E04DFD36706E051C3E12B5F9BD40 /* ShareUserDefault.swift in Sources */,
+				8E1859B4D64A135B39F21DA5FC2732F8 /* UserDefaults.swift in Sources */,
+				34BB82A6B0820C429E25766379B689D7 /* UserPropertyManager.swift in Sources */,
+				534827D7AE739543817310FED1B7CD13 /* Utils.swift in Sources */,
+				54022F81F7D36BB2F10BAB5A9B9B73E5 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1BDB2A5540B7133C3221612B30FA45C0 /* PBXTargetDependency */ = {
+		CB1F7A5F18D51DFB14E33D5DB4409608 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = iZootoiOSSDK;
 			target = B937209D37B790611891BD8A8E7A54A9 /* iZootoiOSSDK */;
-			targetProxy = AF1AFB66B10DE24E34F59A8D5EC3DC3E /* PBXContainerItemProxy */;
+			targetProxy = 0BC8684A3A64AFAF6F3D47F259AFBF95 /* PBXContainerItemProxy */;
 		};
-		284D7F5E1D88DFA773F83040E10C45A3 /* PBXTargetDependency */ = {
+		E219AB7B02E8EABDC88E953BCC1FC8EE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = iZootoiOSSDK;
 			target = B937209D37B790611891BD8A8E7A54A9 /* iZootoiOSSDK */;
-			targetProxy = 79FC8FEE5B6C7909D6894DC5D4B74E4B /* PBXContainerItemProxy */;
+			targetProxy = 617EF2B0B44BC987B19A5C0839E6DDEA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		297056C0F2361D4B0319584F87ADFE4D /* Debug */ = {
+		083505118B5CF82BE95B08AD86A0D453 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B20B387BB3616A65AD79A3F89274D473 /* Pods-iZootoiOSProject.debug.xcconfig */;
+			baseConfigurationReference = A81A1DF39BB0619FE4CFB53D0B781F7A /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -493,7 +653,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject-Info.plist";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -502,7 +664,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -511,10 +673,11 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 		2B9E26EAE2CD392AD762421F663075A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -582,115 +745,6 @@
 			};
 			name = Debug;
 		};
-		2CEFE859EB8E642687D7A8E7756C697E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A81A1DF39BB0619FE4CFB53D0B781F7A /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		4B61A7CA52A40B27DE2492A04DEBE56F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8B97D514DF6FC13EF086E22E2BFD30E /* iZootoiOSSDK.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK.modulemap";
-				PRODUCT_MODULE_NAME = iZootoiOSSDK;
-				PRODUCT_NAME = iZootoiOSSDK;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		4E949CAA1BC386BEB19548CBBFFC411B /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8BC3B22317438C77CEDD564C9ABC0DBF /* iZootoiOSSDK.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK.modulemap";
-				PRODUCT_MODULE_NAME = iZootoiOSSDK;
-				PRODUCT_NAME = iZootoiOSSDK;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -753,7 +807,46 @@
 			};
 			name = Release;
 		};
-		CF16C369DFB814223817920B869DDB01 /* Release */ = {
+		87B3B1A02632893CFC8B4552B015E60C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0C4D03A9015BC6E61D8251F048C88EBB /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		901FD6EA2C007744972144F9F876009B /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3AC193045FEBEACCFB09A2029C78EFB9 /* Pods-iZootoiOSProject.release.xcconfig */;
 			buildSettings = {
@@ -767,6 +860,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -791,9 +886,48 @@
 			};
 			name = Release;
 		};
-		E6EFAD852856FD68FA6AFF15DD82DFED /* Debug */ = {
+		E307121F63A89A9C78D7BB0797D5A2A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C4D03A9015BC6E61D8251F048C88EBB /* Pods-iZootoiOSProject-iZootoNotificationExtendsServices.debug.xcconfig */;
+			baseConfigurationReference = EEE5E705A2D839DC6843892C2426E8BC /* iZootoiOSSDK.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK.modulemap";
+				PRODUCT_MODULE_NAME = iZootoiOSSDK;
+				PRODUCT_NAME = iZootoiOSSDK;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E5D01F73CD436F5AD2F8A8E09F6B3B12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B20B387BB3616A65AD79A3F89274D473 /* Pods-iZootoiOSProject.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -805,7 +939,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices-Info.plist";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -814,7 +950,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSProject-iZootoNotificationExtendsServices/Pods-iZootoiOSProject-iZootoNotificationExtendsServices.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-iZootoiOSProject/Pods-iZootoiOSProject.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -828,14 +964,54 @@
 			};
 			name = Debug;
 		};
+		F6B6E4E93C7994CF38EC3ECF864FBD04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1E20722D2BCC61222D7ED94EF18B3E3 /* iZootoiOSSDK.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/iZootoiOSSDK/iZootoiOSSDK.modulemap";
+				PRODUCT_MODULE_NAME = iZootoiOSSDK;
+				PRODUCT_NAME = iZootoiOSSDK;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3A409858D79082840126984BD5000E62 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject" */ = {
+		174B11555290800597C8B26F17EB0B08 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject-iZootoNotificationExtendsServices" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				297056C0F2361D4B0319584F87ADFE4D /* Debug */,
-				CF16C369DFB814223817920B869DDB01 /* Release */,
+				87B3B1A02632893CFC8B4552B015E60C /* Debug */,
+				083505118B5CF82BE95B08AD86A0D453 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -849,20 +1025,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		827E8C741F03EC773F12AA95FEF48085 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject-iZootoNotificationExtendsServices" */ = {
+		4E5A13E4022210445474BA336AF3FCE6 /* Build configuration list for PBXNativeTarget "Pods-iZootoiOSProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E6EFAD852856FD68FA6AFF15DD82DFED /* Debug */,
-				2CEFE859EB8E642687D7A8E7756C697E /* Release */,
+				E5D01F73CD436F5AD2F8A8E09F6B3B12 /* Debug */,
+				901FD6EA2C007744972144F9F876009B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C84FAB7F762F39FAD8CC7B8112C95736 /* Build configuration list for PBXNativeTarget "iZootoiOSSDK" */ = {
+		5E631C1464F3785119BA5F25BC1F7B38 /* Build configuration list for PBXNativeTarget "iZootoiOSSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B61A7CA52A40B27DE2492A04DEBE56F /* Debug */,
-				4E949CAA1BC386BEB19548CBBFFC411B /* Release */,
+				E307121F63A89A9C78D7BB0797D5A2A2 /* Debug */,
+				F6B6E4E93C7994CF38EC3ECF864FBD04 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -12,15 +12,37 @@ import WebKit
 
 class ViewController: UIViewController {
     
-   
-    
-    @IBAction func addProperties(_ sender: Any) {
-        print("clicked")
-        getNotificationFeedData(isPagination: false) // o index called
 
-        //let data = ["language": "bangla"] as [String : Any]
-           //iZooto.addUserProperties(data: data)
-      //  iZooto.registerForPushNotifications()
+    
+  
+    @IBOutlet var webview: WKWebView!
+    public static var Webview = WKWebView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBlue
+
+       
+       
+    }
+    
+    func getNotificationFeedData(isPagination : Bool)
+    {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Simulate API call delay
+                   iZooto.getNotificationFeed(isPagination: true){ (jsonString, error) in
+                       if let error = error {
+                           print("\(error.localizedDescription)")
+                       } else if let jsonString = jsonString {
+                           print("Response = ",jsonString) // response data
+                          
+                       }
+                   }
+               }
+      
+    }
+    @IBAction func addProperties(_ sender: Any) {
+        let data = ["language":"hindi"]
+        iZooto.addUserProperties(data: data)
 
     }
     @IBAction func shareToken(_ sender: Any) {
@@ -52,6 +74,8 @@ class ViewController: UIViewController {
     }
     @IBAction func clickAction(_ sender: Any) {
         print("clicks")
+         getNotificationFeedData(isPagination: false) // o index called
+
         
         if #available(iOS 13.0, *) {
            // let svc = (storyboard?.instantiateViewController(identifier: "green_vc")) as! SecondViewController
@@ -63,31 +87,6 @@ class ViewController: UIViewController {
 //        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
 //        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "newsview") as! NewsController//
 //        self.navigationController?.pushViewController(nextViewController, animated: true)
-    }
-    @IBOutlet var webview: WKWebView!
-    public static var Webview = WKWebView()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBlue
-
-       
-       
-    }
-    
-    func getNotificationFeedData(isPagination : Bool)
-    {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Simulate API call delay
-                   iZooto.getNotificationFeed(isPagination: true){ (jsonString, error) in
-                       if let error = error {
-                           print("\(error.localizedDescription)")
-                       } else if let jsonString = jsonString {
-                           print("Response = ",jsonString) // response data
-                          
-                       }
-                   }
-               }
-      
     }
     
 
