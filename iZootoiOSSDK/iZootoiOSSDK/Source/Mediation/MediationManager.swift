@@ -111,7 +111,6 @@ final class MediationManager {
             }
             
             guard let firstURL = fuDataArray.first else {
-                print("No valid fetch URLs found for tp=5")
                 return
             }
             
@@ -292,7 +291,6 @@ final class MediationManager {
                     //To Check FallBack
                     if let jsonDictionary = json as? [String:Any] {
                         if let value = jsonDictionary[AppConstant.AD_RESPONSE_KEY] as? String {
-                            debugPrint(value)
                             MediationManager.falbackBidsTp4(startDate: startDate)
                             FallbackAdsManager.shared.handleFallback(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: rid, userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                             return
@@ -509,7 +507,6 @@ final class MediationManager {
                         if let jsonDictionary = json as? [String:Any] {
                             if MediationManager.shared.shouldHandleOutbrainFallback(json: jsonDictionary) || jsonDictionary[AppConstant.AD_RESPONSE_KEY] != nil {
                                 if let msg = jsonDictionary[AppConstant.AD_RESPONSE_KEY] as? String {
-                                    debugPrint(msg)
                                 }
                                 let t = Int(Date().timeIntervalSince(startDate) * 1000)
                                 bidsData.append([
@@ -536,7 +533,6 @@ final class MediationManager {
                             if let jsonArray = json as? [[String:Any]] {//Adgebra
                                 
                                 if let value = jsonArray[0][AppConstant.AD_RESPONSE_KEY] as? String{
-                                    print(value)
                                     let t = Int(Date().timeIntervalSince(startDate) * 1000)
                                     bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00, AppConstant.iZ_CTR_KEY: ctrValue])
                                 }else{
@@ -759,7 +755,6 @@ final class MediationManager {
                                     } else {
                                         if let jsonArray = json as? [[String:Any]] {//if adgebra has pf = 1.
                                             if let value = jsonArray[0][AppConstant.AD_RESPONSE_KEY] as? String{
-                                                print(value)
                                                 finalDataValue.setValue("\(index)", forKey: "result")
                                                 FallbackAdsManager.shared.handleFallback(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: notificationData.global?.rid ?? "", userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                                 return

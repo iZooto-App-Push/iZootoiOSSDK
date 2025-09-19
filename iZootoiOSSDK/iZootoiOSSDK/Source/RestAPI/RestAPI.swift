@@ -44,7 +44,7 @@ public class RestAPI : NSObject
         ]
         let bodyData = requestBodyComponents.query?.data(using: .utf8)
         guard let url = URL(string: ApiConfig.eventUrl) else {
-            print("Error: Invalid URL")
+            debugPrint("Error: Invalid URL")
             return
         }
         
@@ -57,7 +57,6 @@ public class RestAPI : NSObject
         NetworkManager.shared.sendRequest(request) { result in
             switch result {
             case .success:
-                print("Event added.")
                 AppStorage.shared.removeValue(forKey: AppConstant.KEY_EVENT)
                 AppStorage.shared.removeValue(forKey: AppConstant.KEY_EVENT_NAME)
             case .failure(let error):
@@ -95,7 +94,6 @@ public class RestAPI : NSObject
             
             guard let url = URL(string: ApiConfig.impressionUrl) else {
                 // Handle the case where the URL is nil
-                print("Error: Invalid URL")
                 return
             }
             var request = URLRequest(url: url)
@@ -118,7 +116,6 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            debugPrint("callImpression Success")
                         }else{
                             Utils.handleOnceException(bundleName: bundleName, exceptionName:  error?.localizedDescription ?? "Error code " , className: tag_name, methodName: "callImpression",rid: rid, cid: cid, userInfo: userInfo)
                         }
@@ -166,7 +163,6 @@ public class RestAPI : NSObject
             let dict = [AppConstant.iZ_KEY_PID: pid, AppConstant.iZ_KEY_DEVICE_TOKEN: token, AppConstant.iZ_CID_KEY:"\(notificationData.id ?? "")" , AppConstant.iZ_RID_KEY:notificationData.rid, AppConstant.iZ_TITLE_KEY:notificationData.alert?.title, "op":"click", "ver": ApiConfig.SDK_VERSION, "btn": type]
             guard let url = URL(string: ApiConfig.clickUrl) else {
                 // Handle the case where the URL is nil
-                print("Error: Invalid URL")
                 return
             }
             var request = URLRequest(url: url)
@@ -244,7 +240,6 @@ public class RestAPI : NSObject
             ]
             guard let url = URL(string: ApiConfig.clickUrl) else {
                 // Handle the case where the URL is nil
-                print("Error: Invalid URL")
                 return
             }
             var request = URLRequest(url: url)
@@ -260,7 +255,6 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            print("offline click clk successfull!")
                             UserDefaults.standard.removeObject(forKey: AppConstant.iZ_CLICK_OFFLINE_DATA)
                         }
                     }
@@ -284,12 +278,10 @@ public class RestAPI : NSObject
         }
 
         guard let finalUrl = URL(string: ApiConfig.mediationClickUrl) else {
-            print("Error: Invalid URL")
             return
         }
 
         guard let jsonData = try? JSONSerialization.data(withJSONObject: finalDict as? [String: Any] ?? [:]) else {
-            print("Error: Unable to convert dictionary to JSON")
             return
         }
 
@@ -304,7 +296,6 @@ public class RestAPI : NSObject
             switch result {
             case .success(let data):
                 // Optional: Handle response body
-                    print("Offline Medc Track Success")
                 UserDefaults.standard.removeObject(forKey: AppConstant.iZ_MED_CLICK_OFFLINE_DATA)
                 break
             case .failure(let error):
@@ -356,7 +347,6 @@ public class RestAPI : NSObject
                 
                 guard let url = URL(string: ApiConfig.lastVisitUrl) else {
                     // Handle the case where the URL is nil
-                    print("Error: Invalid URL")
                     return
                 }
                 var request = URLRequest(url: url)
@@ -417,7 +407,6 @@ public class RestAPI : NSObject
             ]
             guard let url = URL(string: url) else {
                 // Handle the case where the URL is nil
-                print("Error: Invalid URL")
                 return
             }
             var request = URLRequest(url: url)
@@ -440,7 +429,6 @@ public class RestAPI : NSObject
                     // Check the HTTP response status code
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
-                            //print("last impression called.")
                         }else{
                             Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: rid,cid : cid, userInfo: userInfo)
                         }
@@ -590,7 +578,7 @@ public class RestAPI : NSObject
                 
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {
-                        print("Exception sent successfully to server")
+                       // debprint("Exception sent successfully to server\(requestBody)")
                     } else {
                         throw NSError(domain: "APIError", code: httpResponse.statusCode, userInfo: nil)
                     }
@@ -609,7 +597,6 @@ public class RestAPI : NSObject
         }
 
         guard let finalUrl = URL(string: url) else {
-            print("Error: Invalid URL")
             return
         }
 
@@ -646,7 +633,6 @@ public class RestAPI : NSObject
     }
     static func callRV_RC_Request(bundleName:String, urlString : String)
     {
-        print("RV RC url : \(urlString)")
         if urlString.contains("https"){
             // create post request
             if let url = URL(string: urlString) {
@@ -665,7 +651,6 @@ public class RestAPI : NSObject
                         // Check the HTTP response status code
                         if let httpResponse = response as? HTTPURLResponse {
                             if httpResponse.statusCode == 200 {
-                                print("RV and RC api hits successfully.")
                             }
                         }
                     } catch {
@@ -786,7 +771,6 @@ extension RestAPI {
         urlComponents.queryItems = queryParameters.map { URLQueryItem(name: $0.0, value: $0.1) }
 
         guard let url = URL(string: ApiConfig.subscriptiponUrl) else {
-            print("Invalid URL")
             return
         }
         let bodyData = urlComponents.query?.data(using: .utf8)

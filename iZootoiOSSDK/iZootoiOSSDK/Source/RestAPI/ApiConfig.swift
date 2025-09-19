@@ -25,9 +25,8 @@ final class ApiConfig {
     static let fallbackAdUrl = "https://flbk.izooto.com/default.json"
     static let emailSubscriptionUrl = "https://eenp.izooto.com/eenp"
     static let newsHubFeedUrl = "https://nh.izooto.com/nh/"
-
     // MARK: - Meta
-    static let SDK_VERSION = "2.4.6-beta1"
+    static let SDK_VERSION = "2.4.6"
    
 }
 

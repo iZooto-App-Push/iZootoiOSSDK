@@ -14,6 +14,7 @@ final class UserPropertyManager {
     
     @objc public func addUserProperties(data: [String: Any]) {
         let bundleName = Bundle.main.object(forInfoDictionaryKey: AppConstant.BUNDLE_IDENTIFIER) as? String ?? ""
+        AppStorage.shared.configureAppGroup(Utils.getGroupName(bundleName: bundleName) ?? "")
 
         let validatedData = Utils.dataValidate(data: data)
         let cleanedData = validatedData.reduce(into: [String: Any]()) { result, item in
@@ -74,7 +75,6 @@ final class UserPropertyManager {
         ]
         let bodyData = requestBodyComponents.query?.data(using: .utf8)
         guard let url = URL(string: ApiConfig.propertiesUrl) else {
-            print("Error: Invalid URL")
             return
         }
         

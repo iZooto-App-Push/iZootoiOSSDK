@@ -278,7 +278,7 @@ public class AnKey {
     }
 }
 
-public class Global {
+ public class Global {
     
     public var act1name : String?
     public var act1Id : String?

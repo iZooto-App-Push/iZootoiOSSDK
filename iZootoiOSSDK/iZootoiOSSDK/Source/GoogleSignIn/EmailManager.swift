@@ -12,6 +12,7 @@ class EmailManager {
     
     @objc public static func syncEmail(email: String, fName: String, lName: String) {
         let bundleName = Bundle.main.object(forInfoDictionaryKey: AppConstant.BUNDLE_IDENTIFIER) as? String ?? ""
+        AppStorage.shared.configureAppGroup(Utils.getGroupName(bundleName: bundleName) ?? "")
         guard !email.isEmpty else {
             debugPrint("Email should not be blank")
             return
@@ -27,7 +28,7 @@ class EmailManager {
         
         guard email.count < 100 else { return }
         guard EmailManager.shared.isValidEmail(email) else {
-            print("Invalid Email Address")
+            debugPrint("Invalid Email Address")
             return
         }
         

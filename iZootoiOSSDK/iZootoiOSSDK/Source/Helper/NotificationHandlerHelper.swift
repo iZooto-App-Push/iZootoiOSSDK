@@ -34,7 +34,7 @@ class NotificationHandlerHelper {
         }
         
         if let inApp = notificationData.inApp, inApp.contains("1") {
-            presentViewController(with: adUrl)
+            iZooto.handleBroserNotification(url: adUrl)
         } else {
             iZooto.handleBroserNotification(url: adUrl)
         }
@@ -43,7 +43,6 @@ class NotificationHandlerHelper {
     //MARK: handle Content-Push clicks
     func handleStandard(notificationData: Payload, userInfo: [String: Any], response: UNNotificationResponse, bundleName: String) {
         guard let rid = notificationData.rid, notificationData.created_on != nil else {
-            print("Missing rid or created_on")
             return
         }
         
@@ -105,7 +104,10 @@ class NotificationHandlerHelper {
     //MARK: handle web View if ia = 1
     private func presentViewController(with url: String) {
         var urlString = url
-        if !url.hasPrefix("http://") && !url.hasPrefix("https://") {
+        // Always enforce HTTPS
+        if url.hasPrefix("http://") {
+            urlString = url.replacingOccurrences(of: "http://", with: "https://")
+        } else if !url.hasPrefix("https://") {
             urlString = "https://" + url
         }
         if let url = MediationManager.getDecodedUrl(from: urlString){
@@ -117,7 +119,7 @@ class NotificationHandlerHelper {
                 }
             }
         }else {
-            print("Wrong url only launch the app.")
+            debugPrint("Wrong url only launch the app.")
         }
     }
     
@@ -140,7 +142,7 @@ class NotificationHandlerHelper {
             }
         } else {
             iZooto.handleBroserNotification(url: finalURL)
-        } 
+        }
     }
 }
 

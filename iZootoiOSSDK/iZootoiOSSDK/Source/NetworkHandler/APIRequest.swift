@@ -104,13 +104,16 @@ struct APIRequest {
             }
 
             request.httpBody = bodyString.data(using: .utf8)
+            
+
+          
         } else {
             request.httpBody = body
             
             // for log purpose
             let data = request.httpBody ?? Data()
             if let bodyString = String(data: data, encoding: .utf8) {
-//                print("HTTP Body: \(bodyString)")
+                print("HTTP Body: \(bodyString)")
             } 
         }
         return request
