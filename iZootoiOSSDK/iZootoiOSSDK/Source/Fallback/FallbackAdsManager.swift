@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 final class FallbackAdsManager {
     static let shared = FallbackAdsManager()
         private init() {}

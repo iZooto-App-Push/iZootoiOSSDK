@@ -20,7 +20,7 @@ final class FetcherAds {
         }
         
         guard let fetchUrl = notificationData.fetchurl, !fetchUrl.isEmpty else { return }
-        
+        AdsFilterKey.shared.loadKeywordsCache()
         let startDate = Date()
         bidsData.removeAll()
         finalDataValue.removeAllObjects()
@@ -108,7 +108,7 @@ final class FetcherAds {
                 FallbackAdsManager.shared.handleFallback(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: notificationData.rid ?? "", userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                 return
             }
-            updateNotificationData(from: jsonDictionary, notificationData: notificationData)
+            updateNotificationData(from: jsonDictionary, notificationData: notificationData, bundleName: bundleName, userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
         }
         // Handle Array response
         else if let jsonArray = json as? [[String: Any]] {
@@ -116,7 +116,7 @@ final class FetcherAds {
                 FallbackAdsManager.shared.handleFallback(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: notificationData.rid ?? "", userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                 return
             }
-            updateNotificationData(from: jsonArray, notificationData: notificationData)
+            updateNotificationData(from: jsonArray, notificationData: notificationData, bundleName: bundleName, userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
         }
         
         // Manage categories and CTA buttons
@@ -139,6 +139,15 @@ final class FetcherAds {
                 if let title = finalAlert.title, !title.isEmpty {
                     bestAttemptContent.title = title
                     finalDataValue.setValue("1", forKey: "result")
+                    
+                    let body = notificationData.m ?? ""
+                    let combinedString = title + " " + body
+                    if AdsFilterKey.shared.checkKeywordsMatchInstant(from: combinedString) {
+                        FallbackAdsManager.shared.handleFallback(bundleName: bundleName, fallCategory: "", notiRid: aps["rid"] as? String ?? "", userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        return
+                    }
+                        
+                    
                 }else {
                     FallbackAdsManager.shared.handleFallback(bundleName: bundleName, fallCategory: "", notiRid: aps["rid"] as? String ?? "", userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                     return
@@ -211,7 +220,11 @@ final class FetcherAds {
     // MARK: - Update notification data from JSON
     private func updateNotificationData(
         from json: Any,
-        notificationData: Payload
+        notificationData: Payload,
+        bundleName: String,
+        userInfo: [AnyHashable: Any],
+        bestAttemptContent: UNMutableNotificationContent,
+        contentHandler: ((UNNotificationContent) -> Void)?
     ) {
         func parseValue(_ source: String?, using parser: (Any, String) -> String?) -> String? {
             guard let source = source, !source.isEmpty else { return nil }

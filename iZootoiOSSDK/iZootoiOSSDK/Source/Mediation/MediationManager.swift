@@ -47,7 +47,7 @@ final class MediationManager {
         
         resetSharedData()
         extractBasicData(from: aps, bundleName: bundleName)
-        
+        AdsFilterKey.shared.loadKeywordsCache()
         
         guard let gData = aps[AppConstant.iZ_G_KEY] as? [String: Any],
               let tpValue = gData[AppConstant.iZ_TPKEY] as? String else {
@@ -1398,7 +1398,25 @@ final class MediationManager {
                 }else{
                     bestAttemptContent.body = ""
                 }
+                // for ad filter Notification
+                let adTitle = bestAttemptContent.title
+                let adMessage = bestAttemptContent.body
+                let combinedAdTitleAndMessage = adTitle + " " + adMessage
+                if AdsFilterKey.shared.checkKeywordsMatchInstant(from: combinedAdTitleAndMessage){
+                    let rid = notificationData.global?.rid ?? ""
+                    FallbackAdsManager.shared.handleFallback(bundleName: bundleName, fallCategory: "", notiRid: rid, userInfo: userInfo, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                    return false
+                }
             }
+            
+            
+            if let aps = bestAttemptContent.userInfo[AppConstant.iZ_NOTIFCATION_KEY_NAME] as? [String: Any] {
+                if let finalDict = aps[AppConstant.IZ_FETCH_AD_DETAILS] as? NSDictionary
+                {
+                    RestAPI.callAdMediationImpressionApi(finalDict: finalDict, bundleName: bundleName, userInfo: userInfo, url: ApiConfig.mediationImpressionUrl)
+                }
+            }
+            
             if notificationData.global?.act1name != nil && notificationData.ankey?.act1link != nil{
                 aps["l1"] = notificationData.ankey?.act1link
             }
